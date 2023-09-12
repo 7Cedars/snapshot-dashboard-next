@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userInputReducer from './userInputReducer'
-import proposalsReducer from './proposalsReducer'
-import notificationReducer from  './notificationReducer'
-import urlReducer from './urlReducer'
+import userInputReducer from './reducers/userInputReducer'
+import proposalsReducer from './reducers/proposalsReducer'
+import notificationReducer from  './reducers/notificationReducer'
+import urlReducer from './reducers/urlReducer'
 
 const store = configureStore({
   reducer: {

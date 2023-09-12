@@ -4,7 +4,7 @@ import { useLazyQuery } from '@apollo/client'
 import { VOTERS_ON_PROPOSALS } from '../utils/queries'
 import { SyntheticEvent, useEffect, useState } from 'react'; 
 import { useAppSelector } from '../../redux/reducers/hooks';
-import { Proposal } from '../../../.next/types/app/components';
+import { Proposal } from '../../../types';
 import { useAppDispatch } from '../../redux/reducers/hooks';
 import { addVotes } from '../../redux/reducers/proposalsReducer'
 import { toNetworkGraph } from '../utils/transposeData';

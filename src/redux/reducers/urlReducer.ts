@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {  UrlDataPayload } from '../../../../types'
-import { standardDateRange } from '../../../../constants'
+import {  UrlDataPayload } from '../../../types'
+import { standardDateRange } from '../../../constants'
 
 interface Props {
   urlData: string

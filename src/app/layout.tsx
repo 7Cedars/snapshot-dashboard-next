@@ -2,8 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { ApolloWrapper } from "./ApolloWrapper";
-import store from '../redux/reducers/store'
-import { Provider } from 'react-redux'
+import store from '../redux/store'
+import { Providers } from "../redux/provider";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,11 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Provider store={store}>
+      <Providers>
         <ApolloWrapper>
           {children}
         </ApolloWrapper>
-      </Provider>
+      </Providers>
     </html>
   )
 }

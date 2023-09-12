@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Notification, NotificationWithoutId } from '../../../.next/types/app/components'
+import { Notification, NotificationWithoutId } from '../../../types'
 import { v4 as uuidv4 } from 'uuid';
 
 interface NotificationState {
