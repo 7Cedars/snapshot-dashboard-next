@@ -1,8 +1,10 @@
+"use client";
+
 import { useLazyQuery } from '@apollo/client'
 import { VOTERS_ON_PROPOSALS } from '../utils/queries'
 import { SyntheticEvent, useEffect, useState } from 'react'; 
 import { useAppSelector } from '../reducers/hooks';
-import { Proposal } from '../types';
+import { Proposal } from '../../types';
 import { useAppDispatch } from '../reducers/hooks';
 import { addVotes } from '../reducers/proposalsReducer'
 import { toNetworkGraph } from '../utils/transposeData';

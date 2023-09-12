@@ -7,7 +7,8 @@ import { useAppSelector } from "../../reducers/hooks";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
 import { parseUrlInput } from "../../utils/parsers";
-import { useParams } from "react-router-dom";
+import { useParams } from 'next/navigation'
+// import { useParams } from "react-router-dom";
 
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
@@ -19,7 +20,7 @@ type HeatmapProps = {
 
 export const Heatmap = ({ width = 500, height = 400}: HeatmapProps) => {
   // const { selectedSpaces, startDate, endDate } = useAppSelector(state => state.userInput)
-  const { dataUrl } = useParams(); 
+  const dataUrl = useParams(); 
   const { selectedSpaces, startDate, endDate  }  = parseUrlInput(dataUrl)
 
   const { proposals } = useAppSelector(state => state.loadedProposals) 

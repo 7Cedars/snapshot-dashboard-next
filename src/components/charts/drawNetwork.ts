@@ -1,4 +1,4 @@
-import { Link, Node } from "../../types";
+import { Link, Node } from "../../../types";
 
 export const RADIUS = 10;
 
@@ -26,11 +26,9 @@ export const drawNetwork = (
 
    links.forEach((link) => {
       context.beginPath();
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       // this seems to be a bug in d3
       context.moveTo(link.source.x, link.source.y); 
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       // this seems to be a bug in d3
       context.lineTo(link.target.x, link.target.y);

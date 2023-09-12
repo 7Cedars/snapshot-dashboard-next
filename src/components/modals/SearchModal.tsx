@@ -3,10 +3,10 @@ import { Dialog, Transition, Listbox } from '@headlessui/react'
 import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
 import { updateModal } from '../../reducers/userInputReducer'
 import { XMarkIcon, ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react/24/outline'
-import spaces from '../../data/spacesList'
-import { Space } from '../../types'
+import spaces from '../../../public/data/spacesList'
+import { Space } from '../../../types'
 import { updateUrl } from '../../reducers/urlReducer'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'next/navigation'
 import { parseUrlInput } from '../../utils/parsers'
 
 const compareVotes = (a: Space, b: Space) => {
