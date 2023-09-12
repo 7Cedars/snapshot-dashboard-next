@@ -1,8 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../reducers/hooks";
-import { updateUrl } from "../../reducers/urlReducer";
+import { useAppSelector, useAppDispatch } from "../../../src/reducers/hooks";
+import { updateUrl } from "../../../src/reducers/urlReducer";
 import { standardDateRange } from "../../../constants";
-import { toDateFormat } from "../../utils/utils";
+import { toDateFormat } from "../../../src/utils/utils";
 
 export const RangeSlider = () => {
   const dispatch = useAppDispatch()

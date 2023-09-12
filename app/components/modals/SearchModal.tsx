@@ -1,13 +1,15 @@
+"use client";
+
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition, Listbox } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
-import { updateModal } from '../../reducers/userInputReducer'
+import { useAppDispatch, useAppSelector } from '../../../app/reducers/hooks'
+import { updateModal } from '../../../app/reducers/userInputReducer'
 import { XMarkIcon, ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react/24/outline'
 import spaces from '../../../public/data/spacesList'
 import { Space } from '../../../types'
-import { updateUrl } from '../../reducers/urlReducer'
+import { updateUrl } from '../../../app/reducers/urlReducer'
 import { useParams } from 'next/navigation'
-import { parseUrlInput } from '../../utils/parsers'
+import { parseUrlInput } from '../../../app/utils/parsers'
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount

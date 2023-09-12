@@ -1,11 +1,13 @@
+"use client";
+
 import { 
   HomeIcon, 
   Cog6ToothIcon, 
   BookmarkSquareIcon, 
   QuestionMarkCircleIcon
  } from '@heroicons/react/24/outline'
- import { useAppDispatch } from "../reducers/hooks";
- import { updateModal } from "../reducers/userInputReducer";
+ import { useAppDispatch } from "../../app/reducers/hooks";
+ import { updateModal } from "../../app/reducers/userInputReducer";
 
 
 const NavBar = () => {

@@ -1,7 +1,9 @@
+"use client";
+
 import { Fragment } from 'react'
 import { Dialog, Transition, Disclosure } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../reducers/hooks'
-import { updateModal } from '../../reducers/userInputReducer'
+import { useAppDispatch, useAppSelector } from '../../../app/reducers/hooks'
+import { updateModal } from '../../../app/reducers/userInputReducer'
 import { XMarkIcon, ChevronUpIcon } from '@heroicons/react/24/outline'
 
 export const AboutDialog = () => {

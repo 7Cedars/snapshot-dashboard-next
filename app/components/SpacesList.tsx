@@ -1,10 +1,13 @@
+"use client";
+
 import SpaceItem from "./SpaceItem";
-import { useAppDispatch, useAppSelector } from "../reducers/hooks";
-import { updateModal } from "../reducers/userInputReducer";
-import loadProposals from "../services/loadProposals";
+import { useAppDispatch, useAppSelector } from "../../app/reducers/hooks";
+import { updateModal } from "../../app/reducers/userInputReducer";
+import loadProposals from "../../app/services/loadProposals";
 import { useEffect, useState } from "react";
-import { parseUrlInput } from "../utils/parsers";
-import { useParams } from "react-router-dom";
+import { parseUrlInput } from "../../app/utils/parsers";
+import { useParams } from 'next/navigation'
+// import { useParams } from "react-router-dom";
 
 const SpacesList = () => {
   console.log("DATA: ")

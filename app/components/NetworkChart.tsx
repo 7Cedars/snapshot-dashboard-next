@@ -1,14 +1,14 @@
 "use client";
 
 import { useLazyQuery } from '@apollo/client'
-import { VOTERS_ON_PROPOSALS } from '../utils/queries'
+import { VOTERS_ON_PROPOSALS } from '../../app/utils/queries'
 import { SyntheticEvent, useEffect, useState } from 'react'; 
-import { useAppSelector } from '../reducers/hooks';
+import { useAppSelector } from '../../app/reducers/hooks';
 import { Proposal } from '../../types';
-import { useAppDispatch } from '../reducers/hooks';
-import { addVotes } from '../reducers/proposalsReducer'
-import { toNetworkGraph } from '../utils/transposeData';
-import { toSelectedProposals } from '../utils/utils';
+import { useAppDispatch } from '../../app/reducers/hooks';
+import { addVotes } from '../../app/reducers/proposalsReducer'
+import { toNetworkGraph } from '../../app/utils/transposeData';
+import { toSelectedProposals } from '../../app/utils/utils';
 import { ChartCanvas } from './ui/ChartCanvas';
 import { NetworkDiagram } from './charts/NetworkDiagram';
 

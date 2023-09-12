@@ -3,10 +3,10 @@
 import { useMemo } from "react";
 import * as d3 from "d3";
 // import { data } from "../../data/dummyHeatmapData";   // data: { x: string; y: string; value: number }[];
-import { useAppSelector } from "../../reducers/hooks";
-import { toHeatmapData } from "../../utils/transposeData";
-import { toDateFormat } from "../../utils/utils";
-import { parseUrlInput } from "../../utils/parsers";
+import { useAppSelector } from "../../../src/reducers/hooks";
+import { toHeatmapData } from "../../../src/utils/transposeData";
+import { toDateFormat } from "../../../src/utils/utils";
+import { parseUrlInput } from "../../../src/utils/parsers";
 import { useParams } from 'next/navigation'
 // import { useParams } from "react-router-dom";
 

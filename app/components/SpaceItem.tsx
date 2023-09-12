@@ -1,7 +1,9 @@
-import spaces from "../data/spacesList"
+"use client";
+
+import spaces from '../../public/data/spacesList'
 import { MinusCircleIcon, UserIcon } from '@heroicons/react/24/outline'
-import { useAppDispatch } from "../reducers/hooks";
-import { updateUrl } from "../reducers/urlReducer";
+import { useAppDispatch } from "../../app/reducers/hooks";
+import { updateUrl } from "../../app/reducers/urlReducer";
 
 interface Props {
   key: string; 
@@ -40,7 +42,7 @@ const SpaceItem = ( {spaceId}: Props) => {
                 </div>
                 <div className={`block truncate font-light text-gray-600 pl-3`}>
                   {space.categories.length > 0 ? 
-                    `Categories: ${space.categories.map(category => category).join(", ")}`
+                    `Categories: ${space.categories.map((category: string) => category).join(", ")}`
                     : 
                     `No categories defined.`
                   }

@@ -1,15 +1,18 @@
+"use client";
+
 import { useEffect, useState } from "react";
 // import SelectSpacesForm from "../searchComponent/SelectSpacesForm (depricated)"
-import { useParams } from "react-router-dom";
-import { parseUrlInput } from "../utils/parsers";
-import { useAppDispatch, useAppSelector } from "../reducers/hooks";
+// import { useParams } from "react-router-dom";
+import { useParams } from 'next/navigation'
+import { parseUrlInput } from "../../app/utils/parsers";
+import { useAppDispatch, useAppSelector } from "../../app/reducers/hooks";
 // import { updateEndDate, updateSelectedSpaces, updateStartDate } from "../reducers/userInputReducer";
-import loadProposals from "../services/loadProposals";
+import loadProposals from "../../app/services/loadProposals";
 import { useLazyQuery } from "@apollo/client";
-import { PROPOSALS_FROM_SPACES } from "../utils/queries";
+import { PROPOSALS_FROM_SPACES } from "../../app/utils/queries";
 
 // import loadProposals from "../services/loadProposals";
-import { updateStopFetching } from "../reducers/userInputReducer";
+import { updateStopFetching } from "../../app/reducers/userInputReducer";
 
 const UpdateState = () => {
   const dispatch = useAppDispatch()
@@ -25,7 +28,7 @@ const UpdateState = () => {
     ) 
   
     const spacesToLoad = selectedSpaces.filter(
-      spaceId => loadedSpaces.indexOf(spaceId) === -1
+      (spaceId: string) => loadedSpaces.indexOf(spaceId) === -1
     )
     console.log("spacesToLoad: ",  spacesToLoad)
     loadProposals(spacesToLoad)

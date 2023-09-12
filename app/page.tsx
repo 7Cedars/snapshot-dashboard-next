@@ -2,17 +2,17 @@
 // import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 // import { useAppSelector } from "./reducers/hooks";
 
-import AboutDialog from "../components/modals/AboutModal";
-import SettingsDialog from "../components/modals/SettingsModal";
-import SavedSearchesDialog from "../components/modals/SavedSearches";
+import AboutDialog from "./components/modals/AboutModal";
+import SettingsDialog from "./components/modals/SettingsModal";
+import SavedSearchesDialog from "./components/modals/SavedSearches";
 // import SearchDialog from "../components/modals/SearchModal";
 
-import SpacesList from "../components/SpacesList";
-import NetworkComponent from "../components/NetworkChart";
-import HeatMap from "../components/Heatmap";
-import NavBar from "../components/NavBar";
+import SpacesList from "./components/SpacesList";
+import NetworkComponent from "./components/NetworkChart";
+import HeatMap from "./components/Heatmap";
+import NavBar from "./components/NavBar";
 // import UpdateState from "../components/UpdateState";
-import { RangeSlider } from "../components/ui/RangeSlider";
+import { RangeSlider } from "./components/ui/RangeSlider";
 
 const Home = () => {
 

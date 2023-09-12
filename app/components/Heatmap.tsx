@@ -1,9 +1,11 @@
+"use client";
+
 import { Heatmap } from "./charts/Heatmap";
 import { ChartCanvas } from "./ui/ChartCanvas";
-import { useAppSelector, useAppDispatch } from "../reducers/hooks";
+import { useAppSelector, useAppDispatch } from "../../app/reducers/hooks";
 import { useLazyQuery } from "@apollo/client";
-import { PROPOSALS_FROM_SPACES } from "../utils/queries";
-import { addProposals } from "../reducers/proposalsReducer";
+import { PROPOSALS_FROM_SPACES } from "../../app/utils/queries";
+import { addProposals } from "../../app/reducers/proposalsReducer";
 
 const HeatMap = () => { 
   // const dispatch = useAppDispatch()
