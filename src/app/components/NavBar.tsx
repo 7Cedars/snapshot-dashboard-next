@@ -6,7 +6,7 @@ import {
   BookmarkSquareIcon, 
   QuestionMarkCircleIcon
  } from '@heroicons/react/24/outline'
- import { useAppDispatch } from "../../redux/reducers/hooks";
+ import { useAppDispatch } from "../../redux/hooks";
  import { updateModal } from "../../redux/reducers/userInputReducer";
 
 

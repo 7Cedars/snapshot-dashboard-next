@@ -3,12 +3,13 @@
 import { useMemo } from "react";
 import * as d3 from "d3";
 // import { data } from "../../data/dummyHeatmapData";   // data: { x: string; y: string; value: number }[];
-import { useAppSelector } from "../../../redux/reducers/hooks";
+import { useAppSelector } from "../../../redux/hooks";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
 import { parseUrlInput } from "../../utils/parsers";
 import { useParams } from 'next/navigation'
 // import { useParams } from "react-router-dom";
+import { Proposal } from "../../../../types"
 
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
@@ -25,7 +26,7 @@ export const Heatmap = ({ width = 500, height = 400}: HeatmapProps) => {
 
   const { proposals } = useAppSelector(state => state.loadedProposals) 
   
-  const selectedProposals = proposals.filter(proposal => {
+  const selectedProposals = proposals.filter((proposal: Proposal) => {
     return selectedSpaces.includes(proposal.space.id)
   })
   const nCol =  Math.floor((width / height) * selectedSpaces.length)

@@ -1,7 +1,7 @@
 "use client";
 
 import SpaceItem from "./SpaceItem";
-import { useAppDispatch, useAppSelector } from "../../redux/reducers/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
 import loadProposals from "../../redux/services/loadProposals";
 import { useEffect, useState } from "react";

@@ -4,7 +4,7 @@ import proposalsReducer from './reducers/proposalsReducer'
 import notificationReducer from  './reducers/notificationReducer'
 import urlReducer from './reducers/urlReducer'
 
-const store = configureStore({
+export const store = configureStore({
   reducer: {
     urlData: urlReducer, 
     userInput: userInputReducer, 

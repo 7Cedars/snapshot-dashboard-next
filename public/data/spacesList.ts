@@ -1,7 +1,7 @@
 // These are the first 19998 (!) spaces list (ascending by creation date).
 // build up further later on.  
 
-import { Space } from "../types" ;
+import { Space } from "../../types" ;
 
 const spaces: Space[] = 
 [

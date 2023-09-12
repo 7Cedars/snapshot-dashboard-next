@@ -1,5 +1,5 @@
 // import SelectSpacesForm from "../searchComponent/SelectSpacesForm (depricated)"
-import { useAppDispatch, useAppSelector } from "../reducers/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks";
 import { addProposals } from "../reducers/proposalsReducer";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
 import { useLazyQuery } from "@apollo/client";

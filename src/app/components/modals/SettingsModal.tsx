@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react'
 import { Dialog, Transition, Switch } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../../redux/reducers/hooks'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 import { updateModal, setDarkMode, setDeveloperMode } from '../../../redux/reducers/userInputReducer'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 

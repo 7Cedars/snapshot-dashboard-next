@@ -5,11 +5,12 @@ import { useEffect, useState } from "react";
 // import { useParams } from "react-router-dom";
 import { useParams } from 'next/navigation'
 import { parseUrlInput } from "../utils/parsers";
-import { useAppDispatch, useAppSelector } from "../../redux/reducers/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 // import { updateEndDate, updateSelectedSpaces, updateStartDate } from "../reducers/userInputReducer";
 import loadProposals from "../../redux/services/loadProposals";
 import { useLazyQuery } from "@apollo/client";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
+import { Proposal } from "../../../types"
 
 // import loadProposals from "../services/loadProposals";
 import { updateStopFetching } from "../../redux/reducers/userInputReducer";
@@ -24,7 +25,7 @@ const UpdateState = () => {
     const {selectedSpaces }  = parseUrlInput(data)
 
     const loadedSpaces = Array.from(
-      new Set(proposals.map(proposal => proposal.space.id))
+      new Set(proposals.map((proposal: Proposal) => proposal.space.id))
     ) 
   
     const spacesToLoad = selectedSpaces.filter(

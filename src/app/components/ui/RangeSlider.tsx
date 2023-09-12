@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../../redux/reducers/hooks";
+import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
 import { updateUrl } from "../../../redux/reducers/urlReducer";
 import { standardDateRange } from "../../../../constants";
 import { toDateFormat } from "../../utils/utils";
+import { Proposal } from "../../../../types" 
 
 export const RangeSlider = () => {
   const dispatch = useAppDispatch()
@@ -18,8 +19,8 @@ export const RangeSlider = () => {
     maxVal = Date.now()
 
   } else {
-     minVal = Math.min(...proposals.map( proposal => proposal.start) ) 
-     maxVal = Math.max(...proposals.map( proposal => proposal.end) )
+     minVal = Math.min(...proposals.map( (proposal: Proposal) => proposal.start) ) 
+     maxVal = Math.max(...proposals.map( (proposal: Proposal) => proposal.end) )
   }
 
   const [valueA, setValueA] = useState(minVal);

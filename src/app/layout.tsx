@@ -1,11 +1,7 @@
 import './globals.css'
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import { ApolloWrapper } from "./ApolloWrapper";
-import store from '../redux/store'
-import { Providers } from "../redux/provider";
-
-const inter = Inter({ subsets: ['latin'] })
+import { ReduxProvider } from "../redux/provider" 
 
 export const metadata: Metadata = {
   title: 'Snapshot Dashboard',
@@ -19,11 +15,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <Providers>
+      <body>
         <ApolloWrapper>
-          {children}
+          <ReduxProvider>
+            {children}
+          </ReduxProvider>
         </ApolloWrapper>
-      </Providers>
+      </body>
+      
     </html>
   )
 }

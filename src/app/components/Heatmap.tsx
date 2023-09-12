@@ -2,7 +2,7 @@
 
 import { Heatmap } from "./charts/Heatmap";
 import { ChartCanvas } from "./ui/ChartCanvas";
-import { useAppSelector, useAppDispatch } from "../../redux/reducers/hooks";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { useLazyQuery } from "@apollo/client";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
 import { addProposals } from "../../redux/reducers/proposalsReducer";
