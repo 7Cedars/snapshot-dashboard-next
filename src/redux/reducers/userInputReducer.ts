@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { UserInputState } from '../types'
-import { standardDateRange } from '../../constants'
+import { UserInputState } from '../../../../types'
+import { standardDateRange } from '../../../../constants'
 
 const initialState: UserInputState = {
   // selectedSpaces: [], 

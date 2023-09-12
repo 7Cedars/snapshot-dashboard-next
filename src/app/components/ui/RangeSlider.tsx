@@ -1,8 +1,10 @@
+"use client";
+
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../../src/reducers/hooks";
-import { updateUrl } from "../../../src/reducers/urlReducer";
-import { standardDateRange } from "../../../constants";
-import { toDateFormat } from "../../../src/utils/utils";
+import { useAppSelector, useAppDispatch } from "../../../redux/reducers/hooks";
+import { updateUrl } from "../../../redux/reducers/urlReducer";
+import { standardDateRange } from "../../../../constants";
+import { toDateFormat } from "../../utils/utils";
 
 export const RangeSlider = () => {
   const dispatch = useAppDispatch()

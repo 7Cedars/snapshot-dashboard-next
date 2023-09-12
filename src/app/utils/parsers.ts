@@ -1,4 +1,4 @@
-import { Space, UrlInput} from "../types";
+import { Space, UrlInput} from "../../../.next/types/app/components";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;

@@ -1,4 +1,4 @@
-import { Proposal, Node, Vote, NetworkGraph, NetworkLink, NetworkNode } from "../types";
+import { Proposal, Node, Vote, NetworkGraph, NetworkLink, NetworkNode } from "../../../.next/types/app/components";
 import * as d3 from "d3";
 
 interface toHeatmapProps {

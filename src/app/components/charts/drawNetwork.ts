@@ -1,4 +1,4 @@
-import { Link, Node } from "../../../types";
+import { Link, Node } from "../../../../.next/types/app/components";
 
 export const RADIUS = 10;
 

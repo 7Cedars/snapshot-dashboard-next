@@ -1,8 +1,8 @@
 import * as d3 from 'd3';
 import { useEffect, useRef } from 'react';
 import { RADIUS, drawNetwork } from './drawNetwork';
-import { Link, Node } from '../../../types';
-import { data } from '../../../public/data/dummyNetworkData';
+import { Link, Node } from '../../../../.next/types/app/components';
+import { data } from '../../../../public/data/dummyNetworkData';
 
 type NetworkDiagramProps = {
   width: number;

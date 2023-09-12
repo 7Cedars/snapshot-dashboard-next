@@ -6,8 +6,8 @@ import {
   BookmarkSquareIcon, 
   QuestionMarkCircleIcon
  } from '@heroicons/react/24/outline'
- import { useAppDispatch } from "../../app/reducers/hooks";
- import { updateModal } from "../../app/reducers/userInputReducer";
+ import { useAppDispatch } from "../../redux/reducers/hooks";
+ import { updateModal } from "../../redux/reducers/userInputReducer";
 
 
 const NavBar = () => {

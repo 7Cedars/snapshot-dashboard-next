@@ -2,8 +2,8 @@
 
 import { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../../app/reducers/hooks'
-import { updateModal } from '../../../app/reducers/userInputReducer'
+import { useAppDispatch, useAppSelector } from '../../../redux/reducers/hooks'
+import { updateModal } from '../../../redux/reducers/userInputReducer'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 
 export const SavedSearchesDialog = () => {

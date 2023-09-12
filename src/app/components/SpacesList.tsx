@@ -1,11 +1,11 @@
 "use client";
 
 import SpaceItem from "./SpaceItem";
-import { useAppDispatch, useAppSelector } from "../../app/reducers/hooks";
-import { updateModal } from "../../app/reducers/userInputReducer";
-import loadProposals from "../../app/services/loadProposals";
+import { useAppDispatch, useAppSelector } from "../../redux/reducers/hooks";
+import { updateModal } from "../../redux/reducers/userInputReducer";
+import loadProposals from "../../redux/services/loadProposals";
 import { useEffect, useState } from "react";
-import { parseUrlInput } from "../../app/utils/parsers";
+import { parseUrlInput } from "../utils/parsers";
 import { useParams } from 'next/navigation'
 // import { useParams } from "react-router-dom";
 

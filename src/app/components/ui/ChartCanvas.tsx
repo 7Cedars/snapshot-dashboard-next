@@ -1,4 +1,5 @@
 // Based on clone from https://github.com/holtzy/react-graph-gallery
+"use client";
 
 import { ReactNode, useRef } from "react";
 import { useDimensions } from "../../hooks/use-dimensions";
