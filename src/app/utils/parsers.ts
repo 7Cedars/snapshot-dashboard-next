@@ -85,12 +85,12 @@ export const parseEndDate = (value: string): EndDate => {
   return parseInt(value); 
 }
 
-export const parseSelectedSpaces = (value: string[]): SelectedSpaces => {
-  if (value.find(item => !isString(item))) {
-    throw new Error(`Incorrect or missing dataUrl at selectedSpaces: ${value}`);
+export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
+  if (spaces.find(space => !isString(space))) {
+    throw new Error(`Incorrect or missing dataUrl at selectedSpaces: ${spaces}`);
   }
 
-  const selectedSpaces = value //.split(';')
+  const selectedSpaces = spaces //.split(';')
   // TODO
   // Here should be checked against ids of spacelist. 
   // But should not be created everysingle time... 

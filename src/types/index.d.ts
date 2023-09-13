@@ -38,7 +38,7 @@ export type StartDate = number;
 export type EndDate = number;
 
 export interface SearchParams {
-  selectedSpaces: SelectedSpaces;
+  space: SelectedSpaces;
   startDate: StartDate; 
   endDate: EndDate;
 }

@@ -7,8 +7,7 @@ import { updateModal } from '../../redux/reducers/userInputReducer'
 import { XMarkIcon, ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react/24/outline'
 import spaces from '../../../public/data/spacesList'
 import { Space } from '../../types'
-import { updateUrl } from '../../redux/reducers/urlReducer'
-import { useParams } from 'next/navigation'
+import { useSpaces } from '../hooks/useUrl';
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
@@ -26,18 +25,15 @@ console.log("listCategories: ", listCategories )
 export const SearchDialog = () => {
   const dispatch = useAppDispatch()
   const { modal } = useAppSelector(state => state.userInput)
-  const [ selectedSpaces, setSelectedSpaces] = useState([''])
-
   const [selectedCategory, setSelectedCategory] = useState<string[]>(['all'])
-  const [filteredSpaces, setFilteredSpaces ] = useState<Space[]>(spaces.sort(compareVotes))
-  // const { selectedSpaces } = useAppSelector(state => state.userInput)
-  const { data } = useParams(); 
-  // const {selectedSpaces }  = parseUrlInput(data)
-
+  const [filteredSpaces, setFilteredSpaces ] = useState<Space[]>(spaces.sort(compareVotes).slice(0, 50))
   const [query, setQuery] = useState('')
+  const { selectedSpaces, addSpace } = useSpaces()
 
-  useEffect (() => {
-    
+  const handleSelection = (space: Space) => {
+  
+    addSpace(space)
+
     let firstFilter = spaces.filter((space: Space) => 
       space.categories.some(item => selectedCategory.includes(item))
     )
@@ -46,7 +42,7 @@ export const SearchDialog = () => {
 
     const secondFilter = firstFilter.filter((space: Space) => 
       selectedSpaces.indexOf(space.id) === -1 
-    )
+    ) 
 
     if (query.length > 0) {
       const thirdFilter = secondFilter.filter((space:Space) => 
@@ -55,10 +51,29 @@ export const SearchDialog = () => {
     } else {
       setFilteredSpaces(secondFilter.slice(0, 50))
     }
+  } 
 
-  }, [selectedCategory, query, selectedSpaces])
+  // useEffect (() => {
+    
+  //   let firstFilter = spaces.filter((space: Space) => 
+  //     space.categories.some(item => selectedCategory.includes(item))
+  //   )
 
+  //   if (selectedCategory.includes('all')) {firstFilter = spaces}
 
+  //   const secondFilter = firstFilter.filter((space: Space) => 
+  //     selectedSpaces.indexOf(space.id) === -1 
+  //   ) 
+
+  //   if (query.length > 0) {
+  //     const thirdFilter = secondFilter.filter((space:Space) => 
+  //       space.id.includes(query))
+  //     setFilteredSpaces(thirdFilter.slice(0, 50)) 
+  //   } else {
+  //     setFilteredSpaces(secondFilter.slice(0, 50))
+  //   }
+
+  // }, [selectedCategory, query ]) // selectedSpaces
 
   return (
    
@@ -129,21 +144,18 @@ export const SearchDialog = () => {
                     <Listbox value={selectedCategory} onChange={setSelectedCategory} >
                      
                         <Listbox.Button className="absolute flex justify-between cursor-default p-2 w-48">
-                          {/* <span className="pointer-events-none "> */}
                             <TagIcon
                               className="h-5 w-5 text-black pointer-events-none "
                               aria-hidden="true"
                             />
-                          {/* </span> */}
 
                           {selectedCategory}
 
-                          {/* <span className="pointer-events-none"> */}
                             <ChevronDownIcon
                               className="h-5 w-5 text-black pointer-events-none "
                               aria-hidden="true"
                             />
-                          {/* </span> */}
+
                         </Listbox.Button>
                         <Transition
                           as={Fragment}
@@ -191,7 +203,7 @@ export const SearchDialog = () => {
                     <div key = {space.id} > 
                     <button 
                       className='border border-blue-300 rounded-lg p-2 mr-1 my-2 w-96 grid justify-items-start'
-                      onClick={() => dispatch(updateUrl({data: space.id, type: 'space'}))}
+                      onClick={() => handleSelection(space)} 
                     > 
                       <div className={`block truncate font-medium`} >
                           {space.id}
@@ -208,17 +220,9 @@ export const SearchDialog = () => {
                         </div>
                     </button> 
                     </div> 
-
                   ))}
-
-
-
                 </div>
-
-                </div>
-
-
-
+              </div>
             </Dialog.Panel>
           </Transition.Child>
         </div>

@@ -6,6 +6,7 @@ import { ReduxProvider } from "../redux/provider"
 import AboutDialog from "./modals/AboutModal";
 import SettingsDialog from "./modals/SettingsModal";
 import SavedSearchesDialog from "./modals/SavedSearches";
+import SearchDialog from './modals/SearchModal';
 import NavBar from './NavBar';
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
           
             <div className="max-h-screen grid grid-cols-1 relative">
           
-              <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> 
+              <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
               <NavBar/>
 
               {children}

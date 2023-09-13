@@ -4,6 +4,7 @@ import spaces from '../../../public/data/spacesList'
 import { MinusCircleIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useAppDispatch } from "../../redux/hooks";
 import { updateUrl } from "../../redux/reducers/urlReducer";
+import { useSpaces } from '../hooks/useUrl';
 
 interface Props {
   key: string; 
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const SpaceItem = ( {spaceId}: Props) => {
-  const dispatch = useAppDispatch()
+  const { removeSpace } = useSpaces() 
   
   const space = spaces.find(space => space.id === spaceId)
 
@@ -56,7 +57,7 @@ const SpaceItem = ( {spaceId}: Props) => {
             <button 
               className="font-bold"
               type="submit"
-              onClick={() => dispatch(updateUrl({data: spaceId, type: 'space'})) }
+              onClick={() => removeSpace(spaceId) }
               >
                 <MinusCircleIcon
                   className="h-8 w-8 text-red-400 hover:text-red-600 items-center justify-center"

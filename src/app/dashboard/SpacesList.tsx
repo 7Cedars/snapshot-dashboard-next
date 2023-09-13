@@ -19,12 +19,12 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
     <div className="p-2 grid grid-cols-1 place-content-start border border-gray-500 rounded-lg shadow-md mt-20"> 
 
       <div className="pb-3 pt-1 max-h-screen overflow-auto">
-        {selectedSpaces.length === 1 ? 
+        {selectedSpaces.length === 0 ? 
           <i className="grid justify-items-center p-2 my-4 text-gray-500 "> No DAO spaces selected. </i>
           :
           selectedSpaces.map(spaceId => (
             < SpaceItem key = {spaceId} spaceId = {spaceId}/> 
-          ))        
+          ))
         }
       </div>
 

@@ -29,12 +29,10 @@ export function getEndDateFromUrlParams(
 export function getSpacesFromUrlParams(
   searchParams: SearchParams
 ): SelectedSpaces {
-  const spacesParam = searchParams.selectedSpaces;
+  const spacesParam = [searchParams.space].flat();
   let selectedSpaces: SelectedSpaces = [];
-  if ('spaces' in searchParams && spacesParam) {
+  if ('space' in searchParams && spacesParam) {
     selectedSpaces = parseSelectedSpaces(spacesParam);
   }
   return selectedSpaces;
 }
-
-// Here still need function getSelectedSpaces... TBD

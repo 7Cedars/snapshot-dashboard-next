@@ -53,11 +53,23 @@ export function useSpaces() {
   const router = useRouter();
   const selectedSpaces = getSpacesFromUseSearchParams(params);
 
-  const handleSpaces = (value: Space) => {
-    let newParams = new URLSearchParams();
-    newParams.append('space', value.id)
+  const addSpace = (space: Space) => {
+    let newParams = new URLSearchParams(params.toString());
+    newParams.append('space', space.id)
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  return { selectedSpaces, handleSpaces };
+  // because deleting single item is not supported yet, need to do it in a roundabout way. 
+  const removeSpace = (spaceId: String) => {
+    let newParams = new URLSearchParams(params.toString());
+    const newParamsArray = Array.from(newParams).map(item => item[1])
+    const updatedSpaces = newParamsArray.filter(item => item !== spaceId)
+
+    newParams.delete('space')
+    updatedSpaces.forEach(spaceId => newParams.append('space', spaceId))
+
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
+
+  return { selectedSpaces, addSpace, removeSpace };
 }
