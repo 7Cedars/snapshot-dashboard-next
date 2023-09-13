@@ -6,15 +6,17 @@ import { updateUrl } from "../../redux/reducers/urlReducer";
 import { standardDateRange } from "../../../constants";
 import { toDateFormat } from "../utils/utils";
 import { Proposal } from "../../types" 
+import { useStartDate, useEndDate } from "../hooks/useUrl";
 
 interface RangeSliderProps {
   ValueA: number;
   ValueB: number;
 }
 
-export const RangeSlider = ( {ValueA, ValueB}: RangeSliderProps ) => {
-  const dispatch = useAppDispatch()
+export const RangeSlider = ( ) => {
   const { proposals } = useAppSelector(state => state.loadedProposals)
+  const { endDate, handleEndDate } = useEndDate()
+  const { startDate, handleStartDate } = useStartDate()
 
   let minVal
   let maxVal
@@ -37,17 +39,11 @@ export const RangeSlider = ( {ValueA, ValueB}: RangeSliderProps ) => {
     } else {
       setValueB(value)
     }
+
+    handleStartDate(Math.min(valueA, valueB))
+    handleEndDate(Math.max(valueA, valueB))
+
   }
-
-  const startDate = Math.min(valueA, valueB) 
-  const endDate = Math.max(valueA, valueB) 
-
-  useEffect(() => {
-    
-    dispatch( updateUrl({ data: String(startDate), type: 'startDate' }) )
-    dispatch( updateUrl({ data: String(endDate), type: 'endDate' }) )
-
-  }, [valueA, valueB]);
 
   return (
     
