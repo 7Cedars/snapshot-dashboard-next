@@ -1,7 +1,7 @@
 "use client";
 
 import { Heatmap } from "./charts/Heatmap";
-import { ChartCanvas } from "./ui/ChartCanvas";
+import { ChartCanvas } from "../ui/ChartCanvas";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { useLazyQuery } from "@apollo/client";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";

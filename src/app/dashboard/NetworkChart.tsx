@@ -4,12 +4,12 @@ import { useLazyQuery } from '@apollo/client'
 import { VOTERS_ON_PROPOSALS } from '../utils/queries'
 import { SyntheticEvent, useEffect, useState } from 'react'; 
 import { useAppSelector } from '../../redux/hooks';
-import { Proposal } from '../../../types';
+import { Proposal } from '../../types';
 import { useAppDispatch } from '../../redux/hooks';
 import { addVotes } from '../../redux/reducers/proposalsReducer'
 import { toNetworkGraph } from '../utils/transposeData';
 import { toSelectedProposals } from '../utils/utils';
-import { ChartCanvas } from './ui/ChartCanvas';
+import { ChartCanvas } from '../ui/ChartCanvas';
 import { NetworkDiagram } from './charts/NetworkDiagram';
 
 

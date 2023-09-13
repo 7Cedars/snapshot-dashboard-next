@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import loadProposals from "../../redux/services/loadProposals";
 import { useLazyQuery } from "@apollo/client";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
-import { Proposal } from "../../../types"
+import { Proposal } from "../../types"
 
 // import loadProposals from "../services/loadProposals";
 import { updateStopFetching } from "../../redux/reducers/userInputReducer";

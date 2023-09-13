@@ -14,11 +14,11 @@ const SpacesList = () => {
   const dispatch = useAppDispatch()
   const [selectedSpaces, setSelectedSpaces] = useState(['']) 
   // const { selectedSpaces } = useAppSelector(state => state.userInput)
-  const { data } = useParams();
-
+  // const { data } = useParams();
+  // console.log("DATA: ", data)
   
   useEffect(() => {
-    const { selectedSpaces }  = parseUrlInput(data)
+    // const { selectedSpaces }  = parseUrlInput(data)
     setSelectedSpaces(selectedSpaces)
   }, [])
 

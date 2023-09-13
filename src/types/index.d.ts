@@ -33,10 +33,14 @@ export interface UserInputState {
   }
 }
 
+export type SelectedSpaces = string[];
+export type StartDate = number;
+export type EndDate = number;
+
 export interface UrlInput {
-  selectedSpaces: string[];
-  startDate: number; 
-  endDate: number;
+  selectedSpaces: SelectedSpaces;
+  startDate: StartDate; 
+  endDate: EndDate;
 }
 
 // export interface UserInputStateU {

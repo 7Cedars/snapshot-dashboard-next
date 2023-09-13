@@ -2,7 +2,7 @@
 "use client";
 
 import { ReactNode, useRef } from "react";
-import { useDimensions } from "../../hooks/use-dimensions";
+import { useDimensions } from "../hooks/useDimensions";
 
 type ChartCanvasProps = {
   VizComponent: (props: {

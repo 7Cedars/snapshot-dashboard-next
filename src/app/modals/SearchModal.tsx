@@ -2,14 +2,14 @@
 
 import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Transition, Listbox } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
-import { updateModal } from '../../../redux/reducers/userInputReducer'
+import { useAppDispatch, useAppSelector } from '../../redux/hooks'
+import { updateModal } from '../../redux/reducers/userInputReducer'
 import { XMarkIcon, ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react/24/outline'
-import spaces from '../../../../public/data/spacesList'
-import { Space } from '../../../../types'
-import { updateUrl } from '../../../redux/reducers/urlReducer'
+import spaces from '../../../public/data/spacesList'
+import { Space } from '../../types'
+import { updateUrl } from '../../redux/reducers/urlReducer'
 import { useParams } from 'next/navigation'
-import { parseUrlInput } from '../../utils/parsers'
+import { parseUrlInput } from '../utils/parsers'
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount

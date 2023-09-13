@@ -1,4 +1,5 @@
-import { Space, UrlInput} from "../../../.next/types/app/components";
+import { Space, UrlInput, StartDate, EndDate, SelectedSpaces} from "../../types";
+import spaces from "../../../public/data/spacesList";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -58,7 +59,48 @@ export const toSpaceEntry = (object: unknown): Space => {
 // NB: still need to add parsers for Proposal and Vote inputs. 
 // Never ever trust anything you receive from an outside source... 
 
-// NB: still WIP: see below.  
+// NB: still WIP: see below.
+
+export const parseStartDate = (value: string): StartDate => {
+  if (!isString(value)) {
+    throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
+  }
+
+  if (!isNumber(parseInt(value))) {
+    throw new Error(`Data is not stringefied number: ${value}`);
+  }
+
+  return parseInt(value); 
+}
+
+export const parseEndDate = (value: string): EndDate => {
+  if (!isString(value)) {
+    throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
+  }
+
+  if (!isNumber(parseInt(value))) {
+    throw new Error(`Data is not stringefied number: ${value}`);
+  }
+
+  return parseInt(value); 
+}
+
+export const parseSelectedSpaces = (value: string): SelectedSpaces => {
+  if (!isString(value)) {
+    throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
+  }
+
+  const selectedSpaces = value.split(';')
+  // TODO
+  // Here should be checked against ids of spacelist. 
+  // But should not be created everysingle time... 
+  // should save this list in redux store at startup. 
+
+  return selectedSpaces; 
+}
+
+
+// To be depricated 
 export const parseUrlInput = (object: unknown): UrlInput => { 
   console.log("parseInputEntries is called.")
   if (!isString(object)) {

@@ -1,45 +1,42 @@
 "use client"
 
 // import FetchSpaces from "./components/FetchSpaces";
-// import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
-// import { useAppSelector } from "./redux/hooks";
+import { useAppSelector } from  "../redux/hooks";
+import { useEffect } from "react";
 
-import AboutDialog from "./components/modals/AboutModal";
-import SettingsDialog from "./components/modals/SettingsModal";
-import SavedSearchesDialog from "./components/modals/SavedSearches";
+import AboutDialog from "./modals/AboutModal";
+import SettingsDialog from "./modals/SettingsModal";
+import SavedSearchesDialog from "./modals/SavedSearches";
 // import SearchDialog from "../components/modals/SearchModal";
 
-import SpacesList from "./components/SpacesList";
-import NetworkComponent from "./components/NetworkChart";
-import HeatMap from "./components/Heatmap";
-import NavBar from "./components/NavBar";
+import SpacesList from "./dashboard/SpacesList";
+import NetworkComponent from "./dashboard/NetworkChart";
+import HeatMap from "./dashboard/Heatmap";
+import NavBar from "./NavBar";
 // import UpdateState from "../components/UpdateState";
-import { RangeSlider } from "./components/ui/RangeSlider";
+import { RangeSlider } from "./ui/RangeSlider";
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const Home = () => {
-  // const { urlData } = useAppSelector(state => state.urlData)
-  const router = useRouter()
-
-  // router.push(urlData)
 
   return (
       <div className="max-h-screen grid grid-cols-1 relative">
         
         <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> 
+        <NavBar/>
 
-          <NavBar />
-
-            {/* <> 
+            <> 
             <div className="flex flex-row w-full max-h-screen text-sm py-5 place-content-center px-2">
               <div> 
-                <SpacesList/>
+                A Dashboard for Visualising Relational Voting Behaviour on Snapshot 
+                {/* <SpacesList/> */}
               </div>
-              <NetworkComponent />
+              {/* <NetworkComponent />
               <HeatMap />
-              <RangeSlider /> 
-            </div>  */}
-            {/* </> */}
+              <RangeSlider />  */}
+            </div> 
+            </>
       </div>
 
   );

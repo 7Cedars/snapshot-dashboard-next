@@ -6,12 +6,21 @@ import {
   BookmarkSquareIcon, 
   QuestionMarkCircleIcon
  } from '@heroicons/react/24/outline'
- import { useAppDispatch } from "../../redux/hooks";
- import { updateModal } from "../../redux/reducers/userInputReducer";
+ import { useAppDispatch } from "../redux/hooks";
+ import { updateModal } from "../redux/reducers/userInputReducer";
 
+ interface UrlProps {
+  searchParams: {
+    sps: string[];
+    sd: number; 
+    ed: number;
+  }
+}
 
-const NavBar = () => {
+const NavBar = ( ) => {
   const dispatch = useAppDispatch() 
+
+  // console.log(searchParams)
 
   return (
     <header className="absolute top-0 grid justify-items-center h-18 flex flex-wrap w-full text-sm py-0 border-b border-black shadow-md">

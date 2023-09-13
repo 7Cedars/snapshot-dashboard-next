@@ -1,13 +1,18 @@
 "use client";
 
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "../../../redux/hooks";
-import { updateUrl } from "../../../redux/reducers/urlReducer";
-import { standardDateRange } from "../../../../constants";
-import { toDateFormat } from "../../utils/utils";
-import { Proposal } from "../../../../types" 
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { updateUrl } from "../../redux/reducers/urlReducer";
+import { standardDateRange } from "../../../constants";
+import { toDateFormat } from "../utils/utils";
+import { Proposal } from "../../types" 
 
-export const RangeSlider = () => {
+interface RangeSliderProps {
+  ValueA: number;
+  ValueB: number;
+}
+
+export const RangeSlider = ( {ValueA, ValueB}: RangeSliderProps ) => {
   const dispatch = useAppDispatch()
   const { proposals } = useAppSelector(state => state.loadedProposals)
 

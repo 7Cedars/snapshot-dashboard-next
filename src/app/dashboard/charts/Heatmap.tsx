@@ -9,7 +9,7 @@ import { toDateFormat } from "../../utils/utils";
 import { parseUrlInput } from "../../utils/parsers";
 import { useParams } from 'next/navigation'
 // import { useParams } from "react-router-dom";
-import { Proposal } from "../../../../types"
+import { Proposal } from "../../../types"
 
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
