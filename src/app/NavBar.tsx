@@ -50,7 +50,7 @@ const NavBar = ( ) => {
             <button 
               className="text-black font-bold py-2 px-4"
               type="submit"
-              onClick={() => dispatch(updateModal('settings'))}
+              onClick={() => dispatch(updateModal('settings'))} 
               >
               <Cog6ToothIcon
                 className="h-7 w-7"

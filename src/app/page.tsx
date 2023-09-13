@@ -21,23 +21,17 @@ import Link from 'next/link'
 const Home = () => {
 
   return (
-      <div className="max-h-screen grid grid-cols-1 relative">
-        
-        <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> 
-        <NavBar/>
-
-            <> 
-            <div className="flex flex-row w-full max-h-screen text-sm py-5 place-content-center px-2">
-              <div> 
-                A Dashboard for Visualising Relational Voting Behaviour on Snapshot 
-                {/* <SpacesList/> */}
-              </div>
-              {/* <NetworkComponent />
-              <HeatMap />
-              <RangeSlider />  */}
-            </div> 
-            </>
+    
+    <div className="pt-40 flex flex-row w-full max-h-screen text-sm py-5 place-content-center px-2">
+      <div> 
+        A Dashboard for Visualising Relational Voting Behaviour on Snapshot 
+        {/* <SpacesList/> */}
       </div>
+      <div>
+        <Link href='/dashboard'>To the DashBoard</Link>
+      </div>
+
+    </div> 
 
   );
 }

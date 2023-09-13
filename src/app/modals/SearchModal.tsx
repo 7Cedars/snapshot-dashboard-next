@@ -9,7 +9,6 @@ import spaces from '../../../public/data/spacesList'
 import { Space } from '../../types'
 import { updateUrl } from '../../redux/reducers/urlReducer'
 import { useParams } from 'next/navigation'
-import { parseUrlInput } from '../utils/parsers'
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
@@ -34,10 +33,6 @@ export const SearchDialog = () => {
   // const { selectedSpaces } = useAppSelector(state => state.userInput)
   const { data } = useParams(); 
   // const {selectedSpaces }  = parseUrlInput(data)
-  useEffect(() => {
-    const { selectedSpaces }  = parseUrlInput(data)
-    setSelectedSpaces(selectedSpaces)
-  }, [data])
 
   const [query, setQuery] = useState('')
 

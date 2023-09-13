@@ -5,41 +5,26 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
 import loadProposals from "../../redux/services/loadProposals";
 import { useEffect, useState } from "react";
-import { parseUrlInput } from "../utils/parsers";
 import { useParams } from 'next/navigation'
-// import { useParams } from "react-router-dom";
+import { SelectedSpaces } from "@/types";
 
-const SpacesList = () => {
-  console.log("DATA: ")
+interface spacesListProps {
+  selectedSpaces: SelectedSpaces
+}
+
+const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   const dispatch = useAppDispatch()
-  const [selectedSpaces, setSelectedSpaces] = useState(['']) 
-  // const { selectedSpaces } = useAppSelector(state => state.userInput)
-  // const { data } = useParams();
-  // console.log("DATA: ", data)
-  
-  useEffect(() => {
-    // const { selectedSpaces }  = parseUrlInput(data)
-    setSelectedSpaces(selectedSpaces)
-  }, [])
 
   return (
     <div className="p-2 grid grid-cols-1 place-content-start border border-gray-500 rounded-lg shadow-md mt-20"> 
-      {/* <button 
-        type="submit"
-        disabled={selectedSpaces.length < 2} 
-        className='border-blue-500 bg-blue-100 text-blue-900 border w-full rounded-lg font-medium p-2 enabled:hover:bg-blue-200 disabled:opacity-50'
-        onClick={handleOnClick}
-        >
-        Analyse
-      </button>  */}
 
       <div className="pb-3 pt-1 max-h-screen overflow-auto">
         {selectedSpaces.length === 1 ? 
-        <i className="grid justify-items-center p-2 my-4 text-gray-500 "> No DAO spaces selected. </i>
-        :
-        selectedSpaces.map(spaceId => (
-          < SpaceItem key = {spaceId} spaceId = {spaceId}/> 
-        ))        
+          <i className="grid justify-items-center p-2 my-4 text-gray-500 "> No DAO spaces selected. </i>
+          :
+          selectedSpaces.map(spaceId => (
+            < SpaceItem key = {spaceId} spaceId = {spaceId}/> 
+          ))        
         }
       </div>
 

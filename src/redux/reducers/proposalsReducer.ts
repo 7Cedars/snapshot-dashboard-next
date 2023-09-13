@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Proposal, Space, Vote } from '../../../../types'
+import { Proposal, Space, Vote } from '../../types'
 
 interface LoadedProposalsState {
   proposals: Proposal[]

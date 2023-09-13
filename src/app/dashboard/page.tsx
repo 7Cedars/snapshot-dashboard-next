@@ -1,9 +1,11 @@
 import { SearchParams } from '../../types';
 import { 
   getStartDateFromUrlParams, 
-  getEndDateFromUrlParams } from '../utils/getDataFromUrl';
+  getEndDateFromUrlParams,
+  getSpacesFromUrlParams } from '../utils/getDataFromUrl';
+import SpacesList from './SpacesList';
 
-  
+
 type Props = {
   searchParams: SearchParams;
 };
@@ -11,11 +13,25 @@ type Props = {
 export default function Page({ searchParams }: Props) {
   const startDate = getStartDateFromUrlParams(searchParams);
   const endDate = getEndDateFromUrlParams(searchParams);
+  const selectedSpaces = getSpacesFromUrlParams(searchParams);
+
+  console.log({
+    startDate: startDate,
+    endDate: endDate, 
+    selectedSpaces: selectedSpaces
+  })
 
   return (
-    <>
-      <ListControlesButtons />
-      <List sortOrder={sortOrder} />
-    </>
+    
+    <div className="pt-40 flex flex-row w-full max-h-screen text-sm py-5 place-content-center px-2">
+      <div> 
+        <SpacesList selectedSpaces = {selectedSpaces}/>
+      </div>
+
+      {/* <NetworkComponent />
+      <HeatMap />
+      <RangeSlider />  */}
+    </div> 
+
   );
 }
