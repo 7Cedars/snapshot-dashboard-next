@@ -1,5 +1,5 @@
 import { 
-  SelectedSpaces, 
+  Space, 
   StartDate, 
   EndDate 
 } from '../../types';
@@ -10,8 +10,12 @@ import {
 } from 'next/navigation';
 import { 
   getStartDateFromUseSearchParams,
-  getEndDateFromUseSearchParams 
-} from '../utils/getDataFromUrl';
+  getEndDateFromUseSearchParams,
+  getSpacesFromUseSearchParams
+} from '../utils/getDataFromUseSearch';
+
+// NB: I do not know if the hooks below will work. 
+// Because I have three different. See and fix if needed. 
 
 export function useStartDate() {
   const params = useSearchParams();
@@ -21,7 +25,7 @@ export function useStartDate() {
 
   const handleStartDate = (value: StartDate) => {
     const newParams = new URLSearchParams(params.toString());
-    newParams.set('sd', String(value));
+    newParams.set('startDate', String(value));
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
@@ -36,11 +40,24 @@ export function useEndDate() {
 
   const handleEndDate = (value: EndDate) => {
     const newParams = new URLSearchParams(params.toString());
-    newParams.set('sd', String(value));
+    newParams.set('endDate', String(value));
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
   return { endDate, handleEndDate };
 }
 
-// To be implemented: useSelectedSpaces hook. TBD. 
+export function useSpaces() {
+  const params = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const selectedSpaces = getSpacesFromUseSearchParams(params);
+
+  const handleSpaces = (value: Space) => {
+    let newParams = new URLSearchParams();
+    newParams.append('space', value.id)
+    router.push(`${pathname}?${newParams.toString()}`);
+  };
+
+  return { selectedSpaces, handleSpaces };
+}

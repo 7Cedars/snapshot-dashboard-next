@@ -1,4 +1,4 @@
-import { Space, UrlInput, StartDate, EndDate, SelectedSpaces} from "../../types";
+import { Space, StartDate, EndDate, SelectedSpaces} from "../../types";
 import spaces from "../../../public/data/spacesList";
 
 const isString = (text: unknown): text is string => {
@@ -85,12 +85,12 @@ export const parseEndDate = (value: string): EndDate => {
   return parseInt(value); 
 }
 
-export const parseSelectedSpaces = (value: string): SelectedSpaces => {
-  if (!isString(value)) {
-    throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
+export const parseSelectedSpaces = (value: string[]): SelectedSpaces => {
+  if (value.find(item => !isString(item))) {
+    throw new Error(`Incorrect or missing dataUrl at selectedSpaces: ${value}`);
   }
 
-  const selectedSpaces = value.split(';')
+  const selectedSpaces = value //.split(';')
   // TODO
   // Here should be checked against ids of spacelist. 
   // But should not be created everysingle time... 
@@ -100,41 +100,41 @@ export const parseSelectedSpaces = (value: string): SelectedSpaces => {
 }
 
 
-// To be depricated 
-export const parseUrlInput = (object: unknown): UrlInput => { 
-  console.log("parseInputEntries is called.")
-  if (!isString(object)) {
-    throw new Error(`Incorrect or missing dataUrl at Parser: ${object}`);
-  }
+// // To be depricated 
+// export const parseUrlInput = (object: unknown): UrlInput => { 
+//   console.log("parseInputEntries is called.")
+//   if (!isString(object)) {
+//     throw new Error(`Incorrect or missing dataUrl at Parser: ${object}`);
+//   }
 
-  if (
-    object.indexOf('sps:') === -1 || 
-    object.indexOf('&&sd:') === -1 || 
-    object.indexOf('&&ed:') === -1 
-    ) {
-      throw new Error(`Incorrect data in dataUrl: ${object}`);
+//   if (
+//     object.indexOf('sps:') === -1 || 
+//     object.indexOf('&&sd:') === -1 || 
+//     object.indexOf('&&ed:') === -1 
+//     ) {
+//       throw new Error(`Incorrect data in dataUrl: ${object}`);
     
-    } else {
-      const splitUrl = object.split('&&')
-      // const modal: 'about' | 'settings' | 'savedSearches' | 'none' = 'none'
-      // const stopFetching = false
-      // const settings: {darkMode: boolean; developerMode: boolean } = {
-      //   darkMode: false, developerMode: false } 
+//     } else {
+//       const splitUrl = object.split('&&')
+//       // const modal: 'about' | 'settings' | 'savedSearches' | 'none' = 'none'
+//       // const stopFetching = false
+//       // const settings: {darkMode: boolean; developerMode: boolean } = {
+//       //   darkMode: false, developerMode: false } 
 
-      // NB: These still need to be properly checked. 
+//       // NB: These still need to be properly checked. 
 
-      const inputState  = {
-        //urlData: object, 
-        selectedSpaces: splitUrl[0].replace('sps:', '').split(';'),
-        startDate: parseInt(splitUrl[1].replace('sd:', '')), 
-        endDate: parseInt(splitUrl[2].replace('ed:', '')), 
-        // modal: modal,
-        // stopFetching: stopFetching, 
-        // settings: settings
-      }
+//       const inputState  = {
+//         //urlData: object, 
+//         selectedSpaces: splitUrl[0].replace('sps:', '').split(';'),
+//         startDate: parseInt(splitUrl[1].replace('sd:', '')), 
+//         endDate: parseInt(splitUrl[2].replace('ed:', '')), 
+//         // modal: modal,
+//         // stopFetching: stopFetching, 
+//         // settings: settings
+//       }
 
-      return inputState
-    }
-}; 
+//       return inputState
+//     }
+// }; 
 
 export default { toSpaceEntry }; 

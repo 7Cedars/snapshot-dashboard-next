@@ -37,7 +37,7 @@ export type SelectedSpaces = string[];
 export type StartDate = number;
 export type EndDate = number;
 
-export interface UrlInput {
+export interface SearchParams {
   selectedSpaces: SelectedSpaces;
   startDate: StartDate; 
   endDate: EndDate;
