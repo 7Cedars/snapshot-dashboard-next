@@ -8,10 +8,22 @@ import { toDateFormat } from "../utils/utils";
 import { Proposal } from "../../types" 
 import { useStartDate, useEndDate } from "../hooks/useUrl";
 
-interface RangeSliderProps {
+// interface RangeSliderProps {
+//   ValueA: number;
+//   ValueB: number;
+// }
+
+type RangeSliderProps = {
+  MinValue: number;
+  MaxValue: number;
   ValueA: number;
   ValueB: number;
-}
+  isDisabled?: boolean;
+  children: any;
+  onChangeStart:() => number;
+  onChangeStop: () => void;
+  // size?: "sm" | "md";
+};
 
 export const RangeSlider = ( ) => {
   const { proposals } = useAppSelector(state => state.loadedProposals)
@@ -39,8 +51,9 @@ export const RangeSlider = ( ) => {
     } else {
       setValueB(value)
     }
+    
 
-    handleStartDate(Math.min(valueA, valueB))
+    onChangeStart(Math.min(valueA, valueB))
     handleEndDate(Math.max(valueA, valueB))
 
   }

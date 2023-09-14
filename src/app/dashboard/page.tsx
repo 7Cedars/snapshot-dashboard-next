@@ -4,7 +4,8 @@ import {
   getEndDateFromUrlParams,
   getSpacesFromUrlParams } from '../utils/getDataFromUrl';
 import SpacesList from './SpacesList';
-import { RangeSlider } from '../ui/RangeSlider';
+// import { RangeSlider } from '../ui/RangeSlider'; 
+import TimeRangeSlider from './TimeRangeSlider';
 
 type Props = {
   searchParams: SearchParams;
@@ -31,7 +32,7 @@ export default function Page({ searchParams }: Props) {
       {/* <NetworkComponent /> */}
       {/* <HeatMap /> */}
       TEST TEST
-      <RangeSlider /> 
+      <TimeRangeSlider /> 
     </div> 
 
   );
