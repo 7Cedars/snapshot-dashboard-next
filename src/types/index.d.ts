@@ -22,9 +22,9 @@ export interface Vote {
   created: number;
 }
 export interface UserInputState {
-  // selectedSpaces: string[];
-  // startDate: number; 
-  // endDate: number; 
+  spaces: string[];
+  startDate: number; 
+  endDate: number; 
   modal: 'search' | 'about' | 'settings' | 'savedSearches' | 'none'; 
   stopFetching: boolean;
   settings: {

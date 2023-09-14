@@ -3,9 +3,6 @@
 import SpaceItem from "./SpaceItem";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
-import loadProposals from "../../redux/services/loadProposals";
-import { useEffect, useState } from "react";
-import { useParams } from 'next/navigation'
 import { SelectedSpaces } from "@/types";
 
 interface spacesListProps {

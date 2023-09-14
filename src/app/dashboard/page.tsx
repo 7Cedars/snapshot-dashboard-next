@@ -1,10 +1,11 @@
+"use client"; 
+
 import { SearchParams } from '../../types';
 import { 
   getStartDateFromUrlParams, 
   getEndDateFromUrlParams,
   getSpacesFromUrlParams } from '../utils/getDataFromUrl';
 import SpacesList from './SpacesList';
-// import { RangeSlider } from '../ui/RangeSlider'; 
 import TimeRangeSlider from './TimeRangeSlider';
 
 type Props = {

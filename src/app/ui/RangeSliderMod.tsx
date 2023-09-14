@@ -21,8 +21,8 @@ export const RangeSliderMod = ({
   maxVal,
   minLabel = 'min', 
   maxLabel = 'max', 
-  valA = 10,
-  valB = 25,
+  valA,
+  valB,
   onChangeA, 
   onChangeB,
 }: RangeSliderProps) => {
@@ -61,7 +61,7 @@ export const RangeSliderMod = ({
           step="1"
           min={minVal}
           max={maxVal}
-          value={valB}
+          value= {valB}
           onChange={onChangeB}
         />
       </div>  

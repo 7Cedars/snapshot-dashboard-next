@@ -6,30 +6,24 @@ import * as d3 from "d3";
 import { useAppSelector } from "../../../redux/hooks";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
-import { parseUrlInput } from "../../utils/parsers";
-import { useParams } from 'next/navigation'
-// import { useParams } from "react-router-dom";
 import { Proposal } from "../../../types"
-
+import { SearchParams} from "../../../types";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
 
-type HeatmapProps = {
+interface HeatmapProps extends SearchParams {
   width: number;
   height: number;
 };
 
-export const Heatmap = ({ width = 500, height = 400}: HeatmapProps) => {
+export const Heatmap = ({ width = 500, height = 400, space, startDate, endDate }: HeatmapProps) => {
   // const { selectedSpaces, startDate, endDate } = useAppSelector(state => state.userInput)
-  const dataUrl = useParams(); 
-  const { selectedSpaces, startDate, endDate  }  = parseUrlInput(dataUrl)
-
   const { proposals } = useAppSelector(state => state.loadedProposals) 
   
   const selectedProposals = proposals.filter((proposal: Proposal) => {
-    return selectedSpaces.includes(proposal.space.id)
+    return space.includes(proposal.space.id)
   })
-  const nCol =  Math.floor((width / height) * selectedSpaces.length)
+  const nCol =  Math.floor((width / height) * space.length)
 
   const data = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
   

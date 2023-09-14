@@ -2,12 +2,13 @@
 
 import { Heatmap } from "./charts/Heatmap";
 import { ChartCanvas } from "../ui/ChartCanvas";
+import { SearchParams } from "@/types";
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { useLazyQuery } from "@apollo/client";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
 import { addProposals } from "../../redux/reducers/proposalsReducer";
 
-const HeatMap = () => { 
+const HeatMap =  ( { space, startDate, endDate }: SearchParams ) => { 
   // const dispatch = useAppDispatch()
   // const { proposals } = useAppSelector(state => state.loadedProposals)
   // const [ proposalsFromSpaces ] = useLazyQuery(PROPOSALS_FROM_SPACES)
@@ -51,9 +52,10 @@ const HeatMap = () => {
 
   return (
     <div> 
+
       <b> Time Range Component </b>    
           <ChartCanvas
-            VizComponent={Heatmap}
+            VizComponent={ Heatmap }
             vizName={"heatmap"}
             maxWidth={2000}
             height={300}
