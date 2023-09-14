@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, SyntheticEvent, useState } from "react";
+import React, { ChangeEvent } from "react";
 
 type RangeSliderProps = {
   minVal: number;

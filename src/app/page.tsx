@@ -1,21 +1,5 @@
 "use client"
 
-// import FetchSpaces from "./components/FetchSpaces";
-import { useAppSelector } from  "../redux/hooks";
-import { useEffect } from "react";
-
-import AboutDialog from "./modals/AboutModal";
-import SettingsDialog from "./modals/SettingsModal";
-import SavedSearchesDialog from "./modals/SavedSearches";
-// import SearchDialog from "../components/modals/SearchModal";
-
-import SpacesList from "./dashboard/SpacesList";
-import NetworkComponent from "./dashboard/NetworkChart";
-import HeatMap from "./dashboard/Heatmap";
-import NavBar from "./NavBar";
-// import UpdateState from "../components/UpdateState";
-import { RangeSlider } from "./ui/RangeSlider";
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 const Home = () => {

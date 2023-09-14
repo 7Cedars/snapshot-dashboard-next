@@ -61,29 +61,29 @@ export const toSpaceEntry = (object: unknown): Space => {
 
 // NB: still WIP: see below.
 
-export const parseStartDate = (value: string): StartDate => {
-  if (!isString(value)) {
-    throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
+// export const parseDateRange = (value: string): [StartDate, EndDate] => {
+//   if (!isString(value)) {
+//     throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
+//   }
+
+//   if (!isNumber(parseInt(value))) {
+//     throw new Error(`Data is not stringefied number: ${value}`);
+//   }
+
+//   return parseInt(value); 
+// }
+
+export const parseDateRange = (dateRange: string[]): [StartDate, EndDate] => {
+  if (dateRange.find(date => !isString(date))) {
+    throw new Error(`Incorrect or missing dataUrl at dateRange: ${dateRange}`);
   }
 
-  if (!isNumber(parseInt(value))) {
-    throw new Error(`Data is not stringefied number: ${value}`);
-  }
+  const dateRangeNumber = dateRange.map(date => parseInt(date))
+  const [StartDate, EndDate] = [Math.min(...dateRangeNumber), Math.max(...dateRangeNumber),] //.split(';')
 
-  return parseInt(value); 
+  return [StartDate, EndDate]; 
 }
 
-export const parseEndDate = (value: string): EndDate => {
-  if (!isString(value)) {
-    throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
-  }
-
-  if (!isNumber(parseInt(value))) {
-    throw new Error(`Data is not stringefied number: ${value}`);
-  }
-
-  return parseInt(value); 
-}
 
 export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   if (spaces.find(space => !isString(space))) {

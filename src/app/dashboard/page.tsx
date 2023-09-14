@@ -2,9 +2,8 @@
 
 import { SearchParams } from '../../types';
 import { 
-  getStartDateFromUrlParams, 
-  getEndDateFromUrlParams,
-  getSpacesFromUrlParams } from '../utils/getDataFromUrl';
+  getSpacesFromUrlParams, 
+  getDateRangeFromUrlParams} from '../utils/getDataFromUrl';
 import SpacesList from './SpacesList';
 import TimeRangeSlider from './TimeRangeSlider';
 
@@ -13,14 +12,12 @@ type Props = {
 };
 
 export default function Page({ searchParams }: Props) {
-  const startDate = getStartDateFromUrlParams(searchParams);
-  const endDate = getEndDateFromUrlParams(searchParams);
   const selectedSpaces = getSpacesFromUrlParams(searchParams);
+  const dateRange = getDateRangeFromUrlParams(searchParams)
 
   console.log({
     searchParams: searchParams, 
-    startDate: startDate,
-    endDate: endDate, 
+    dateRange: dateRange,
     selectedSpaces: selectedSpaces
   })
 

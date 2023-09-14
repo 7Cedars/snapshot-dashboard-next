@@ -3,9 +3,9 @@ import { UserInputState } from '../../types'
 import { standardDateRange } from '../../../constants'
 
 const initialState: UserInputState = {
-  spaces: [], 
-  startDate: Date.now() - standardDateRange,
-  endDate: Date.now(),
+  // spaces: [], 
+  // startDate: Date.now() - standardDateRange,
+  // endDate: Date.now(),
   modal: 'none',
   stopFetching: false, 
   settings: {
@@ -20,15 +20,15 @@ export const selectedSpacesSlice = createSlice({
   name: 'userInput',
   initialState: initialState, 
   reducers: {
-    updateSelectedSpaces: (state, action: PayloadAction<string[]>) => {
-     state.spaces = action.payload
-    },
-    updateStartDate: (state, action: PayloadAction<number>) => {
-      state.startDate = action.payload
-    }, 
-    updateEndDate: (state, action: PayloadAction<number>) => {
-      state.endDate = action.payload
-    },
+    // updateSelectedSpaces: (state, action: PayloadAction<string[]>) => {
+    //  state.spaces = action.payload
+    // },
+    // updateStartDate: (state, action: PayloadAction<number>) => {
+    //   state.startDate = action.payload
+    // }, 
+    // updateEndDate: (state, action: PayloadAction<number>) => {
+    //   state.endDate = action.payload
+    // },
     updateModal: (state, action: PayloadAction<'search' |'about' | 'settings' | 'savedSearches' | 'none'>) => {
       state.modal = action.payload
     },
@@ -45,9 +45,9 @@ export const selectedSpacesSlice = createSlice({
 })
 
 export const { 
-  updateSelectedSpaces, 
-  updateStartDate, 
-  updateEndDate, 
+  // updateSelectedSpaces, 
+  // updateStartDate, 
+  // updateEndDate, 
   updateModal,
   updateStopFetching, 
   setDarkMode,

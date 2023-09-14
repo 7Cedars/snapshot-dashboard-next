@@ -1,7 +1,8 @@
+"use client"
+
+
 import { 
-  Space, 
-  StartDate, 
-  EndDate 
+  Space
 } from '../../types';
 import { 
   usePathname, 
@@ -9,42 +10,24 @@ import {
   useSearchParams 
 } from 'next/navigation';
 import { 
-  getStartDateFromUseSearchParams,
-  getEndDateFromUseSearchParams,
+  getDateRangeFromUseSearchParams,
   getSpacesFromUseSearchParams
 } from '../utils/getDataFromUseSearch';
 
-// NB: I do not know if the hooks below will work. 
-// Because I have three different. See and fix if needed. 
-
-export function useStartDate() {
+export function useDateRange() {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const startDate = getStartDateFromUseSearchParams(params);
+  const dateRange = getDateRangeFromUseSearchParams(params);
 
-  const handleStartDate = (value: StartDate) => {
-    const newParams = new URLSearchParams(params.toString());
-    newParams.set('startDate', String(value));
+  const handleDates = (dates: [string, string]) => {
+    let newParams = new URLSearchParams(params.toString());
+    newParams.delete('date')
+    dates.forEach(date => newParams.append('date', date))
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  return { startDate, handleStartDate };
-}
-
-export function useEndDate() {
-  const params = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-  const endDate = getEndDateFromUseSearchParams(params);
-
-  const handleEndDate = (value: EndDate) => {
-    const newParams = new URLSearchParams(params.toString());
-    newParams.set('endDate', String(value));
-    router.push(`${pathname}?${newParams.toString()}`);
-  };
-
-  return { endDate, handleEndDate };
+  return { dateRange, handleDates };
 }
 
 export function useSpaces() {
@@ -62,8 +45,11 @@ export function useSpaces() {
   // because deleting single item is not supported yet, need to do it in a roundabout way. 
   const removeSpace = (spaceId: String) => {
     let newParams = new URLSearchParams(params.toString());
-    const newParamsArray = Array.from(newParams).map(item => item[1])
-    const updatedSpaces = newParamsArray.filter(item => item !== spaceId)
+
+    const newSpaceParams = newParams.getAll('space');
+
+    //  const newParamsArray = Array.from(newSpaceParams).map(item => item[1])
+    const updatedSpaces = newSpaceParams.filter(item => item !== spaceId)
 
     newParams.delete('space')
     updatedSpaces.forEach(spaceId => newParams.append('space', spaceId))

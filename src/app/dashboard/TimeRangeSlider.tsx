@@ -3,14 +3,12 @@
 import { useState } from "react";
 import { RangeSliderMod } from "../ui/RangeSliderMod";
 import { useAppSelector } from "@/redux/hooks";
-import { standardDateRange } from "../../../constants";
 import { Proposal } from "@/types";
-import { useStartDate, useEndDate } from '../hooks/useUrl';
+import { useDateRange } from '../hooks/useUrl';
 
 const TimeRangeSlider = () => {
   const { proposals } = useAppSelector(state => state.loadedProposals)
-  const { handleStartDate } = useStartDate()
-  const { handleEndDate } = useEndDate()
+  const { handleDates } = useDateRange()
   
   let minVal
   let maxVal
@@ -18,7 +16,6 @@ const TimeRangeSlider = () => {
   if (proposals.length === 0) {
     minVal = 1678911239007 
     maxVal = 1694690039007
-
   } else {
      minVal = Math.min(...proposals.map( (proposal: Proposal) => proposal.start) ) 
      maxVal = Math.max(...proposals.map( (proposal: Proposal) => proposal.end) )
@@ -30,18 +27,14 @@ const TimeRangeSlider = () => {
   const [valueB, setValueB] = useState(maxVal - ((maxVal - minVal) / 6));
 
   const handleValueChange = (value: number) => {
-    if (Math.abs(value - valueA) <  Math.abs(value - valueB)) {
+
+    if (Math.abs(value - valueA) < Math.abs(value - valueB)) {
       setValueA(value)
     } else {
       setValueB(value)
     }
-    
-    handleStartDate(Math.min(valueA, valueB))
-    handleEndDate(Math.max(valueA, valueB))
-
   }
-
-  console.log("VALUEA, VALUEB: ", valueA, valueB)
+  handleDates([String(valueA), String(valueB)])
   
   return (
     <>
