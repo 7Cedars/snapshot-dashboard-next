@@ -6,6 +6,9 @@ import {
   getDateRangeFromUrlParams} from '../utils/getDataFromUrl';
 import SpacesList from './SpacesList';
 import TimeRangeSlider from './TimeRangeSlider';
+import loadProposals from '../utils/loadProposals';
+import HeatMap from './Heatmap';
+import NetworkChart from './NetworkChart';
 
 type Props = {
   searchParams: SearchParams;
@@ -14,6 +17,8 @@ type Props = {
 export default function Page({ searchParams }: Props) {
   const selectedSpaces = getSpacesFromUrlParams(searchParams);
   const dateRange = getDateRangeFromUrlParams(searchParams)
+
+  // loadProposals(selectedSpaces)
 
   console.log({
     searchParams: searchParams, 
@@ -27,8 +32,8 @@ export default function Page({ searchParams }: Props) {
         <SpacesList selectedSpaces = {selectedSpaces}/>
       </div>
 
-      {/* <NetworkComponent /> */}
-      {/* <HeatMap /> */}
+      <NetworkChart />
+      <HeatMap />
       TEST TEST
       <TimeRangeSlider /> 
     </div> 

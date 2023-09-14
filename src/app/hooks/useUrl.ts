@@ -13,6 +13,7 @@ import {
   getDateRangeFromUseSearchParams,
   getSpacesFromUseSearchParams
 } from '../utils/getDataFromUseSearch';
+import loadProposals from '../utils/loadProposals';
 
 export function useDateRange() {
   const params = useSearchParams();
@@ -40,6 +41,7 @@ export function useSpaces() {
     let newParams = new URLSearchParams(params.toString());
     newParams.append('space', space.id)
     router.push(`${pathname}?${newParams.toString()}`);
+
   };
 
   // because deleting single item is not supported yet, need to do it in a roundabout way. 
@@ -47,8 +49,6 @@ export function useSpaces() {
     let newParams = new URLSearchParams(params.toString());
 
     const newSpaceParams = newParams.getAll('space');
-
-    //  const newParamsArray = Array.from(newSpaceParams).map(item => item[1])
     const updatedSpaces = newSpaceParams.filter(item => item !== spaceId)
 
     newParams.delete('space')

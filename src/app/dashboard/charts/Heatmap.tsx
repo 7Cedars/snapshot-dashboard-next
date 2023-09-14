@@ -4,28 +4,30 @@ import { useMemo } from "react";
 import * as d3 from "d3";
 // import { data } from "../../data/dummyHeatmapData";   // data: { x: string; y: string; value: number }[];
 import { useAppSelector } from "../../../redux/hooks";
+import { useDateRange, useSpaces } from "@/app/hooks/useUrl";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
 import { Proposal } from "../../../types"
-import { SearchParams} from "../../../types";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
 
-interface HeatmapProps extends SearchParams {
+interface HeatmapProps {
   width: number;
   height: number;
 };
 
-export const Heatmap = ({ width = 500, height = 400, space, startDate, endDate }: HeatmapProps) => {
-  // const { selectedSpaces, startDate, endDate } = useAppSelector(state => state.userInput)
+export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
+  const { dateRange } = useDateRange()
+  const { selectedSpaces } = useSpaces ()
+
   const { proposals } = useAppSelector(state => state.loadedProposals) 
   
   const selectedProposals = proposals.filter((proposal: Proposal) => {
-    return space.includes(proposal.space.id)
+    return selectedSpaces.includes(proposal.space.id)
   })
-  const nCol =  Math.floor((width / height) * space.length)
+  const nCol =  Math.floor((width / height) * selectedSpaces.length)
 
-  const data = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
+  const data = toHeatmapData({proposals: selectedProposals, start: dateRange[0], end: dateRange[1], nCol}) 
   
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;

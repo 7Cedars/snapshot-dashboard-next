@@ -11,9 +11,8 @@ import { toNetworkGraph } from '../utils/transposeData';
 import { toSelectedProposals } from '../utils/utils';
 import { ChartCanvas } from '../ui/ChartCanvas';
 import { NetworkDiagram } from './charts/NetworkDiagram';
-import { SearchParams } from '../../types';
 
-const NetworkChart = ( { space, startDate, endDate }: SearchParams ) => {
+const NetworkChart = ( ) => {
 
   const dispatch = useAppDispatch()
   const [ votersOnProposals ] = useLazyQuery(VOTERS_ON_PROPOSALS)
