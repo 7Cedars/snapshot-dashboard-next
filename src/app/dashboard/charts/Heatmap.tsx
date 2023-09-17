@@ -8,6 +8,8 @@ import { useDateRange, useSpaces } from "@/app/hooks/useUrl";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
 import { Proposal } from "../../../types"
+import { PROPOSALS_FROM_SPACES } from "@/app/utils/queries";
+import { useQuery, useLazyQuery, useApolloClient } from "@apollo/client";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
 
@@ -19,7 +21,10 @@ interface HeatmapProps {
 export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
   const { dateA, dateB } = useDateRange()
   const { selectedSpaces } = useSpaces()
-  const { proposals } = useAppSelector(state => state.loadedProposals) 
+
+  const { cache }  = useApolloClient()
+  const proposals = Object.values(cache.extract())
+    .filter(item => item.__typename === "Proposal")
 
   const startDate = Math.min(dateA, dateB)
   const endDate = Math.max(dateA, dateB)
@@ -29,15 +34,15 @@ export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
   })
   const nCol =  Math.floor((width / height) * selectedSpaces.length)
 
-  const data = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
+  const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
   
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
 
   // groups
-  const allYGroups = useMemo(() => [...new Set(data.map((d) => d.y))], [data]);
-  const allXGroups = useMemo(() => [...new Set(data.map((d) => d.x))], [data]);
+  const allYGroups = useMemo(() => [...new Set(dataMap.map((d) => d.y))], [dataMap]);
+  const allXGroups = useMemo(() => [...new Set(dataMap.map((d) => d.x))], [dataMap]);
 
   // console.log("data inside Heatmap: ", data)
 
@@ -48,7 +53,7 @@ export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
       .range([0, boundsWidth])
       .domain(allXGroups)
       .padding(0.01);
-  }, [data, width]);
+  }, [dataMap, width]);
 
   const yScale = useMemo(() => {
     return d3
@@ -56,9 +61,9 @@ export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
       .range([boundsHeight, 0])
       .domain(allYGroups)
       .padding(0.01);
-  }, [data, height]);
+  }, [dataMap, height]);
 
-  const [min, max] = d3.extent(data.map((d) => d.value));
+  const [min, max] = d3.extent(dataMap.map((d) => d.value));
 
   if (min === undefined || max === undefined) {
     // throw new Error(`Incorrect data at Heatmap`);
@@ -72,7 +77,7 @@ export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
     .domain([min, max]);
 
   // Build the rectangles
-  const allRects = data.map((d, i) => {
+  const allRects = dataMap.map((d, i) => {
     return (
       <rect
         key={i}

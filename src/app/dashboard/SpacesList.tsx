@@ -4,16 +4,44 @@ import SpaceItem from "./SpaceItem";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
 import { SelectedSpaces } from "@/types";
+import { Button } from "../ui/Button";
+import { useLazyQuery } from "@apollo/client";
+import { PROPOSALS_FROM_SPACES } from "../utils/queries";
+import { useProposals } from "../hooks/useProposals";
 
 interface spacesListProps {
   selectedSpaces: SelectedSpaces
 }
 
+// const [ proposalsFromSpaces ] = useLazyQuery(PROPOSALS_FROM_SPACES)
+
+
 const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   const dispatch = useAppDispatch()
+  
+  const handleClick = async () => {
+    console.log("Button pressed")
+    
+   
+    // const skip = 0
+  
+    // const { data, error, loading } = await proposalsFromSpaces({
+    //         variables: { first: 1000, skip: skip, space_in: ['ctcswap.eth']} 
+    //       })
+  
+    // if (loading) return null;
+    // if (error) return `Error! ${error}`;
+  
+    // console.log(data)
+    
+  }
 
   return (
     <div className="p-2 grid grid-cols-1 place-content-start border border-gray-500 rounded-lg shadow-md mt-20"> 
+      < Button
+        onClick={ handleClick } > 
+        TEST Graph QL query
+      </Button> 
 
       <div className="pb-3 pt-1 max-h-screen overflow-auto">
         {selectedSpaces.length === 0 ? 

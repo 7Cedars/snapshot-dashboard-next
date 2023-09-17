@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client'
 
+    // votesCount
+    // categories
+
 const SPACE_DETAILS = gql`
   fragment SpaceDetails on Space {
     id
-    votesCount
-    categories
   }
 `
 
