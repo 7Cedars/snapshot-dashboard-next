@@ -36,8 +36,8 @@ export type EndDate = number;
 
 export interface SearchParams {
   space: SelectedSpaces;
-  startDate: StartDate; 
-  endDate: EndDate;
+  dateA: number; 
+  dateB: number;
 }
 
 // export interface UserInputStateU {

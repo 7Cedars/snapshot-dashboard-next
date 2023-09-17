@@ -15,7 +15,7 @@ type RangeSliderProps = {
   children: any;
 };
 
-export const RangeSliderMod = ({
+export const RangeSlider = ({
   children,
   minVal,
   maxVal,

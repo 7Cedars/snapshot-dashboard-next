@@ -84,6 +84,13 @@ export const parseDateRange = (dateRange: string[]): [StartDate, EndDate] => {
   return [StartDate, EndDate]; 
 }
 
+export const parseDate = (date: string): number => {
+  if (!isString(date)) {
+    throw new Error(`Incorrect or missing dataUrl at dateRange: ${date}`);
+  }
+
+  return parseInt(date); 
+}
 
 export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   if (spaces.find(space => !isString(space))) {

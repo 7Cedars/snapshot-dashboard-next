@@ -17,17 +17,19 @@ interface HeatmapProps {
 };
 
 export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
-  const { dateRange } = useDateRange()
-  const { selectedSpaces } = useSpaces ()
-
+  const { dateA, dateB } = useDateRange()
+  const { selectedSpaces } = useSpaces()
   const { proposals } = useAppSelector(state => state.loadedProposals) 
-  
+
+  const startDate = Math.min(dateA, dateB)
+  const endDate = Math.max(dateA, dateB)
+
   const selectedProposals = proposals.filter((proposal: Proposal) => {
     return selectedSpaces.includes(proposal.space.id)
   })
   const nCol =  Math.floor((width / height) * selectedSpaces.length)
 
-  const data = toHeatmapData({proposals: selectedProposals, start: dateRange[0], end: dateRange[1], nCol}) 
+  const data = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
   
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;

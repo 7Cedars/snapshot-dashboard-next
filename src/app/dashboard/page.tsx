@@ -20,11 +20,11 @@ export default function Page({ searchParams }: Props) {
 
   // loadProposals(selectedSpaces)
 
-  console.log({
-    searchParams: searchParams, 
-    dateRange: dateRange,
-    selectedSpaces: selectedSpaces
-  })
+  // console.log({
+  //   searchParams: searchParams, 
+  //   dateRange: dateRange,
+  //   selectedSpaces: selectedSpaces
+  // })
 
   return (    
     <div className="pt-4 flex flex-row w-full max-h-screen text-sm py-5 place-content-center px-2">
@@ -32,7 +32,7 @@ export default function Page({ searchParams }: Props) {
         <SpacesList selectedSpaces = {selectedSpaces}/>
       </div>
 
-      <NetworkChart />
+      {/* <NetworkChart /> */}
       <HeatMap />
       TEST TEST
       <TimeRangeSlider /> 

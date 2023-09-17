@@ -1,6 +1,5 @@
 "use client"
 
-
 import { 
   Space
 } from '../../types';
@@ -13,22 +12,22 @@ import {
   getDateRangeFromUseSearchParams,
   getSpacesFromUseSearchParams
 } from '../utils/getDataFromUseSearch';
-import loadProposals from '../utils/loadProposals';
 
 export function useDateRange() {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const dateRange = getDateRangeFromUseSearchParams(params);
+  const { dateA, dateB }  = getDateRangeFromUseSearchParams(params);
 
-  const handleDates = (dates: [string, string]) => {
+  const handleDates = (dateA: string, dateB: string) => {
+    // console.log("handleDates called.")
     let newParams = new URLSearchParams(params.toString());
-    newParams.delete('date')
-    dates.forEach(date => newParams.append('date', date))
+    newParams.set('dateA', dateA)
+    newParams.set('dateB', dateB)
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  return { dateRange, handleDates };
+  return { dateA, dateB, handleDates };
 }
 
 export function useSpaces() {
@@ -44,7 +43,7 @@ export function useSpaces() {
 
   };
 
-  // because deleting single item is not supported yet, need to do it in a roundabout way. 
+  // because deleting single item is not supported yet: need to delete all, and then repopulate. 
   const removeSpace = (spaceId: String) => {
     let newParams = new URLSearchParams(params.toString());
 

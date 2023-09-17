@@ -1,18 +1,24 @@
 // Example from: https://github.com/peterlidee/mocking-useRouter-useSearchParams-next-13
 
-import { SelectedSpaces, StartDate, EndDate, SearchParams } from "../../types" ;
-import { parseSelectedSpaces, parseDateRange } from './parsers';
+import { SelectedSpaces, SearchParams } from "../../types" ;
+import { parseSelectedSpaces, parseDate } from './parsers';
 import { standardDateRange } from "../../../constants";
 
 export function getDateRangeFromUrlParams(
   searchParams: SearchParams
-): [StartDate, EndDate] {
-  const spacesParam = [searchParams.space].flat();
-  let dateRange: [StartDate, EndDate] = [(Date.now() - standardDateRange), Date.now() ];
-  if ('date' in searchParams && spacesParam) {
-    dateRange = parseDateRange(spacesParam);
+): {dateA: number, dateB: number} { 
+  const dateAParam = searchParams.dateA;
+  const dateBParam = searchParams.dateB;
+  let dateA = (Date.now() - standardDateRange);
+  let dateB = Date.now()
+  if ('dateA' in searchParams && dateAParam && 'dateB' in searchParams && dateBParam) {
+    dateA = parseDate(String(dateAParam));
+    dateB = parseDate(String(dateBParam));
   }
-  return dateRange;
+  return{
+    dateA: dateA,
+    dateB: dateB
+  }; ;
 }
 
 export function getSpacesFromUrlParams(
