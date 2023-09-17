@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { RangeSliderMod } from "../ui/RangeSliderMod";
+import { RangeSliderMod } from "../ui/RangeSlider";
 import { useAppSelector } from "@/redux/hooks";
 import { Proposal } from "@/types";
 import { useDateRange } from '../hooks/useUrl';

@@ -3,10 +3,10 @@ import type { Metadata } from 'next'
 import { ApolloWrapper } from "./ApolloWrapper";
 import { ReduxProvider } from "../redux/provider" 
 
-import AboutDialog from "./modals/AboutModal";
-import SettingsDialog from "./modals/SettingsModal";
+import AboutDialog from "./modals/About";
+import SettingsDialog from "./modals/Settings";
 import SavedSearchesDialog from "./modals/SavedSearches";
-import SearchDialog from './modals/SearchModal';
+import SearchDialog from './modals/Search';
 import NavBar from './NavBar';
 
 export const metadata: Metadata = {
