@@ -1,13 +1,10 @@
 "use client";
 
 import SpaceItem from "./SpaceItem";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
 import { SelectedSpaces } from "@/types";
-import { Button } from "../ui/Button";
-import { useLazyQuery } from "@apollo/client";
-import { PROPOSALS_FROM_SPACES } from "../utils/queries";
-import { useProposals } from "../hooks/useProposals";
+// import { useProposals } from "../hooks/useProposals";
 
 interface spacesListProps {
   selectedSpaces: SelectedSpaces
@@ -19,8 +16,8 @@ interface spacesListProps {
 const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   const dispatch = useAppDispatch()
   
-  const handleClick = async () => {
-    console.log("Button pressed")
+  // const handleClick = async () => {
+  //   console.log("Button pressed")
     
    
     // const skip = 0
@@ -34,14 +31,14 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   
     // console.log(data)
     
-  }
+  // }
 
   return (
-    <div className="p-2 grid grid-cols-1 place-content-start border border-gray-500 rounded-lg shadow-md mt-20"> 
-      < Button
+    <div className="p-2 grid grid-cols-1 place-content-start border border-gray-500 rounded-lg shadow-md m-4"> 
+      {/* < Button
         onClick={ handleClick } > 
         TEST Graph QL query
-      </Button> 
+      </Button>  */}
 
       <div className="pb-3 pt-1 max-h-screen overflow-auto">
         {selectedSpaces.length === 0 ? 
@@ -55,7 +52,7 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
 
       <form>
         <input
-          className="w-full border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+          className="p-2 w-full border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
           type="search"
           id="mySearch"
           name="q"

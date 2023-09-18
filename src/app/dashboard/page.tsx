@@ -31,11 +31,12 @@ export default function Page({ searchParams }: Props) {
       <div> 
         <SpacesList selectedSpaces = {selectedSpaces}/>
       </div>
-
-      {/* <NetworkChart /> */}
-      <HeatMap />
-      TEST TEST
-      <TimeRangeSlider /> 
+      <div className='grid grid-cols-1'> 
+        {/* <NetworkChart /> */}
+        <HeatMap />
+        TEST TEST
+        <TimeRangeSlider /> 
+      </div>
     </div> 
 
   );

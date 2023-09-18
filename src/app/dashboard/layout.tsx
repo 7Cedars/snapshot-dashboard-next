@@ -15,21 +15,12 @@ export default function layout({
   children: React.ReactNode
 }) {
   return (
-    <div>
-      {/* <ReduxProvider>
-        <ApolloWrapper> */}
-          
-            <div className="max-h-screen grid grid-cols-1 relative">
-          
-              <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
-              <NavBar/>
+    <div>          
+      <div className="h-screen[.7] w-full pt-16 grid grid-cols-1">
 
-              {children}
-            
-            </div>
-          
-          {/* </ApolloWrapper>
-        </ReduxProvider> */}
+        {children}
+      
+      </div>
       </div>
   )
 }

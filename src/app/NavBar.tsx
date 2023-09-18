@@ -8,6 +8,7 @@ import {
  } from '@heroicons/react/24/outline'
  import { useAppDispatch } from "../redux/hooks";
  import { updateModal } from "../redux/reducers/userInputReducer";
+ import Link from 'next/link';
 
  interface UrlProps {
   searchParams: {
@@ -27,17 +28,13 @@ const NavBar = ( ) => {
 
     <div className="grid grid-cols-10 gap-2 w-4/5 flex">
 
-      <div className="container col-span-2 rounded-lg p-2 m-2">
-        <button 
-          className="text-black font-bold py-2 px-4"
-          type="submit"
-          // onClick={handleOnClick}
-          >
-          <HomeIcon
-            className="h-7 w-7"
-            aria-hidden="true"
-          />
-        </button>
+      <div className="container col-span-2 rounded-lg m-1">
+          <Link href='/' className='text-black font-bold py-4'>
+            <HomeIcon
+              className="h-7 w-7 "
+              aria-hidden="true"
+            />
+          </Link>
       </div>
         
       <div className="col-span-6 "> </div> 

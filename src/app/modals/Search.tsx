@@ -30,31 +30,10 @@ export const SearchDialog = () => {
   const [query, setQuery] = useState('')
   const { selectedSpaces, addSpace } = useSpaces()
 
-  const handleSelection = (space: Space) => {
+  // const handleSelection = (space: Space) => {
   
-    addSpace(space)
+    // addSpace(space)
 
-    let firstFilter = spaces.filter((space: Space) => 
-      space.categories.some(item => selectedCategory.includes(item))
-    )
-
-    if (selectedCategory.includes('all')) {firstFilter = spaces}
-
-    const secondFilter = firstFilter.filter((space: Space) => 
-      selectedSpaces.indexOf(space.id) === -1 
-    ) 
-
-    if (query.length > 0) {
-      const thirdFilter = secondFilter.filter((space:Space) => 
-        space.id.includes(query))
-      setFilteredSpaces(thirdFilter.slice(0, 50)) 
-    } else {
-      setFilteredSpaces(secondFilter.slice(0, 50))
-    }
-  } 
-
-  // useEffect (() => {
-    
   //   let firstFilter = spaces.filter((space: Space) => 
   //     space.categories.some(item => selectedCategory.includes(item))
   //   )
@@ -72,13 +51,36 @@ export const SearchDialog = () => {
   //   } else {
   //     setFilteredSpaces(secondFilter.slice(0, 50))
   //   }
+  // } 
 
-  // }, [selectedCategory, query ]) // selectedSpaces
+  useEffect (() => {
+    
+    let firstFilter = spaces.filter((space: Space) => 
+      space.categories.some(item => selectedCategory.includes(item))
+    )
+
+    if (selectedCategory.includes('all')) {firstFilter = spaces}
+
+    const secondFilter = firstFilter.filter((space: Space) => 
+      selectedSpaces.indexOf(space.id) === -1 
+    ) 
+
+    if (query.length > 0) {
+      const thirdFilter = secondFilter.filter((space:Space) => 
+        space.id.includes(query))
+      setFilteredSpaces(thirdFilter.slice(0, 50)) 
+    } else {
+      setFilteredSpaces(secondFilter.slice(0, 50))
+    }
+
+  }, [selectedCategory, query ]) // selectedSpaces
 
   return (
    
     <Transition appear show={(modal === 'search')} as={Fragment}>
-    <Dialog as="div" className="relative z-10" onClose={() => dispatch(updateModal('none'))}>
+    <Dialog as="div" className="relative z-10" 
+      onClose={() => dispatch(updateModal('none'))}
+      >
       <Transition.Child
         as={Fragment}
         enter="ease-out duration-300"
@@ -93,15 +95,6 @@ export const SearchDialog = () => {
 
       <div className="fixed inset-0 overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center">
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
             <Dialog.Panel className="w-max min-w-fit transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
             
             <div className='flex justify-end '> 
@@ -131,7 +124,7 @@ export const SearchDialog = () => {
                 <div className='flex'> 
                   <form>
                     <input
-                      className="flex-auto w-11/12 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium mt-4"
+                      className="p-2 flex-auto w-11/12 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium mt-4"
                       type="search"
                       id="mySearch"
                       name="q"
@@ -203,7 +196,7 @@ export const SearchDialog = () => {
                     <div key = {space.id} > 
                     <button 
                       className='border border-blue-300 rounded-lg p-2 mr-1 my-2 w-96 grid justify-items-start'
-                      onClick={() => handleSelection(space)} 
+                      onClick={() => addSpace(space)} 
                     > 
                       <div className={`block truncate font-medium`} >
                           {space.id}
@@ -224,7 +217,6 @@ export const SearchDialog = () => {
                 </div>
               </div>
             </Dialog.Panel>
-          </Transition.Child>
         </div>
       </div>
     </Dialog>
