@@ -16,7 +16,7 @@ export default function layout({
 }) {
   return (
     <div>          
-      <div className="h-screen[.7] w-full pt-16 grid grid-cols-1">
+      <div className="h-screen w-full grid grid-cols-3 gap-3">
 
         {children}
       

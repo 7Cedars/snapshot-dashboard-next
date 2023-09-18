@@ -8,6 +8,7 @@ import { XMarkIcon, ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react
 import spaces from '../../../public/data/spacesList'
 import { Space } from '../../types'
 import { useSpaces } from '../hooks/useUrl';
+import { RangeSlider } from '../ui/RangeSlider';
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
@@ -29,6 +30,17 @@ export const SearchDialog = () => {
   const [filteredSpaces, setFilteredSpaces ] = useState<Space[]>(spaces.sort(compareVotes).slice(0, 50))
   const [query, setQuery] = useState('')
   const { selectedSpaces, addSpace } = useSpaces()
+
+  const [valueA, setValueA] = useState(10)
+  const [valueB, setValueB] = useState(40)
+
+  const handleValueChange = (value: number) => {
+    if (Math.abs(value - valueA) < Math.abs(value - valueB)) {
+      setValueA(value)
+    } else {
+      setValueB(value)
+    }
+  }
 
   // const handleSelection = (space: Space) => {
   
@@ -156,7 +168,7 @@ export const SearchDialog = () => {
                           leaveFrom="opacity-100"
                           leaveTo="opacity-0"
                         >
-                          <Listbox.Options className="absolute mt-10 pr-9 max-h-60 border bg-white border-blue-500 overflow-auto rounded-lg py-1 text-base focus:outline-none ">
+                          <Listbox.Options className="absolute mt-10 z-10 pr-9 max-h-60 border bg-white border-blue-500 overflow-auto rounded-lg py-1 text-base focus:outline-none ">
                             {listCategories.map((category: string, categoryIdx) => (
                               <Listbox.Option
                                 key={categoryIdx}
@@ -189,6 +201,22 @@ export const SearchDialog = () => {
                         </Transition>
                     </Listbox>
                     </div>
+                  </div>
+
+                  <div className='py-2 text-sm'> 
+
+                  <RangeSlider
+                    minVal = {0}
+                    maxVal = {100}
+                    minLabel = 'old' 
+                    maxLabel = 'young'
+                    valA={valueA}
+                    valB={valueB}
+                    onChangeA={( {target} ) => handleValueChange(Number(target.value)) }
+                    onChangeB={( {target} ) => handleValueChange(Number(target.value))}
+                    >
+                    Filter DAO spaces on age
+                  </RangeSlider>
                   </div>
 
                 <div className='overflow-auto max-h-96 pl-0 mt-5'> 

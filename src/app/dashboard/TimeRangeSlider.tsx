@@ -48,7 +48,8 @@ const TimeRangeSlider = () => {
   }
 
   return (
-    <>
+    <div className="pt-4"> 
+
       <RangeSlider
         minVal = {minVal}
         maxVal = {maxVal}
@@ -59,9 +60,10 @@ const TimeRangeSlider = () => {
         onChangeA={( {target} ) => handleValueChange(Number(target.value)) }
         onChangeB={( {target} ) => handleValueChange(Number(target.value))}
         >
-          TEST TEST
+        Time Range Analysis
       </RangeSlider>
-    </>
+    </div>
+
   );
 }
 

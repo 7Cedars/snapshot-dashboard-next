@@ -27,17 +27,19 @@ export default function Page({ searchParams }: Props) {
   // })
 
   return (    
-    <div className="pt-4 flex flex-row w-full max-h-screen text-sm py-5 place-content-center px-2">
-      <div> 
+    <>
+      <div className="mt-20 col-span-1 pt-4 flex flex-row w-full max-h-screen text-sm place-content-center px-2 py-5 ">
         <SpacesList selectedSpaces = {selectedSpaces}/>
       </div>
-      <div className='grid grid-cols-1'> 
+      
+      <div className='mt-20 col-span-2 grid grid-cols-1 m-2 py-5 px-2'> 
+        <TimeRangeSlider /> 
         {/* <NetworkChart /> */}
         <HeatMap />
         TEST TEST
-        <TimeRangeSlider /> 
-      </div>
-    </div> 
+        
+      </div> 
+    </> 
 
   );
 }

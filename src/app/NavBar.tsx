@@ -28,8 +28,8 @@ const NavBar = ( ) => {
 
     <div className="grid grid-cols-10 gap-2 w-4/5 flex">
 
-      <div className="container col-span-2 rounded-lg m-1">
-          <Link href='/' className='text-black font-bold py-4'>
+      <div className="container col-span-2 rounded-lg m-1 pt-4">
+          <Link href='/' className='text-black font-bold pt-1'>
             <HomeIcon
               className="h-7 w-7 "
               aria-hidden="true"

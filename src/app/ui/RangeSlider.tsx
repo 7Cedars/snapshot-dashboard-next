@@ -26,46 +26,52 @@ export const RangeSlider = ({
   onChangeA, 
   onChangeB,
 }: RangeSliderProps) => {
-  let appearance = 
-  // "rounded m-1 cursor-pointer border-reactGallery border"  
-  "grid justify-between relative w-full/[.5] p-3 m-3 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium ";
-  
+
   return (
-    
-    <div className= {appearance} >
-      <label htmlFor="sliderA" className="pb-3 mb-2 px-12 text-sm font-medium text-gray-500">
-        { minLabel }
-      </label>
-      <input
-          id="sliderA"
-          className={`w-full[.7] absolute inset-x-0 mt-7 h-2 mb-6 bg-gray-300 rounded-lg appearance-none cursor-pointer dark:bg-gray-700`}
-          name="min"
-          type="range"
-          step="1"
-          min={minVal}
-          max={maxVal}
-          value={valA}
-          onChange={onChangeA}
-        />
-        
-        <div className="text-gray-500 text-base">
+    <>
+    <div className= "grid grid-cols-1 h-14 bg-white w-full px-6 m-0 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium " >
+     
+     {/* Labels  */}
+     <div className="flex flex-row justify-between w-full "> 
+        <label htmlFor="sliderA" className=" flex-none w-6 pt-2 text-sm font-medium text-gray-500">
+          { minLabel }
+        </label>
+
+        <div className="text-gray-500 text-base text-sm  flex align-items-center pt-2 ">
           { children }
         </div>
-         
-      <label htmlFor="sliderB" className="relative place-self-end pb-3 px-20 mb-2 text-sm text-gray-500">
-      { maxLabel }
-      </label>
-      <input
-          id="sliderB"
-          className={`w-full[.7] absolute inset-x-0 mt-7 h-2 mb-6 bg-blue-200/[.01] appearance-none cursor-pointer dark:bg-gray-700`}
-          name="max"
-          type="range"
-          step="1"
-          min={minVal}
-          max={maxVal}
-          value= {valB}
-          onChange={onChangeB}
-        />
-      </div>  
+
+        <label htmlFor="sliderB" className=" flex-none w-6 pt-2 text-sm text-gray-500">
+        { maxLabel }
+        </label>
+      </div>
+
+      {/* Slider  */}
+        <div className="flex flex-row justify-center relative "> 
+          <input
+              id="sliderA"
+              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-gray-300 rounded-lg appearance-none cursor-pointer dark:bg-gray-700`}
+              name="min"
+              type="range"
+              step="1"
+              min={minVal}
+              max={maxVal}
+              value={valA}
+              onChange={onChangeA}
+            />        
+          <input
+              id="sliderB"
+              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-blue-200/[.01] appearance-none cursor-pointer dark:bg-gray-700`}
+              name="max"
+              type="range"
+              step="1"
+              min={minVal}
+              max={maxVal}
+              value= {valB}
+              onChange={onChangeB}
+            />
+        </div>
+      </div> 
+    </>  
   );
 };
