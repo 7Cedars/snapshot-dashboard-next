@@ -1,5 +1,4 @@
 import { Proposal, Node, Vote, NetworkGraph, NetworkLink, NetworkNode } from "../../types";
-import * as d3 from "d3";
 
 interface toHeatmapProps {
   proposals: Proposal[]; 
@@ -77,7 +76,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
       }) 
     ))
 
-    console.log("DATA: ", data)
+    // console.log("DATA: ", data)
 
     proposals.forEach((proposal: any) => 
       data.forEach(point => {
@@ -168,7 +167,7 @@ export const toNetworkGraph = (proposals: Proposal[]) => {
     return votersPerSpace
   })
 
-  console.log("votersOfSpace: ", votersPerSpace)
+  // console.log("votersOfSpace: ", votersPerSpace)
 
   const links = votersPerSpace.map(spaceSource => 
     votersPerSpace.map(spaceTarget => {

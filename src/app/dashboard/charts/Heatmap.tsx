@@ -45,7 +45,7 @@ export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) 
 
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
   
-  console.log("dataMap: ", dataMap )
+  // console.log("dataMap: ", dataMap )
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;

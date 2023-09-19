@@ -2,14 +2,14 @@
 
 import { SelectedSpaces, SearchParams } from "../../types" ;
 import { parseSelectedSpaces, parseDate } from './parsers';
-import { standardDateRange } from "../../../constants";
+import { standardDateRange, genesisSnapshot } from "../../../constants";
 
 export function getDateRangeFromUrlParams(
   searchParams: SearchParams
 ): {dateA: number, dateB: number} { 
   const dateAParam = searchParams.dateA;
   const dateBParam = searchParams.dateB;
-  let dateA = Date.now()
+  let dateA = Date.now() - standardDateRange
   let dateB = Date.now()
   if ('dateA' in searchParams && dateAParam && 'dateB' in searchParams && dateBParam) {
     dateA = parseDate(String(dateAParam));

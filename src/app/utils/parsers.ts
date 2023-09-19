@@ -1,4 +1,4 @@
-import { Space, StartDate, EndDate, SelectedSpaces} from "../../types";
+import { Space, StartDate, EndDate, SelectedSpaces, Proposal} from "../../types";
 import spaces from "../../../public/data/spacesList";
 
 const isString = (text: unknown): text is string => {
@@ -106,6 +106,36 @@ export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   return selectedSpaces; 
 }
 
+// CONTINUE HERE // 
+// export const parseProposals = (object: unknown): Proposal[] => {
+//   if ( !object || typeof object !== 'object' ) {
+//     throw new Error('Incorrect or missing data');
+//   }
+
+//   if ('proposals' in object )
+
+//   {
+//     const proposals: Proposal[] = {
+//       name: parseName(object.name),
+//       dateOfBirth: parseDate(object.dateOfBirth),
+//       ssn: parseSsn(object.ssn),
+//       gender: parseGender(object.gender),
+//       occupation: parseOccupation(object.occupation)
+//     };
+//     return newEntry;
+//   } 
+  
+//   throw new Error('Incorrect data: some fields are missing');
+// };
+
+  // const selectedSpaces = spaces //.split(';')
+  // TODO
+  // Here should be checked against ids of spacelist. 
+  // But should not be created everysingle time... 
+  // should save this list in redux store at startup. 
+
+  // return selectedSpaces; 
+// }
 
 // // To be depricated 
 // export const parseUrlInput = (object: unknown): UrlInput => { 

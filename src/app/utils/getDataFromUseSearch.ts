@@ -10,7 +10,7 @@ export function getDateRangeFromUseSearchParams(
 ) {
   const dateAParam = params.get('dateA');
   const dateBParam = params.get('dateB');
-  let dateA = Date.now();
+  let dateA = Date.now() - standardDateRange
   let dateB = Date.now()
   if (params.has('dateA') && params.has('dateB') && dateAParam && dateBParam) {
     dateA = parseDate(dateAParam);
