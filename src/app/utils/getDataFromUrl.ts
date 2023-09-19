@@ -9,7 +9,7 @@ export function getDateRangeFromUrlParams(
 ): {dateA: number, dateB: number} { 
   const dateAParam = searchParams.dateA;
   const dateBParam = searchParams.dateB;
-  let dateA = (Date.now() - standardDateRange);
+  let dateA = Date.now()
   let dateB = Date.now()
   if ('dateA' in searchParams && dateAParam && 'dateB' in searchParams && dateBParam) {
     dateA = parseDate(String(dateAParam));

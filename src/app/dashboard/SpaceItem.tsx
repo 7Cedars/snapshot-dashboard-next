@@ -1,9 +1,7 @@
 "use client";
 
 import spaces from '../../../public/data/spacesList'
-import { MinusCircleIcon, UserIcon } from '@heroicons/react/24/outline'
-import { useAppDispatch } from "../../redux/hooks";
-import { updateUrl } from "../../redux/reducers/urlReducer";
+import { MinusCircleIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
 
 interface Props {

@@ -4,14 +4,10 @@ import SpaceItem from "./SpaceItem";
 import { useAppDispatch } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
 import { SelectedSpaces } from "@/types";
-// import { useProposals } from "../hooks/useProposals";
 
 interface spacesListProps {
   selectedSpaces: SelectedSpaces
 }
-
-// const [ proposalsFromSpaces ] = useLazyQuery(PROPOSALS_FROM_SPACES)
-
 
 const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   const dispatch = useAppDispatch()

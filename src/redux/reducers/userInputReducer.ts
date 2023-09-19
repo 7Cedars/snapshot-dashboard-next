@@ -20,15 +20,6 @@ export const selectedSpacesSlice = createSlice({
   name: 'userInput',
   initialState: initialState, 
   reducers: {
-    // updateSelectedSpaces: (state, action: PayloadAction<string[]>) => {
-    //  state.spaces = action.payload
-    // },
-    // updateStartDate: (state, action: PayloadAction<number>) => {
-    //   state.startDate = action.payload
-    // }, 
-    // updateEndDate: (state, action: PayloadAction<number>) => {
-    //   state.endDate = action.payload
-    // },
     updateModal: (state, action: PayloadAction<'search' |'about' | 'settings' | 'savedSearches' | 'none'>) => {
       state.modal = action.payload
     },
@@ -45,9 +36,6 @@ export const selectedSpacesSlice = createSlice({
 })
 
 export const { 
-  // updateSelectedSpaces, 
-  // updateStartDate, 
-  // updateEndDate, 
   updateModal,
   updateStopFetching, 
   setDarkMode,

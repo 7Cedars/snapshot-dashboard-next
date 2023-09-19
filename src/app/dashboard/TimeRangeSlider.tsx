@@ -2,36 +2,47 @@
 
 import { useEffect, useState } from "react";
 import { RangeSlider } from "../ui/RangeSlider";
-import { useAppSelector } from "@/redux/hooks";
 import { Proposal } from "@/types";
 import { useDateRange } from '../hooks/useUrl';
+import { standardDateRange } from "../../../constants";
 import { useDebounce } from "../hooks/useDebounce";
+import { useApolloClient } from "@apollo/client";
 
 const TimeRangeSlider = () => {
-  const { proposals } = useAppSelector(state => state.loadedProposals)
   const { dateA, dateB, handleDates } = useDateRange()
-   // the handle dates needs to be debounced: otherwise url is updated too often. 
-   const handleDatesDebounced = useDebounce(handleDates, 1000)
+  const { cache }  = useApolloClient()
+  const handleDatesDebounced = useDebounce(handleDates, 500)
 
-  // Setting min and max values 
+  // console.log("dateA: ", dateA, "dateB: ", dateB)
+
+  // NB: how I set these dates can be improved. 
+  // date today often falls outside date range of selected proposals... 
+  const cachedProposals = Object.values(cache.extract())
+    .filter(item => item.__typename === "Proposal") // NB: I can do this with ANY type: spaces, proposals, votes... 
+
   let minVal
   let maxVal
 
-  if (proposals.length === 0) {
-    minVal = 1678911239007 
-    maxVal = 1694690039007
+  if (cachedProposals.length === 0) {
+    minVal = Date.now() - standardDateRange
+    maxVal = Date.now() 
+
   } else {
-    minVal = Math.min(...proposals.map( (proposal: Proposal) => proposal.start) ) 
-    maxVal = Math.max(...proposals.map( (proposal: Proposal) => proposal.end) )
+    minVal = Math.min(...cachedProposals.map( (proposal: Proposal) => (proposal.start * 1000)) ) 
+    maxVal = Math.max(...cachedProposals.map( (proposal: Proposal) => (proposal.end * 1000)) )
   }
 
-  const [valueA, setValueA] = useState(dateA);
-  const [valueB, setValueB] = useState(dateB);
+  // console.log("minVal: ", minVal ,"maxVal: ", maxVal)
+  
+  const [valueA, setValueA] = useState(minVal);
+  const [valueB, setValueB] = useState(maxVal);
 
   useEffect(() => {
     setValueA(dateA)
     setValueB(dateB)
   }, [dateA, dateB])
+
+  // console.log("valueA: ", valueA ,"valueB: ", valueB)
 
 
   // Note: despite only top slider being called, it updates the value of teh slider that is closest to pointer.

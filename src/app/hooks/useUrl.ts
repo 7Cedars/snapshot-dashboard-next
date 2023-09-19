@@ -19,6 +19,8 @@ export function useDateRange() {
   const router = useRouter();
   const { dateA, dateB }  = getDateRangeFromUseSearchParams(params);
 
+  console.log("at UseDateRange: dateA: ", dateA, "dateB: ", dateB)
+
   const handleDates = (dateA: string, dateB: string) => {
     // console.log("handleDates called.")
     let newParams = new URLSearchParams(params.toString());
