@@ -1,4 +1,4 @@
-import { Proposal, Node, Vote, NetworkGraph, NetworkLink, NetworkNode } from "../../../.next/types/app/components";
+import { Proposal, Node, Vote, NetworkGraph, NetworkLink, NetworkNode } from "../../types";
 import * as d3 from "d3";
 
 interface toHeatmapProps {
@@ -46,15 +46,19 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
   const stepPerCol = (end - start) / nCol
 
   const spaces = Array.from( 
-    new Set(proposals.map(proposal => proposal.space.id))
+    new Set(proposals.map((proposal: any) => proposal.space.__ref.replace("Space:", "")))
     )
 
   const intersectionRangeProposal = ({startRange, endRange, startProposal, endProposal}: IntersectionProps): number => {
+
+    // console.log("intersectionRangeProposal: ",startRange, endRange, startProposal, endProposal)
 
     if (startProposal > endRange || startRange > endProposal ) {return 0} 
     else {
       const intervalLength = Math.min(endRange, endProposal) - Math.max(startRange, startProposal) 
       const proposalLength = endProposal - startProposal
+
+      
 
       return intervalLength / proposalLength
     }
@@ -73,20 +77,37 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
       }) 
     ))
 
+    console.log("DATA: ", data)
+
+    proposals.forEach((proposal: any) => 
+      data.forEach(point => {
+         if (point.y ===  proposal.space.__ref.replace("Space:", "")) {
+          point.value  = point.value + proposal.votes * intersectionRangeProposal(
+            { startRange: parseInt(point.x),
+              endRange: parseInt(point.x) + stepPerCol,
+              startProposal: proposal.start * 1000,
+              endProposal: proposal.end * 1000
+            } 
+          )
+         }
+      }) 
+    )
+
+   console.log('test: ', data)
   // filling in data points.
-  proposals.forEach(proposal => {
-    data.forEach(point => {
-      if (point.y === proposal.space.id) {
-        point.value = point.value + proposal.votes * intersectionRangeProposal(
-          { startRange: parseInt(point.x),
-            endRange: parseInt(point.x) + stepPerCol,
-            startProposal: proposal.start,
-            endProposal: proposal.end
-          } 
-        )
-      }
-    })
-  })
+  // proposals.forEach((proposal: any) => {
+  //   data.forEach(point => {
+  //     if (point.y ===  proposal.space.__ref.replace("Space:", "")) {
+  //       return point.value + proposal.votes * intersectionRangeProposal(
+  //         { startRange: parseInt(point.x),
+  //           endRange: parseInt(point.x) + stepPerCol,
+  //           startProposal: proposal.start,
+  //           endProposal: proposal.end
+  //         } 
+  //       )
+  //     }
+  //   })
+  // })
 
   // console.log("DATA at Heatmap data: ", data)
   
@@ -106,27 +127,27 @@ export const toNetworkGraph = (proposals: Proposal[]) => {
     new Set(proposals.map(proposal => proposal.space.id))
   )
 
-  const uniqueVotesSpace = new Set(
-      proposals.map(proposal => 
-        proposal.votesDetails.map(vote => 
-          `${vote.voter};${proposal.space.id}`)
-      ).flat()
-  )
+  // const uniqueVotesSpace = new Set(
+  //     proposals.map(proposal => 
+  //       proposal.votesDetails.map(vote => 
+  //         `${vote.voter};${proposal.space.id}`)
+  //     ).flat()
+  // )
 
-  const uniqueVotesSpaceArray = Array.from(uniqueVotesSpace).map(string => 
-    string.split(";")[0]
-    ).flat()
+  // const uniqueVotesSpaceArray = Array.from(uniqueVotesSpace).map(string => 
+  //   string.split(";")[0]
+  //   ).flat()
 
-  const votersInMultipleSpaces =  uniqueVotesSpaceArray.filter(
-    (item, index) => uniqueVotesSpaceArray.indexOf(item) !== index
-    ) 
+  // const votersInMultipleSpaces =  uniqueVotesSpaceArray.filter(
+  //   (item, index) => uniqueVotesSpaceArray.indexOf(item) !== index
+  //   ) 
 
   const assessment = proposals.reduce((accumulator, proposal) => accumulator + proposal.votes, 0)
 
   // const votesPerVoter = uniqueVoters.map(voter => 
   //   votes.filter(vote => vote.voter === voter)
   //   )
-  console.log("ASSESSMENT no votes: ", assessment, "TEST: ", votersInMultipleSpaces)
+  // console.log("ASSESSMENT no votes: ", assessment, "TEST: ", votersInMultipleSpaces)
 
   // const spacesPerVoter = votesPerVoter.map(voter => 
   //   )

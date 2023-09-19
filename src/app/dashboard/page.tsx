@@ -36,8 +36,6 @@ export default function Page({ searchParams }: Props) {
         <TimeRangeSlider /> 
         {/* <NetworkChart /> */}
         <HeatMap />
-        TEST TEST
-        
       </div> 
     </> 
 

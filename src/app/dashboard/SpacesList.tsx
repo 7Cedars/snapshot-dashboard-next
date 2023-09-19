@@ -30,7 +30,7 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   // }
 
   return (
-    <div className="p-2 grid grid-cols-1 relative h-auto place-content-start border border-gray-500 rounded-lg shadow-md m-4"> 
+    <div className="p-2 grid grid-cols-1 relative h-auto place-content-start m-4"> 
       {/* < Button
         onClick={ handleClick } > 
         TEST Graph QL query

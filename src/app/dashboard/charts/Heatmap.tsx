@@ -2,14 +2,11 @@
 
 import { useMemo } from "react";
 import * as d3 from "d3";
-// import { data } from "../../data/dummyHeatmapData";   // data: { x: string; y: string; value: number }[];
-import { useAppSelector } from "../../../redux/hooks";
 import { useDateRange, useSpaces } from "@/app/hooks/useUrl";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
 import { Proposal } from "../../../types"
-import { PROPOSALS_FROM_SPACES } from "@/app/utils/queries";
-import { useQuery, useLazyQuery, useApolloClient } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
 
@@ -18,24 +15,38 @@ interface HeatmapProps {
   height: number;
 };
 
-export const Heatmap = ({ width = 500, height = 400 }: HeatmapProps) => {
+const nCol = 60
+
+export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) => {
   const { dateA, dateB } = useDateRange()
   const { selectedSpaces } = useSpaces()
 
   const { cache }  = useApolloClient()
-  const proposals = Object.values(cache.extract())
-    .filter(item => item.__typename === "Proposal")
+  const cachedProposals = Object.values(cache.extract())
+  .filter(item => item.__typename === "Proposal") 
+
+  const votes=  cachedProposals.map(proposal => proposal.votes)
+  console.log("cachedProposals votes: ", votes)
 
   const startDate = Math.min(dateA, dateB)
   const endDate = Math.max(dateA, dateB)
 
-  const selectedProposals = proposals.filter((proposal: Proposal) => {
-    return selectedSpaces.includes(proposal.space.id)
+  const selectedProposals = cachedProposals.filter((proposal: any) => {
+    return selectedSpaces.includes(
+      proposal.space.__ref.replace("Space:", "")
+      )
+  }) 
+
+  console.log({
+    selectedProposals: selectedProposals, 
+    startDate: startDate, 
+    endDate: endDate
   })
-  const nCol =  Math.floor((width / height) * selectedSpaces.length)
 
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
   
+  console.log("dataMap: ", dataMap )
+
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
