@@ -45,7 +45,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
   const stepPerCol = (end - start) / nCol
 
   const spaces = Array.from( 
-    new Set(proposals.map((proposal: any) => proposal.space.__ref.replace("Space:", "")))
+    new Set(proposals.map((proposal: any) => proposal.space.id))
     )
 
   const intersectionRangeProposal = ({startRange, endRange, startProposal, endProposal}: IntersectionProps): number => {
@@ -80,7 +80,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
 
     proposals.forEach((proposal: any) => 
       data.forEach(point => {
-         if (point.y ===  proposal.space.__ref.replace("Space:", "")) {
+         if (point.y ===  proposal.space.id) {
           point.value  = point.value + proposal.votes * intersectionRangeProposal(
             { startRange: parseInt(point.x),
               endRange: parseInt(point.x) + stepPerCol,
@@ -92,7 +92,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
       }) 
     )
 
-   console.log('test: ', data)
+  //  console.log('test: ', data)
   // filling in data points.
   // proposals.forEach((proposal: any) => {
   //   data.forEach(point => {
@@ -182,12 +182,12 @@ export const toNetworkGraph = (proposals: Proposal[]) => {
     ({id: space, group: "test"})
   )
 
-  console.log(
-    "END RESULT", 
-    "Nodes: ", nodes, 
-    "votersOfSpace: ", votersPerSpace, 
-    "links: ", links
-  )
+  // console.log(
+  //   "END RESULT", 
+  //   "Nodes: ", nodes, 
+  //   "votersOfSpace: ", votersPerSpace, 
+  //   "links: ", links
+  // )
 }
 
 export default { toHeatmapData, toNetworkGraph }; 

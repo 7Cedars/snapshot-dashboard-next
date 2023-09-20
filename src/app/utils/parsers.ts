@@ -56,6 +56,25 @@ export const toSpaceEntry = (object: unknown): Space => {
   throw new Error('Incorrect data: some fields are missing');
 }; 
 
+export const toSpaceId = (object: unknown): string => { 
+  if ( !object || typeof object !== 'object' ) {
+    throw new Error('Incorrect or missing data');
+  }
+
+  if ('id' in object && isString(object.id)) {
+   const spaceId: string = object.id
+   return spaceId
+  }
+
+  if ('__ref' in object && isString(object.__ref)) {
+    const spaceId: string = object.__ref.replace("Space:", "") 
+    return spaceId
+   }
+
+  throw new Error('Incorrect data: some fields are missing');
+}
+
+
 // NB: still need to add parsers for Proposal and Vote inputs. 
 // Never ever trust anything you receive from an outside source... 
 
@@ -92,6 +111,15 @@ export const parseDate = (date: string): number => {
   return parseInt(date); 
 }
 
+export const parseTimeStamp = (timeStamp: number): number => {
+  if (!isNumber(timeStamp)) {
+    throw new Error(`Incorrect or missing dataUrl at dateRange: ${timeStamp}`);
+  }
+
+  return timeStamp; 
+}
+
+
 export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   if (spaces.find(space => !isString(space))) {
     throw new Error(`Incorrect or missing dataUrl at selectedSpaces: ${spaces}`);
@@ -106,24 +134,38 @@ export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   return selectedSpaces; 
 }
 
-// CONTINUE HERE // 
-// export const parseProposals = (object: unknown): Proposal[] => {
-//   if ( !object || typeof object !== 'object' ) {
-//     throw new Error('Incorrect or missing data');
-//   }
+export const toProposals = (object: unknown): Proposal[] | void | undefined | any => {
+  if ( !object || typeof object !== 'object' ) {
+    throw new Error('Incorrect or missing data');
+  }
 
-//   if ('proposals' in object )
-
-//   {
-//     const proposals: Proposal[] = {
-//       name: parseName(object.name),
-//       dateOfBirth: parseDate(object.dateOfBirth),
-//       ssn: parseSsn(object.ssn),
-//       gender: parseGender(object.gender),
-//       occupation: parseOccupation(object.occupation)
-//     };
-//     return newEntry;
-//   } 
+  if ('proposals' in object ) {
+    if (!isArray(object.proposals)) {
+      throw new Error(`Incorrect data: not an array: ${object.proposals}`);
+    }
+    
+    // let proposals: Proposal[] = []
+    const proposals = object.proposals.map((item: any): Proposal => {
+        if ( 
+          'id'  in item  &&
+          'start' in item &&     
+          'end' in item && 
+          'space' in item &&
+          'votes' in item 
+            ) { return ({
+                id: parseId(item.id),
+                start: parseTimeStamp(item.start),
+                end: parseTimeStamp(item.end),
+                space: {id: toSpaceId(item.space)},
+                votes: parseVotesCount(item.votes),
+              })
+             }
+            throw new Error('Incorrect data: some fields or categories');
+      })
+      return proposals;
+  } 
+  throw new Error('Incorrect data: malformed fields');
+}
   
 //   throw new Error('Incorrect data: some fields are missing');
 // };

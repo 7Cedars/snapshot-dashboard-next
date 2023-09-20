@@ -7,6 +7,7 @@ import { toHeatmapData } from "../../utils/transposeData";
 import { toDateFormat } from "../../utils/utils";
 import { Proposal } from "../../../types"
 import { useApolloClient } from "@apollo/client";
+import { toProposals } from "@/app/utils/parsers";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
 
@@ -19,33 +20,21 @@ const nCol = 60
 
 export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) => {
   const { dateA, dateB } = useDateRange()
-  const { selectedSpaces } = useSpaces()
-
-  const { cache }  = useApolloClient()
-  const cachedProposals = Object.values(cache.extract())
-  .filter(item => item.__typename === "Proposal") 
-
-  const votes=  cachedProposals.map(proposal => proposal.votes)
-  console.log("cachedProposals votes: ", votes)
-
   const startDate = Math.min(dateA, dateB)
   const endDate = Math.max(dateA, dateB)
-
-  const selectedProposals = cachedProposals.filter((proposal: any) => {
-    return selectedSpaces.includes(
-      proposal.space.__ref.replace("Space:", "")
-      )
-  }) 
-
-  console.log({
-    selectedProposals: selectedProposals, 
-    startDate: startDate, 
-    endDate: endDate
+  
+  
+  const { cache }  = useApolloClient()
+  const cachedProposals = toProposals({
+    proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
 
+  const { selectedSpaces } = useSpaces()
+  const selectedProposals = cachedProposals.filter((proposal: any) => {
+    return selectedSpaces.includes( proposal.space.id )
+  }) 
+
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
-  
-  // console.log("dataMap: ", dataMap )
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;

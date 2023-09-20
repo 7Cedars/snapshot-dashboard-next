@@ -7,6 +7,7 @@ import { PROPOSALS_FROM_SPACES } from "../utils/queries";
 import { useSpaces } from "../hooks/useUrl";
 import { UseSuspenseQueryResult } from "@apollo/client";
 import { toDateFormat } from "../utils/utils";
+import { toProposals } from "../utils/parsers";
 
 const HeatMap = () => { 
   const { cache }  = useApolloClient()
@@ -21,8 +22,6 @@ const HeatMap = () => {
   let dataLenght = 1000
   let skip = 0
 
-  console.log("EARLIEST PROPOSAL DATE: ", toDateFormat(1595088000 * 1000)) 
-
   // while (dataLenght === 1000) {
     
     const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(PROPOSALS_FROM_SPACES, {
@@ -34,6 +33,7 @@ const HeatMap = () => {
 
     if (error) return `Error! ${error}`;
 
+    // console.log("DATA from GQL: ", toProposals(data))
     // console.log("data: ", data)
     // skip = skip + 1000
 

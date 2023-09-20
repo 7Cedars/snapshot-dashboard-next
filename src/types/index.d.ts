@@ -4,8 +4,6 @@ export interface Proposal {
   id: string;
   space: OnlyNameSpace; 
   votes: number;
-  votesLoaded: boolean;
-  votesDetails: Vote[]; 
   start: number;
   end: number;
 }
