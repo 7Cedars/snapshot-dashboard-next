@@ -4,8 +4,7 @@ import { useMemo } from "react";
 import * as d3 from "d3";
 import { useDateRange, useSpaces } from "@/app/hooks/useUrl";
 import { toHeatmapData } from "../../utils/transposeData";
-import { toDateFormat } from "../../utils/utils";
-import { Proposal } from "../../../types"
+import { toShortDateFormat } from "../../utils/utils";
 import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 
@@ -106,7 +105,7 @@ export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) 
             dominantBaseline="middle"
             fontSize={12}
           >
-            {toDateFormat(parseInt(timestamp))}
+            {toShortDateFormat(parseInt(timestamp))}
           </text>
         );
       }

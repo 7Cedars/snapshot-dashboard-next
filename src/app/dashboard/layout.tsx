@@ -16,7 +16,7 @@ export default function layout({
 }) {
   return (
       
-      <div className="h-screen w-full grid grid-cols-3 gap-1">
+      <div className="h-screen w-full flex flex-row">
         {children}
       </div>
   

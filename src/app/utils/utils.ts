@@ -1,4 +1,4 @@
-import { Proposal, Node, Vote, Space } from "../../../.next/types/app/components";
+import { Proposal, Node, Vote, Space } from "../../types";
 
 interface Props {
   proposals: Proposal[], 
@@ -7,8 +7,17 @@ interface Props {
   endDate: number | null 
 }
 
+const nameMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
 export const toDateFormat = (timestamp: number): string => { 
   return new Date(timestamp).toISOString().split('T')[0]
+}; 
+
+export const toShortDateFormat = (timestamp: number): string => {
+  const date = new Date(timestamp) 
+  const shortYear = date.getFullYear().toString().slice(2,4) 
+
+  return `${nameMonths[date.getMonth()]} ${shortYear}`
 }; 
 
 export const toTimestamp = (dateFormat: string): string => { 
