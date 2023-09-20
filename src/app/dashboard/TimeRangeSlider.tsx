@@ -8,7 +8,14 @@ import { standardDateRange, genesisSnapshot } from "../../../constants";
 import { useDebounce } from "../hooks/useDebounce";
 import { useApolloClient } from "@apollo/client";
 
-const TimeRangeSlider = () => {
+interface dateRangeProps {
+  dateRange: {
+    dateA: number, 
+    dateB: number
+  }
+}
+
+const TimeRangeSlider = ({dateRange}: dateRangeProps) => {
   const { dateA, dateB, handleDates } = useDateRange()
   const { cache }  = useApolloClient()
   const handleDatesDebounced = useDebounce(handleDates, 500)
@@ -20,9 +27,9 @@ const TimeRangeSlider = () => {
   const [valueB, setValueB] = useState(maxVal);
 
   useEffect(() => {
-    setValueA(dateA)
-    setValueB(dateB)
-  }, [dateA, dateB])
+    setValueA(dateRange.dateA)
+    setValueB(dateRange.dateB)
+  }, [dateRange])
 
   // Note: despite only top slider being called, it updates the value of teh slider that is closest to pointer.
   // it gives the impression of interacting with both sliders. 
@@ -38,7 +45,7 @@ const TimeRangeSlider = () => {
   }
 
   return (
-    <div className="pt-4"> 
+    <div className="p-0"> 
 
       <RangeSlider
         minVal = {minVal}

@@ -15,12 +15,10 @@ export default function layout({
   children: React.ReactNode
 }) {
   return (
-    <div>          
-      <div className="h-screen w-full grid grid-cols-3 gap-3">
-
-        {children}
       
+      <div className="h-screen w-full grid grid-cols-3 gap-1">
+        {children}
       </div>
-      </div>
+  
   )
 }

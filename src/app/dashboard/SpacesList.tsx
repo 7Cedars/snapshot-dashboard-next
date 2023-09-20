@@ -30,7 +30,7 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   // }
 
   return (
-    <div className="p-2 grid grid-cols-1 relative h-auto place-content-start m-4"> 
+    <div className="grid grid-cols-1 relative h-auto min-w-fit place-content-start"> 
       {/* < Button
         onClick={ handleClick } > 
         TEST Graph QL query
@@ -38,7 +38,7 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
 
       <form>
         <input
-          className="p-2 w-full border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+          className="p-2 w-full min-w-fit border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
           type="search"
           id="mySearch"
           name="q"
@@ -57,8 +57,6 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
           ))
         }
       </div>
-
-  
     </div>
   );
 }
