@@ -16,7 +16,7 @@ const SpaceItem = ( {spaceId}: Props) => {
 
   return (
     spaceId !== '' ? 
-      <div className='flex flex-row border w-80 rounded-lg border-gray-400 mx-2 my-2 py-2'>
+      <div className='flex flex-row border w-80 rounded-lg border-gray-400 my-2 py-2'>
           <div className="col-span-2 flex items-center justify-center pl-2">
             
             <label className="text-blue border-blue hover:bg-blue overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full border-2 border-yellow-400 bg-white shadow-lg hover:text-white">

@@ -30,7 +30,7 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
   // }
 
   return (
-    <div className="grid grid-cols-1 h-auto place-content-start"> 
+    <div className="grid grid-cols-1 h-auto place-content-start overflow-x-auto overflow-x-hidden"> 
       {/* < Button
         onClick={ handleClick } > 
         TEST Graph QL query
@@ -48,9 +48,9 @@ const SpacesList = ({selectedSpaces}: spacesListProps ) => {
           />
       </form>
 
-      <div className="pb-3 pt-1 max-h-screen overflow-auto">
+      <div className="pb-3 pt-1 max-h-screen overflow-x-auto overflow-x-hidden">
         {selectedSpaces.length === 0 ? 
-          <i className="grid justify-items-center p-2 my-4 text-gray-500 "> No DAO spaces selected. </i>
+          <i className="grid justify-items-center my-4 text-gray-500 "> No DAO spaces selected. </i>
           :
           selectedSpaces.map(spaceId => (
             < SpaceItem key = {spaceId} spaceId = {spaceId}/> 
