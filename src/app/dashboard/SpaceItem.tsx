@@ -12,17 +12,18 @@ interface Props {
 
 const SpaceItem = ( {spaceId}: Props) => {
   const { selectedSpaces, removeSpace } = useSpaces() 
-  const appearance = `border-4 border-${tailwindColours[selectedSpaces.indexOf(spaceId)]} overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg `
+  const appearance = `border-4 overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg `
   const space = spaces.find(space => space.id === spaceId)
 
-  console.log(appearance)
+  // console.log(appearance)
 
   return (
     spaceId !== '' ? 
       <div className='flex flex-row border w-80 rounded-lg border-gray-400 my-2 py-2'>
           <div className="col-span-2 flex items-center justify-center pl-2">
             
-            <label className= {appearance} >
+            <label className= {`${appearance} ${tailwindColours[selectedSpaces.indexOf(spaceId)]}`} >
+              {/* <div className='border-red-500'> */}
             {/* // {`border-4 border-[#f87171] overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white shadow-lg hover:text-white`}> */}
               <img
                 className="h-14 w-14"
@@ -30,6 +31,7 @@ const SpaceItem = ( {spaceId}: Props) => {
                 src={`https://cdn.stamp.fyi/space/${spaceId}?s=96`}
                 alt="DAO space icon"
               />
+              {/* </div >  */}
             </label>
           
           </div>

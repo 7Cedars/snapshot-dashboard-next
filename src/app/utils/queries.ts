@@ -21,6 +21,16 @@ const PROPOSAL_DETAILS = gql`
   }
 `
 
+const VOTER_DETAILS = gql`
+  fragment VoterDetails on Vote {
+    voter
+    created
+    proposal {
+      id
+    }
+  }
+`
+
 export const LIST_SPACES = gql`
   query listSpaces($first: Int!, $skip:Int!){
     spaces(
@@ -58,15 +68,14 @@ export const VOTERS_ON_PROPOSALS = gql`
     votes (
       first: $first, 
       skip: $skip,
+      orderBy: "created",
+      orderDirection: asc, 
       where: {
         proposal_in: $proposal_in
       }
     ) {
-      voter
-      created
-      proposal {
-        id
-      }
+      ...VoterDetails
     }
   }
+  ${VOTER_DETAILS}
 `

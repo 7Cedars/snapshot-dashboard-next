@@ -1,4 +1,4 @@
-import { Space, StartDate, EndDate, SelectedSpaces, Proposal} from "../../types";
+import { Space, StartDate, EndDate, SelectedSpaces, Proposal, Vote} from "../../types";
 import spaces from "../../../public/data/spacesList";
 
 const isString = (text: unknown): text is string => {
@@ -74,6 +74,26 @@ export const toSpaceId = (object: unknown): string => {
   throw new Error('Incorrect data: some fields are missing');
 }
 
+export const toProposalId = (object: unknown): string => { 
+  if ( !object || typeof object !== 'object' ) {
+    throw new Error('Incorrect or missing data');
+  }
+
+  if ('id' in object && isString(object.id)) {
+   const proposalId: string = object.id
+   return proposalId
+  }
+
+  if ('__ref' in object && isString(object.__ref)) {
+    const proposalId: string = object.__ref.replace("Proposal:", "") 
+    return proposalId
+   }
+
+  throw new Error('Incorrect data: some fields are missing');
+}
+
+
+
 
 // NB: still need to add parsers for Proposal and Vote inputs. 
 // Never ever trust anything you receive from an outside source... 
@@ -134,7 +154,7 @@ export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   return selectedSpaces; 
 }
 
-export const toProposals = (object: unknown): Proposal[] | void | undefined | any => {
+export const toProposals = (object: unknown): Proposal[] => {
   if ( !object || typeof object !== 'object' ) {
     throw new Error('Incorrect or missing data');
   }
@@ -166,7 +186,37 @@ export const toProposals = (object: unknown): Proposal[] | void | undefined | an
   } 
   throw new Error('Incorrect data: malformed fields');
 }
+
+export const toVotes = (object: unknown): Vote[] => {
+  if ( !object || typeof object !== 'object' ) {
+    throw new Error('Incorrect or missing data');
+  }
+
+  if ('votes' in object ) {
+    if (!isArray(object.votes)) {
+      throw new Error(`Incorrect data: not an array: ${object.votes}`);
+    }
+    
+    // let proposals: Proposal[] = []
+    const votes = object.votes.map((item: any): Vote => {
+        if ( 
+          'voter'  in item  &&
+          'created' in item &&     
+          'proposal' in item
+            ) { return ({
+                voter: parseId(item.voter),
+                created: parseTimeStamp(item.created),
+                proposal: {id: toProposalId(item.proposal)},
+              })
+             }
+            throw new Error('Incorrect data: some fields or categories');
+      })
+      return votes;
+  } 
+  throw new Error('Incorrect data: malformed fields');
+}
   
+
 //   throw new Error('Incorrect data: some fields are missing');
 // };
 
