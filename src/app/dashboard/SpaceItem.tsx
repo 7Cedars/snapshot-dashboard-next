@@ -3,6 +3,7 @@
 import spaces from '../../../public/data/spacesList'
 import { MinusCircleIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
+import { colourCodes, tailwindColours } from '../../../constants';
 
 interface Props {
   key: string; 
@@ -10,22 +11,24 @@ interface Props {
 }
 
 const SpaceItem = ( {spaceId}: Props) => {
-  const { removeSpace } = useSpaces() 
-  
+  const { selectedSpaces, removeSpace } = useSpaces() 
+  const appearance = `border-4 border-${tailwindColours[selectedSpaces.indexOf(spaceId)]} overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg `
   const space = spaces.find(space => space.id === spaceId)
+
+  console.log(appearance)
 
   return (
     spaceId !== '' ? 
       <div className='flex flex-row border w-80 rounded-lg border-gray-400 my-2 py-2'>
           <div className="col-span-2 flex items-center justify-center pl-2">
             
-            <label className="text-blue border-blue hover:bg-blue overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full border-2 border-yellow-400 bg-white shadow-lg hover:text-white">
-              {/* img: https://cdn.stamp.fyi/space/magicappstore.eth !! */ }
+            <label className= {appearance} >
+            {/* // {`border-4 border-[#f87171] overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white shadow-lg hover:text-white`}> */}
               <img
                 className="h-14 w-14"
                 aria-hidden="true"
                 src={`https://cdn.stamp.fyi/space/${spaceId}?s=96`}
-                alt="Grapefruit slice atop a pile of other slices"
+                alt="DAO space icon"
               />
             </label>
           

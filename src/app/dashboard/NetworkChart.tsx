@@ -16,8 +16,6 @@ const NetworkChart = ( ) => {
 
   const dispatch = useAppDispatch()
   const [ votersOnProposals ] = useLazyQuery(VOTERS_ON_PROPOSALS)
-  // const {selectedSpaces, startDate, endDate} = useAppSelector(state => state.userInput)
-  const { proposals } = useAppSelector(state => state.loadedProposals)
   const [selectedProposals, setSelectedProposals] = useState<Proposal[]>([])
 
   // useEffect(() => {

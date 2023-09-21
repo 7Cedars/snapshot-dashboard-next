@@ -12,6 +12,10 @@ import {
   getDateRangeFromUseSearchParams,
   getSpacesFromUseSearchParams
 } from '../utils/getDataFromUseSearch';
+import { 
+  tailwindColours, 
+  colourCodes 
+} from '../../../constants';
 
 export function useDateRange() {
   const params = useSearchParams();
@@ -34,7 +38,14 @@ export function useSpaces() {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const selectedSpaces = getSpacesFromUseSearchParams(params);
+  const selectedSpaces = getSpacesFromUseSearchParams(params); 
+  const spacesColours = selectedSpaces.map((space, i) => {
+    return ({
+      space: space,  
+      tailwindColour: tailwindColours[i], 
+      colourCode: colourCodes[i]
+    })
+  })
 
   const addSpace = (space: Space) => {
     let newParams = new URLSearchParams(params.toString());
@@ -56,5 +67,5 @@ export function useSpaces() {
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  return { selectedSpaces, addSpace, removeSpace };
+  return { selectedSpaces, spacesColours, addSpace, removeSpace };
 }

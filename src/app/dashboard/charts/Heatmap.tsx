@@ -7,6 +7,7 @@ import { toHeatmapData } from "../../utils/transposeData";
 import { toShortDateFormat } from "../../utils/utils";
 import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
+import { colourCodes } from "../../../../constants";
 
 const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
 
@@ -28,13 +29,15 @@ export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) 
     proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
 
-  const { selectedSpaces } = useSpaces()
+  const { selectedSpaces, spacesColours } = useSpaces()
   const selectedProposals = cachedProposals.filter((proposal: any) => {
     return selectedSpaces.includes( proposal.space.id )
   }) 
 
+  
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
 
+  // console.log("dataMap: ", dataMap)
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
@@ -69,14 +72,13 @@ export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) 
     return null;
   }
 
-  // Color scale
-  const colorScale = d3
-    .scaleSequentialSqrt()
-    .interpolator(d3.interpolateOranges)
-    .domain([min, max]);
-
   // Build the rectangles
   const allRects = dataMap.map((d, i) => {
+
+    const colorScale = d3
+    .scaleSequential(["#f3f4f6", colourCodes[selectedSpaces.indexOf(d.y)]]) 
+    .domain([min, max / 10]);
+
     return (
       <rect
         key={i}
@@ -88,7 +90,7 @@ export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) 
         opacity={1}
         fill={colorScale(d.value)}
         rx={3}
-        stroke={"white"}
+        stroke={"#f3f4f6"}
       />
     );
   });
