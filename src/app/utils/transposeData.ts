@@ -114,7 +114,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
 }
 
 // toNetworkGraph
-export const toNetworkGraph = (proposals: Proposal[]) => {
+export const toNetworkGraph = (votes: Vote[]) => {
 
   // console.log("proposals at toNetworkGraph: ", proposals)
 

@@ -29,7 +29,7 @@ export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endD
   const withinTimeRange = (timeStamp: number ): boolean => {
     if (startDate === null || endDate === null) { return true }  
     
-    return startDate <= timeStamp && timeStamp <= endDate 
+    return startDate <= timeStamp*1000 && timeStamp*1000 <= endDate 
   }
   
   const amongSelectedSpaces = (spaceId: string): boolean => {

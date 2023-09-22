@@ -1,18 +1,18 @@
 import { Space, Proposal, Vote } from "@/types"
 import spaces from "../../../public/data/spacesList"
 import { useApolloClient } from "@apollo/client"
-import { toProposals } from "./parsers"
+import { toProposals, toVotes } from "./parsers"
+
 
 export const proposalsOfSpaceNotCached = (selectedSpaces: string[]) => {
-  // checkes if all proposals have been loaded for list of spaces. 
-  // does this by comparing votesCount as stated in spacesList, to sum of votes of cached proposals. 
-  // These two do not always align completely, so a margin (by percentage) is included.  
-
   const { cache }  = useApolloClient()
   const cachedProposals: Proposal[] = toProposals({proposals: 
     Object.values(cache.extract())
     .filter(item => item.__typename === "Proposal")
   })
+  // checkes if all proposals have been loaded for list of spaces. 
+  // does this by comparing votesCount as stated in spacesList, to sum of votes of cached proposals. 
+  // These two do not always align completely, so a margin (by percentage) is included.  
 
   const cachedProposalsBySpace = selectedSpaces.map(spaceId => 
     cachedProposals.filter(proposal => proposal.space.id === spaceId ))
@@ -45,9 +45,41 @@ export const proposalsOfSpaceNotCached = (selectedSpaces: string[]) => {
 
 export const votesOfProposalNotCached = (selectedProposals: string[]) => {
   const { cache }  = useApolloClient()
-  const cachedVotes = 
+  const cachedProposals: Proposal[] = toProposals({proposals: 
     Object.values(cache.extract())
-    .filter(item => item.__typename === "Vote")
+    .filter(item => item.__typename === "Proposal")
+  })
 
+  const cachedQueries = Object.values(cache.extract())
+    .filter(item => item.__typename === 'Query')[0]
+  const cachedQueriesFlat = (Array.from(Object.values(cachedQueries))).flat()
+  
+  const cachedVotes: Vote[] = toVotes(cachedQueriesFlat
+    .filter((item: any) => item.__typename === 'Vote' )
+  )
+
+  const cachedVotesByProposal = selectedProposals.map(proposalId => 
+    cachedVotes.filter(vote => vote.proposal.id === proposalId ))
+  const cachedVoteCount = cachedVotesByProposal.map(array => array.length)
+  
+  const savedVotesCount = cachedProposals.map(proposal => proposal.votes)
+
+  const result = selectedProposals.map((proposal, i) => ({
+    proposalId: proposal, 
+    savedVotesCount: savedVotesCount[i], 
+    cachedVoteCount: cachedVoteCount[i]
+  }));
+
+  let notCached: string[] = []
+  selectedProposals.forEach((proposal, i) => {
+    if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
+      notCached.push(proposal) 
+    } 
+  })
+
+  return ({ 
+    result: result,
+    notCached: notCached
+    }) 
 
 }

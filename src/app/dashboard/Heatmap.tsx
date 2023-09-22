@@ -36,30 +36,6 @@ const HeatMap = () => {
 
   if (error) return `Error! ${error}`;
 
-
-  const { error: error2, data: data2 }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
-    variables: { 
-      first: 1000, 
-      skip: 0, 
-      proposal_in: ["0x55d60f39563c5f14e9c48d8fcddb9daac577c9f5eb3cf130dfa56d01e7a983db"]} 
-  });
-
-  if (error2) return `Error! ${error2}`;
-
-  console.log("data2: ", data2)
-
-  useApolloClient().resetStore
-  const { cache }  = useApolloClient()
-  const cachedVotes = 
-  new Set(
-    Object.values(cache.extract())
-    //.filter(item => item.__typename === 'Query' ) 
-  .map(item => item.__typename)) 
-  // .filter(item => item.proposal.id === "0x55d60f39563c5f14e9c48d8fcddb9daac577c9f5eb3cf130dfa56d01e7a983db")
-    //.filter(item => item.__typename === 'Vote' )
-
-  console.log("cachedVotes: ", cachedVotes)
-
   // should integrate suspense here. See Apollo docs. 
   return (
     <div> 

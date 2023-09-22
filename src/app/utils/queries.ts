@@ -28,8 +28,6 @@ const PROPOSAL_DETAILS = gql`
   }
 `
 
-
-
 export const LIST_SPACES = gql`
   query listSpaces($first: Int!, $skip:Int!){
     spaces(
@@ -69,7 +67,7 @@ export const VOTERS_ON_PROPOSALS = gql`
       skip: $skip,
       where: {
         proposal_in: $proposal_in
-      }
+      },
       orderBy: "created",
       orderDirection: asc, 
     ) {

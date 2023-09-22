@@ -154,7 +154,7 @@ export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
   return selectedSpaces; 
 }
 
-export const toProposals = (object: unknown): Proposal[] => {
+export const toProposals = (object: unknown): Proposal[]  => {
   if ( !object || typeof object !== 'object' ) {
     throw new Error('Incorrect or missing data');
   }
@@ -163,8 +163,10 @@ export const toProposals = (object: unknown): Proposal[] => {
     if (!isArray(object.proposals)) {
       throw new Error(`Incorrect data: not an array: ${object.proposals}`);
     }
+
+    if (object.proposals.length === 0) { return [] } 
     
-    const proposals = object.proposals.map((item: any): Proposal => {
+    const proposals = object.proposals.map((item: any): Proposal  => {
         if ( 
           'id'  in item  &&
           'start' in item &&     
@@ -195,6 +197,8 @@ export const toVotes = (object: unknown): Vote[] => {
     if (!isArray(object.votes)) {
       throw new Error(`Incorrect data: not an array: ${object.votes}`);
     }
+
+    if (object.votes.length === 0) {return [] } 
     
     const votes = object.votes.map((item: any): Vote => {
         if ( 

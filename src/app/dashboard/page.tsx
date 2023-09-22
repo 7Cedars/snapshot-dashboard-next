@@ -30,8 +30,9 @@ export default function Page({ searchParams }: Props) {
       <div className='mt-20 flex-grow pt-4 grid grid-cols-1 lg px-1 py-5 '> 
         <div className='p-2 m-1 border border-gray-500 rounded-lg shadow-lg bg-gray-100'>
           <TimeRangeSlider dateRange = {dateRange}/> 
-          {/* <NetworkChart /> */}
+          
           <HeatMap />
+          <NetworkChart />
         </div>
       </div> 
     </> 

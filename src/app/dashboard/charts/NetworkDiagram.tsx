@@ -1,8 +1,12 @@
 import * as d3 from 'd3';
 import { useEffect, useRef } from 'react';
 import { RADIUS, drawNetwork } from './drawNetwork';
-import { Link, Node } from '../../../../.next/types/app/components';
+import { Link, Node, Vote } from '../../../types';
 import { data } from '../../../../public/data/dummyNetworkData';
+import { toNetworkGraph } from '@/app/utils/transposeData';
+import { useApolloClient } from '@apollo/client';
+import { toVotes } from '@/app/utils/parsers';
+
 
 type NetworkDiagramProps = {
   width: number;
@@ -16,6 +20,18 @@ export const NetworkDiagram = ({
   if (width === 0) {
     return null;
   }
+
+  const { cache }  = useApolloClient()
+  const cachedQueries = Object.values(cache.extract())
+      .filter(item => item.__typename === 'Query')[0]
+    const cachedQueriesFlat = (Array.from(Object.values(cachedQueries))).flat()
+    
+    const cachedVotes: Vote[] = toVotes(cachedQueriesFlat
+      .filter((item: any) => item.__typename === 'Vote' )
+    )
+
+  const test = toNetworkGraph(cachedVotes) 
+
 
   // The force simulation mutates links and nodes, so create a copy first
   // Node positions are initialized by d3

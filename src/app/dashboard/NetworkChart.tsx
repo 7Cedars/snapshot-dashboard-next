@@ -6,78 +6,57 @@ import { SyntheticEvent, useEffect, useState } from 'react';
 import { useAppSelector } from '../../redux/hooks';
 import { Proposal } from '../../types';
 import { useAppDispatch } from '../../redux/hooks';
-import { addVotes } from '../../redux/reducers/proposalsReducer'
+import { useSuspenseQuery, UseSuspenseQueryResult } from '@apollo/client';
 import { toNetworkGraph } from '../utils/transposeData';
 import { toSelectedProposals } from '../utils/utils';
 import { ChartCanvas } from '../ui/ChartCanvas';
 import { NetworkDiagram } from './charts/NetworkDiagram';
+import { useApolloClient } from '@apollo/client';
+import { useSpaces, useDateRange } from '../hooks/useUrl';
+import { toProposals } from '../utils/parsers';
 
 const NetworkChart = ( ) => {
+  const { selectedSpaces } = useSpaces()
+  const { dateA, dateB } = useDateRange()
+  const startDate = Math.min(dateA, dateB) 
+  const endDate = Math.max(dateA, dateB) 
 
-  const dispatch = useAppDispatch()
-  const [ votersOnProposals ] = useLazyQuery(VOTERS_ON_PROPOSALS)
-  const [selectedProposals, setSelectedProposals] = useState<Proposal[]>([])
+  const { cache }  = useApolloClient()
+  const cachedProposals: Proposal[] = toProposals({
+    proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
+  })
 
-  // useEffect(() => {
-  //   const selectedProposals = toSelectedProposals({ 
-  //     proposals,
-  //     selectedSpaces, 
-  //     startDate, 
-  //     endDate
-  //   })
+  console.log({
+    proposals: cachedProposals,
+    selectedSpaces: selectedSpaces,
+    startDate: startDate,
+    endDate: endDate
+  })
 
-  //   setSelectedProposals(selectedProposals)
-    
-  // }, [proposals, selectedSpaces, startDate, endDate ])
+  const proposalSelection = toSelectedProposals({
+    proposals: cachedProposals,
+    selectedSpaces: selectedSpaces,
+    startDate: startDate,
+    endDate: endDate
+  })
 
-  // console.log("selectedProposals at network Graph: ", selectedProposals)
+  const selectedProposals = proposalSelection.map(proposal => proposal.id)
 
-  // const loadedProposals = selectedProposals.filter(proposal => 
-  //   proposal.votesLoaded === true
-  // ) 
-  // console.log("loadedProposals at network Graph: ", loadedProposals)
+  // better to make loop here.  
+  const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
+    variables: {
+      first: 1000, 
+      skip: 0, 
+      proposal_in: selectedProposals}
+  });
 
-  const proposalsToLoad = selectedProposals.filter(proposal => 
-    proposal.votesLoaded === false
-  ) 
-  console.log("proposalsToLoad at network Graph: ", proposalsToLoad)
-  
-  const handleDataOnClick = async (event: SyntheticEvent) => {
-    event.preventDefault
+  if (error) return `Error! ${error}`;
 
-    const proposalsToLoad = selectedProposals.filter(proposal => 
-      proposal.votesLoaded === false
-    )    
-    const proposalsToLoadStr = proposalsToLoad.map(proposal => proposal.id)
+  console.log("data2: ", data)
 
-    if (proposalsToLoadStr.length > 0) {
-      try {
-        let continueFetching = true;
-        let skip = 0;
-        while (continueFetching === true) {
-      
-          const { data } = await votersOnProposals({
-            variables: { first: 1000, skip: skip, proposal_in: proposalsToLoadStr} 
-          })
-
-          console.log("FETCHED VOTES: ", data)
-          console.log("LENGTH Fetched votes: ", data.votes.length)
-          
-          dispatch(addVotes(data.votes))
-
-          if (data.votes.length !== 1000) { 
-            continueFetching = false 
-          } else {
-            skip = skip + 1000
-          } 
-        }
-
-      } catch (e) {
-        console.log("ERROR: ", e)
-      }
-    }
-    toNetworkGraph(selectedProposals)
-  }
+  //   }
+  //   toNetworkGraph(selectedProposals)
+  // }
 
   return (
     <div className='content-center'> 
@@ -85,7 +64,7 @@ const NetworkChart = ( ) => {
       <button 
         type="submit"
         className="font-medium text-black px-5 hover:text-gray-300 sm:py-6"
-        onClick={handleDataOnClick}
+        // onClick={handleDataOnClick}
         >
         LOAD DATA
       </button> 
