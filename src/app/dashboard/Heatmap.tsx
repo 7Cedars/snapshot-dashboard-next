@@ -48,6 +48,7 @@ const HeatMap = () => {
 
   console.log("data2: ", data2)
 
+  useApolloClient().resetStore
   const { cache }  = useApolloClient()
   const cachedVotes = 
   new Set(

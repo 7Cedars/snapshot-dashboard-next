@@ -164,7 +164,6 @@ export const toProposals = (object: unknown): Proposal[] => {
       throw new Error(`Incorrect data: not an array: ${object.proposals}`);
     }
     
-    // let proposals: Proposal[] = []
     const proposals = object.proposals.map((item: any): Proposal => {
         if ( 
           'id'  in item  &&
@@ -180,7 +179,7 @@ export const toProposals = (object: unknown): Proposal[] => {
                 votes: parseVotesCount(item.votes),
               })
              }
-            throw new Error('Incorrect data: some fields or categories');
+            throw new Error(`Incorrect data: some fields or categories in Proposal: ${item}`);
       })
       return proposals;
   } 
@@ -197,7 +196,6 @@ export const toVotes = (object: unknown): Vote[] => {
       throw new Error(`Incorrect data: not an array: ${object.votes}`);
     }
     
-    // let proposals: Proposal[] = []
     const votes = object.votes.map((item: any): Vote => {
         if ( 
           'voter'  in item  &&
@@ -209,7 +207,7 @@ export const toVotes = (object: unknown): Vote[] => {
                 proposal: {id: toProposalId(item.proposal)},
               })
              }
-            throw new Error('Incorrect data: some fields or categories');
+            throw new Error(`Incorrect data: some fields or categories in Vote: ${item}`);
       })
       return votes;
   } 

@@ -2,6 +2,8 @@ export const apiProductionUrl = 'https://hub.snapshot.org/graphql';
 export const standardDateRange = 15778800000 // 15778800000 Equals six months
 export const genesisSnapshot = 1595088000 * 1000
 
+// NB! before colours can be used in ${} sentence, they need to be used once written out. 
+// (I guess that they need to be downloaded once.)
 export const tailwindColours = [
   'border-yellow-500', 'border-gray-500', 
   'border-red-500', "border-orange-500", 

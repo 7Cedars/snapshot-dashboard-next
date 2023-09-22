@@ -1,7 +1,7 @@
 "use client";
 // ^ this file needs the "use client" pragma
 
-import { ApolloLink, HttpLink } from "@apollo/client";
+import { ApolloLink, HttpLink, gql } from "@apollo/client";
 import {
   ApolloNextAppProvider,
   NextSSRInMemoryCache,
@@ -9,6 +9,7 @@ import {
   SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
 import { apiProductionUrl } from "../../constants";
+import { createFragmentRegistry } from "@apollo/client/cache";
 
 
 // have a function to create a client for you
@@ -27,7 +28,31 @@ function makeClient() {
 
   return new NextSSRApolloClient({
     // use the `NextSSRInMemoryCache`, not the normal `InMemoryCache`
-    cache: new NextSSRInMemoryCache(),
+    cache: new NextSSRInMemoryCache({
+      fragments: createFragmentRegistry(gql`
+        fragment SpaceDetails on Space {
+          id
+        }
+
+        fragment VoterDetails on Vote {
+          voter
+          proposal {
+            id
+          }
+          created
+        }
+      
+        fragment ProposalDetails on Proposal {
+          id
+          space {
+            id
+          }
+          votes
+          start
+          end
+        }
+    `)
+    }),
     link:
       typeof window === "undefined"
         ? ApolloLink.from([

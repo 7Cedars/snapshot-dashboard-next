@@ -1,11 +1,18 @@
 import { gql } from '@apollo/client'
 
-    // votesCount
-    // categories
-
 const SPACE_DETAILS = gql`
   fragment SpaceDetails on Space {
     id
+  }
+`
+
+const VOTER_DETAILS = gql`
+  fragment VoterDetails on Vote {
+    voter
+    proposal {
+      id
+    }
+    created
   }
 `
 
@@ -21,15 +28,7 @@ const PROPOSAL_DETAILS = gql`
   }
 `
 
-const VOTER_DETAILS = gql`
-  fragment VoterDetails on Vote {
-    voter
-    created
-    proposal {
-      id
-    }
-  }
-`
+
 
 export const LIST_SPACES = gql`
   query listSpaces($first: Int!, $skip:Int!){
@@ -68,11 +67,11 @@ export const VOTERS_ON_PROPOSALS = gql`
     votes (
       first: $first, 
       skip: $skip,
-      orderBy: "created",
-      orderDirection: asc, 
       where: {
         proposal_in: $proposal_in
       }
+      orderBy: "created",
+      orderDirection: asc, 
     ) {
       ...VoterDetails
     }
