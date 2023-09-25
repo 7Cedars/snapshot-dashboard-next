@@ -123,7 +123,7 @@ export const toNetworkGraph = (votes: Vote[]) => {
   }
 
   const spaces = Array.from(
-    new Set(proposals.map(proposal => proposal.space.id))
+    new Set(votes.map(vote => vote.proposal.id))
   )
 
   // const uniqueVotesSpace = new Set(
@@ -141,7 +141,7 @@ export const toNetworkGraph = (votes: Vote[]) => {
   //   (item, index) => uniqueVotesSpaceArray.indexOf(item) !== index
   //   ) 
 
-  const assessment = proposals.reduce((accumulator, proposal) => accumulator + proposal.votes, 0)
+  // const assessment = proposals.reduce((accumulator, proposal) => accumulator + proposal.votes, 0)
 
   // const votesPerVoter = uniqueVoters.map(voter => 
   //   votes.filter(vote => vote.voter === voter)
@@ -151,36 +151,36 @@ export const toNetworkGraph = (votes: Vote[]) => {
   // const spacesPerVoter = votesPerVoter.map(voter => 
   //   )
 
-  const votersPerSpace = spaces.map(space => {
-    const proposalsOfSpace = proposals
-      .filter(proposal => proposal.space.id === space)
+  // const votersPerSpace = spaces.map(space => {
+  //   const proposalsOfSpace = proposals
+  //     .filter(proposal => proposal.space.id === space)
     
-    const votesOfSpace: Vote[] = []
-    proposalsOfSpace.map(proposal => 
-        votesOfSpace.push(...proposal.votesDetails)
-        )
+  //   const votesOfSpace: Vote[] = []
+  //   proposalsOfSpace.map(proposal => 
+  //       votesOfSpace.push(...proposal.votesDetails)
+  //       )
     
-    const votersPerSpace = Array.from(new Set( 
-      votesOfSpace.map( space => space.voter )
-    )) 
+  //   const votersPerSpace = Array.from(new Set( 
+  //     votesOfSpace.map( space => space.voter )
+  //   )) 
 
-    return votersPerSpace
-  })
+  //   return votersPerSpace
+  // })
 
   // console.log("votersOfSpace: ", votersPerSpace)
 
-  const links = votersPerSpace.map(spaceSource => 
-    votersPerSpace.map(spaceTarget => {
-      if (hasSharedVoters(spaceSource, spaceTarget)) { 
-        return { source: spaceSource, target: spaceTarget, value: 1  } 
-      } 
-    }).flat()
-  ).flat()
-  .filter(item => item !== undefined) 
+  // const links = votersPerSpace.map(spaceSource => 
+  //   votersPerSpace.map(spaceTarget => {
+  //     if (hasSharedVoters(spaceSource, spaceTarget)) { 
+  //       return { source: spaceSource, target: spaceTarget, value: 1  } 
+  //     } 
+  //   }).flat()
+  // ).flat()
+  // .filter(item => item !== undefined) 
 
-  const nodes: NetworkNode[] = spaces.map((space, i) => 
-    ({id: space, group: "test"})
-  )
+  // const nodes: NetworkNode[] = spaces.map((space, i) => 
+  //   ({id: space, group: "test"})
+  // )
 
   // console.log(
   //   "END RESULT", 

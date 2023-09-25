@@ -198,22 +198,23 @@ export const toVotes = (object: unknown): Vote[] => {
       throw new Error(`Incorrect data: not an array: ${object.votes}`);
     }
 
-    if (object.votes.length === 0) {return [] } 
-    
-    const votes = object.votes.map((item: any): Vote => {
-        if ( 
-          'voter'  in item  &&
-          'created' in item &&     
-          'proposal' in item
-            ) { return ({
-                voter: parseId(item.voter),
-                created: parseTimeStamp(item.created),
-                proposal: {id: toProposalId(item.proposal)},
-              })
-             }
-            throw new Error(`Incorrect data: some fields or categories in Vote: ${item}`);
-      })
-      return votes;
+    if (object.votes.length === 0) { return [] }  
+    else {
+      const votes = object.votes.map((item: any): Vote => {
+          if ( 
+            'voter'  in item  &&
+            'created' in item &&     
+            'proposal' in item
+              ) { return ({
+                  voter: parseId(item.voter),
+                  created: parseTimeStamp(item.created),
+                  proposal: {id: toProposalId(item.proposal)},
+                })
+              }
+              throw new Error(`Incorrect data: some fields or categories in Vote: ${item}`);
+        })
+        return votes;
+      }
   } 
   throw new Error('Incorrect data: malformed fields');
 }

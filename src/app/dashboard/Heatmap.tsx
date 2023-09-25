@@ -27,6 +27,8 @@ const HeatMap = () => {
   const spacesToQuery = notCached.notCached
   spacesToQuery.push(" ") // if no spaces need to be queried, it queries an empty space. 
 
+
+
   const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(PROPOSALS_FROM_SPACES, {
     variables: { 
       first: 1000, 

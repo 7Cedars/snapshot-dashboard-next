@@ -43,7 +43,7 @@ export const proposalsOfSpaceNotCached = (selectedSpaces: string[]) => {
     }) 
 }
 
-export const votesOfProposalNotCached = (selectedProposals: string[]) => {
+export const votesOfProposalNotCached = (selectedProposals: string[], filterLargeProposals: boolean) => {
   const { cache }  = useApolloClient()
   const cachedProposals: Proposal[] = toProposals({proposals: 
     Object.values(cache.extract())
@@ -71,11 +71,20 @@ export const votesOfProposalNotCached = (selectedProposals: string[]) => {
   }));
 
   let notCached: string[] = []
-  selectedProposals.forEach((proposal, i) => {
-    if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
-      notCached.push(proposal) 
-    } 
-  })
+  if (filterLargeProposals === false) {  
+    selectedProposals.forEach((proposal, i) => {
+      if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
+        notCached.push(proposal) 
+      } 
+    })
+  } else {
+    selectedProposals.forEach((proposal, i) => {
+      if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05) 
+          && savedVotesCount[i] < 1000 ) {
+        notCached.push(proposal) 
+      } 
+    })
+  }
 
   return ({ 
     result: result,

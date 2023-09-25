@@ -14,6 +14,8 @@ import { NetworkDiagram } from './charts/NetworkDiagram';
 import { useApolloClient } from '@apollo/client';
 import { useSpaces, useDateRange } from '../hooks/useUrl';
 import { toProposals } from '../utils/parsers';
+import { votesOfProposalNotCached } from '../utils/checkCache';
+
 
 const NetworkChart = ( ) => {
   const { selectedSpaces } = useSpaces()
@@ -42,17 +44,21 @@ const NetworkChart = ( ) => {
 
   const selectedProposals = proposalSelection.map(proposal => proposal.id)
 
-  // better to make loop here.  
-  const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
-    variables: {
-      first: 1000, 
-      skip: 0, 
-      proposal_in: selectedProposals}
-  });
+  const notCached = votesOfProposalNotCached(selectedSpaces, true)
+  console.log("votesOfProposalNotCached: ",  notCached)
 
-  if (error) return `Error! ${error}`;
 
-  console.log("data2: ", data)
+  // // better to make loop here.  
+  // const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
+  //   variables: {
+  //     first: 1000, 
+  //     skip: 0, 
+  //     proposal_in: notCached}
+  // });
+
+  // if (error) return `Error! ${error}`;
+
+  // console.log("data2: ", data)
 
   //   }
   //   toNetworkGraph(selectedProposals)
