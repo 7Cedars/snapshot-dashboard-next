@@ -6,6 +6,10 @@ import { data } from '../../../../public/data/dummyNetworkData';
 import { toNetworkGraph } from '@/app/utils/transposeData';
 import { useApolloClient } from '@apollo/client';
 import { toVotes } from '@/app/utils/parsers';
+import { useVotes } from '@/app/hooks/useVotes';
+import { toProposals } from '@/app/utils/parsers';
+import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
+import { toSelectedProposals } from '@/app/utils/utils';
 
 
 type NetworkDiagramProps = {
@@ -22,15 +26,41 @@ export const NetworkDiagram = ({
   }
 
   const { cache }  = useApolloClient()
-  const cachedQueries = Object.values(cache.extract())
-      .filter(item => item.__typename === 'Query')[0]
-    const cachedQueriesFlat = (Array.from(Object.values(cachedQueries))).flat()
-    
-    const cachedVotes: Vote[] = toVotes(cachedQueriesFlat
-      .filter((item: any) => item.__typename === 'Vote' )
-    )
+  const cachedProposals = toProposals({
+    proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
+  })
+  const { selectedSpaces } = useSpaces()
+  const { dateA, dateB } = useDateRange()
 
-  const test = toNetworkGraph(cachedVotes) 
+  const startDate = Math.min(dateA, dateB)  
+  const endDate = Math.max(dateA, dateB)  
+
+  const selectedProposals = toSelectedProposals({
+    proposals: cachedProposals,
+    selectedSpaces: selectedSpaces,
+    startDate: startDate,
+    endDate: endDate
+  })
+
+  const { fetchVotes } = useVotes() 
+  fetchVotes(selectedProposals, true)
+
+
+
+  ///////////////////////////// 
+
+  // const { cache }  = useApolloClient()
+  // const cachedQueries = Object.values(cache.extract())
+  //     .filter(item => item.__typename === 'Query')[0]
+  //   const cachedQueriesFlat = (Array.from(Object.values(cachedQueries))).flat()
+
+  //   console.log("cachedQueriesFlat: ", cachedQueriesFlat)
+    
+  //   const cachedVotes: Vote[] = toVotes(cachedQueriesFlat
+  //     .filter((item: any) => item.__typename === 'Vote' )
+  //   )
+
+  // const test = toNetworkGraph(cachedVotes) 
 
 
   // The force simulation mutates links and nodes, so create a copy first

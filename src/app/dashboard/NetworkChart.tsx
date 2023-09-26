@@ -44,8 +44,8 @@ const NetworkChart = ( ) => {
 
   const selectedProposals = proposalSelection.map(proposal => proposal.id)
 
-  const notCached = votesOfProposalNotCached(selectedSpaces, true)
-  console.log("votesOfProposalNotCached: ",  notCached)
+  // const notCached = votesOfProposalNotCached(selectedSpaces, true)
+  // console.log("votesOfProposalNotCached: ",  notCached)
 
 
   // // better to make loop here.  
