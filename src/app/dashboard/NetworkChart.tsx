@@ -15,54 +15,16 @@ import { useApolloClient } from '@apollo/client';
 import { useSpaces, useDateRange } from '../hooks/useUrl';
 import { toProposals } from '../utils/parsers';
 import { votesOfProposalNotCached } from '../utils/checkCache';
+import { useVotes } from '../hooks/useVotes';
 
 
 const NetworkChart = ( ) => {
   const { selectedSpaces } = useSpaces()
   const { dateA, dateB } = useDateRange()
-  const startDate = Math.min(dateA, dateB) 
-  const endDate = Math.max(dateA, dateB) 
+  const { fetchVotes } = useVotes() 
 
-  const { cache }  = useApolloClient()
-  const cachedProposals: Proposal[] = toProposals({
-    proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
-  })
-
-  console.log({
-    proposals: cachedProposals,
-    selectedSpaces: selectedSpaces,
-    startDate: startDate,
-    endDate: endDate
-  })
-
-  const proposalSelection = toSelectedProposals({
-    proposals: cachedProposals,
-    selectedSpaces: selectedSpaces,
-    startDate: startDate,
-    endDate: endDate
-  })
-
-  const selectedProposals = proposalSelection.map(proposal => proposal.id)
-
-  // const notCached = votesOfProposalNotCached(selectedSpaces, true)
-  // console.log("votesOfProposalNotCached: ",  notCached)
-
-
-  // // better to make loop here.  
-  // const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
-  //   variables: {
-  //     first: 1000, 
-  //     skip: 0, 
-  //     proposal_in: notCached}
-  // });
-
-  // if (error) return `Error! ${error}`;
-
-  // console.log("data2: ", data)
-
-  //   }
-  //   toNetworkGraph(selectedProposals)
-  // }
+  const votes = fetchVotes(selectedSpaces, dateA, dateB, true)
+  console.log("votes: ", votes)
 
   return (
     <div className='content-center'> 

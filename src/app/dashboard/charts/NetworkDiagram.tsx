@@ -10,12 +10,18 @@ import { useVotes } from '@/app/hooks/useVotes';
 import { toProposals } from '@/app/utils/parsers';
 import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
 import { toSelectedProposals } from '@/app/utils/utils';
-
+import { Proposal } from '../../../types';
+import { useLazyQuery } from '@apollo/client';
+import { VOTERS_ON_PROPOSALS } from '@/app/utils/queries';
 
 type NetworkDiagramProps = {
   width: number;
   height: number;
 };
+
+
+
+
 
 export const NetworkDiagram = ({
   width = 700,
@@ -25,27 +31,10 @@ export const NetworkDiagram = ({
     return null;
   }
 
-  const { cache }  = useApolloClient()
-  const cachedProposals = toProposals({
-    proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
-  })
-  const { selectedSpaces } = useSpaces()
-  const { dateA, dateB } = useDateRange()
-
-  const startDate = Math.min(dateA, dateB)  
-  const endDate = Math.max(dateA, dateB)  
-
-  const selectedProposals = toSelectedProposals({
-    proposals: cachedProposals,
-    selectedSpaces: selectedSpaces,
-    startDate: startDate,
-    endDate: endDate
-  })
-
-  const { fetchVotes } = useVotes() 
-  fetchVotes(selectedProposals, true)
 
 
+
+  
 
   ///////////////////////////// 
 

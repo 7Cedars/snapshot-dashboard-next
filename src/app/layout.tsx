@@ -8,6 +8,10 @@ import SettingsDialog from "./modals/Settings";
 import SavedSearchesDialog from "./modals/SavedSearches";
 import SearchDialog from './modals/Search';
 import NavBar from './NavBar';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import ReactQueryProviders from './ReactQueryWrapper';
+
+const queryClient = new QueryClient()
 
 export const metadata: Metadata = {
   title: 'Snapshot Dashboard',
@@ -22,20 +26,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-      <ReduxProvider>
-        <ApolloWrapper>
-          
-            <div className="max-h-screen w-full grid grid-cols-1 relative">
-          
-              <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
-              <NavBar/>
-
-              {children}
+      <ReactQueryProviders>
+        <ReduxProvider>
+          <ApolloWrapper>
             
-            </div>
-          
-          </ApolloWrapper>
-        </ReduxProvider>
+              <div className="max-h-screen w-full grid grid-cols-1 relative">
+            
+                <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
+                <NavBar/>
+
+                {children}
+              
+              </div>
+            
+            </ApolloWrapper>
+          </ReduxProvider>
+        </ReactQueryProviders>
       </body>
       
     </html>
