@@ -203,22 +203,6 @@ export const SearchDialog = () => {
                     </div>
                   </div>
 
-                  <div className='py-2 text-sm'> 
-
-                  <RangeSlider
-                    minVal = {0}
-                    maxVal = {100}
-                    minLabel = 'old' 
-                    maxLabel = 'young'
-                    valA={valueA}
-                    valB={valueB}
-                    onChangeA={( {target} ) => handleValueChange(Number(target.value)) }
-                    onChangeB={( {target} ) => handleValueChange(Number(target.value))}
-                    >
-                    Filter DAO spaces on age
-                  </RangeSlider>
-                  </div>
-
                 <div className='overflow-auto max-h-96 pl-0 mt-5'> 
                   {filteredSpaces.map(space => (
                     <div key = {space.id} > 

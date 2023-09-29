@@ -1,6 +1,10 @@
-import { Link, Node } from "../../../../.next/types/app/components";
+import { Link, Node } from "../../../types";
+import { colourCodes } from "../../../../constants";
+import { useSpaces } from "@/app/hooks/useUrl";
+import d3, { scaleOrdinal, schemeCategory10 } from 'd3';
 
-export const RADIUS = 10;
+export const RADIUS = 15;
+
 
 export const drawNetwork = (
   context: CanvasRenderingContext2D,
@@ -11,6 +15,12 @@ export const drawNetwork = (
 ) => {
   context.clearRect(0, 0, width, height);
 
+    // Color Scale
+    const allIds = [...new Set(nodes.map((d) => String(d.id)))];
+    const colorScale = scaleOrdinal<string>()
+    .domain(allIds)
+    .range(colourCodes);
+
   // Draw the nodes
   nodes.forEach((node) => {
     if (!node.x || !node.y) {
@@ -20,7 +30,7 @@ export const drawNetwork = (
     context.beginPath();
     context.moveTo(node.x + RADIUS, node.y);
     context.arc(node.x, node.y, RADIUS, 0, 2 * Math.PI);
-    context.fillStyle = '#cb1dd1';
+    context.fillStyle = colorScale(String(node.id)); // '#ef4444';
     context.fill();
   });
 
