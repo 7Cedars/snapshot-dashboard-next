@@ -55,14 +55,14 @@ export function useVotes() {
           )
         ) : []
 
-        console.log("votesFetchedIds: ", votesFetchedIds)
+        // console.log("votesFetchedIds: ", votesFetchedIds)
 
       // onl
       const votesToFetch = proposals.filter(
         (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
       )
 
-      console.log("votesToFetch: ", votesToFetch)
+      // console.log("votesToFetch: ", votesToFetch)
 
       // building array (queryList) used to fetch votes through useQueries hook. 
       // This can be more efficient, simpler, but for now will do. 
@@ -76,12 +76,12 @@ export function useVotes() {
           querySum = querySum + proposal.votes
         } else {
           queryList.push(proposalsList)
-          console.log("proposalsList: ", proposalsList)
+          // console.log("proposalsList: ", proposalsList)
           proposalsList = [proposal.id]
           querySum = proposal.votes
         }
       })
-      console.log("queryList: ", queryList)
+      // console.log("queryList: ", queryList)
 
       // Here actual fetching takes place. 
       // see:  https://tanstack.com/query/v5/docs/react/reference/useQueries
@@ -99,7 +99,7 @@ export function useVotes() {
         ))
       })
 
-      console.log("useQueriesResult: ", useQueriesResult)
+      // console.log("useQueriesResult: ", useQueriesResult)
      
       useQueriesResult.forEach(result => { 
         if (result.status === 'success') { 

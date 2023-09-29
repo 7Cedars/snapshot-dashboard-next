@@ -32,6 +32,10 @@ interface IntersectionProps {
   endRange: number; 
 }
 
+interface VoteProposal extends Vote {
+  fullProposal: Proposal | undefined;
+}
+
 export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): HeatmapProps[] => {
 
   // console.log("toHeatmapData called")
@@ -114,80 +118,49 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
 }
 
 // toNetworkGraph
-export const toNetworkGraph = (votes: Vote[]) => {
+export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
+  console.log("toNetworkGraph called")
 
-  // console.log("proposals at toNetworkGraph: ", proposals)
+  const uniqueSpaces = Array.from( 
+    new Set(proposals.map((proposal: any) => proposal.space.id))
+    )
 
-  const hasSharedVoters = (spaceSource: Array<string>, spaceTarget: Array<string>) => {
-    return spaceSource.some((item: string) => spaceTarget.includes(item))
-  }
+  const voteProposal: VoteProposal[] = votes.map(vote => (
+    {
+    ...vote,
+    fullProposal: proposals.find(proposal => proposal.id === vote.proposal.id)
+    }
+  ))
 
-  const spaces = Array.from(
-    new Set(votes.map(vote => vote.proposal.id))
+  // console.log("voteProposal: ", voteProposal)
+
+  const uniqueVoters = Array.from(
+    new Set(votes.map(vote => vote.voter))
+    )
+
+  // console.log("uniqueVoters: ", uniqueVoters)
+
+  let links: any[] = []
+  uniqueVoters.forEach(voter => {
+    const voterVotes = voteProposal.filter(vote => vote.voter === voter)
+    const voterSpaces = Array.from(
+      new Set(voterVotes.map(vote => vote.fullProposal?.space.id))
+    )
+    if (voterSpaces.length > 1) {links.push(
+      {source: voterSpaces[0], target: voterSpaces[1]}
+      )}
+  })
+
+  console.log("links: ", links)
+
+  const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => 
+    ({id: space, group: "test"})
   )
 
-  // const uniqueVotesSpace = new Set(
-  //     proposals.map(proposal => 
-  //       proposal.votesDetails.map(vote => 
-  //         `${vote.voter};${proposal.space.id}`)
-  //     ).flat()
-  // )
-
-  // const uniqueVotesSpaceArray = Array.from(uniqueVotesSpace).map(string => 
-  //   string.split(";")[0]
-  //   ).flat()
-
-  // const votersInMultipleSpaces =  uniqueVotesSpaceArray.filter(
-  //   (item, index) => uniqueVotesSpaceArray.indexOf(item) !== index
-  //   ) 
-
-  // const assessment = proposals.reduce((accumulator, proposal) => accumulator + proposal.votes, 0)
-
-  // const votesPerVoter = uniqueVoters.map(voter => 
-  //   votes.filter(vote => vote.voter === voter)
-  //   )
-  // console.log("ASSESSMENT no votes: ", assessment, "TEST: ", votersInMultipleSpaces)
-
-  // const spacesPerVoter = votesPerVoter.map(voter => 
-  //   )
-
-  // const votersPerSpace = spaces.map(space => {
-  //   const proposalsOfSpace = proposals
-  //     .filter(proposal => proposal.space.id === space)
-    
-  //   const votesOfSpace: Vote[] = []
-  //   proposalsOfSpace.map(proposal => 
-  //       votesOfSpace.push(...proposal.votesDetails)
-  //       )
-    
-  //   const votersPerSpace = Array.from(new Set( 
-  //     votesOfSpace.map( space => space.voter )
-  //   )) 
-
-  //   return votersPerSpace
-  // })
-
-  // console.log("votersOfSpace: ", votersPerSpace)
-
-  // const links = votersPerSpace.map(spaceSource => 
-  //   votersPerSpace.map(spaceTarget => {
-  //     if (hasSharedVoters(spaceSource, spaceTarget)) { 
-  //       return { source: spaceSource, target: spaceTarget, value: 1  } 
-  //     } 
-  //   }).flat()
-  // ).flat()
-  // .filter(item => item !== undefined) 
-
-  // const nodes: NetworkNode[] = spaces.map((space, i) => 
-  //   ({id: space, group: "test"})
-  // )
-
-  // console.log(
-  //   "END RESULT", 
-  //   "Nodes: ", nodes, 
-  //   "votersOfSpace: ", votersPerSpace, 
-  //   "links: ", links
-  // )
+  return {
+    nodes: nodes, 
+    links: links
+  }
 }
 
 export default { toHeatmapData, toNetworkGraph }; 
