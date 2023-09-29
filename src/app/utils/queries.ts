@@ -6,7 +6,7 @@ const SPACE_DETAILS = gql`
   }
 `
 
-const VOTER_DETAILS = gql`
+export const VOTER_DETAILS = gql`
   fragment VoterDetails on Vote {
     voter
     proposal {

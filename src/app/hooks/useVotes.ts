@@ -4,34 +4,25 @@
 // function = fetchProposals(proposals: Proposal[], dateRange [number, number], filterOutliers: boolean): votes: Vote[]
 
 import { Proposal, Vote } from "@/types";
-import { useCallback, useEffect, useState } from "react";
-import { useApolloClient, useLazyQuery, useQuery } from "@apollo/client";
+import { useCallback, useEffect, useState, useRef } from "react";
+import { useApolloClient, useLazyQuery} from "@apollo/client";
 import { toProposals, toVotes } from "../utils/parsers";
 import { useSuspenseQuery, UseSuspenseQueryResult } from "@apollo/client";
+import request from "graphql-request";
+import { apiProductionUrl } from "../../../constants";
 
 import { VOTERS_ON_PROPOSALS } from "../utils/queries";
 import { toSelectedProposals } from "../utils/utils";
-import { useQueries } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 
 export function useVotes() {
   const { cache }  = useApolloClient()
-  const [votesFetchedFrom, setVotesFetchedFrom] = useState(['']) 
-  const [status, setStatus] = useState('inactive') 
-  const [votesData, setVotesData] = useState<Vote[]>([]) 
+  const dataRef = useRef<Vote[]>([]) 
 
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract())
     .filter(item => item.__typename === "Proposal")
   })
-
-  const cachedQueries = Object.values(cache.extract())
-      .filter(item => item.__typename === 'Query')[0]
-  const cachedQueriesFlat = (Array.from(Object.values(cachedQueries)))
-    .flat()
-    .filter((item: any) => item.__typename === 'Vote' )
-
-  const cachedVotes: Vote[] = toVotes({votes: cachedQueriesFlat})
-  console.log("cachedVotes: ", cachedVotes)
 
   const fetchVotes = (
 
@@ -41,8 +32,9 @@ export function useVotes() {
     filterOutliers: boolean) => {
 
       const startDate = Math.min(dateA, dateB)  
-      const endDate = Math.max(dateA, dateB)  
+      const endDate = Math.max(dateA, dateB)
     
+      // selecting cached proposals from which to fetch votes 
       let proposals: Proposal[] = toSelectedProposals({
         proposals: cachedProposals,
         selectedSpaces,
@@ -50,20 +42,30 @@ export function useVotes() {
         endDate,
       })
 
-      console.log("toSelectedProposals: ", proposals)
-
+      // for now, only proposals with fewer than 1000 votes are fetched. 
       if (filterOutliers === true) {
         proposals = proposals.filter(proposal => proposal.votes < 1000)
       }
+      
+      // const votesFetched: string[] = [] 
+      const votesFetched: Vote[] = dataRef.current
+      const votesFetchedIds: string[] = votesFetched.length > 0 ?  
+        Array.from(
+          new Set(votesFetched.map(vote => vote.proposal.id)
+          )
+        ) : []
 
-      console.log("filterOutliers: ", proposals.filter(proposal => proposal.votes >= 1000))
+        console.log("votesFetchedIds: ", votesFetchedIds)
 
+      // onl
       const votesToFetch = proposals.filter(
-        proposal => votesFetchedFrom.indexOf(proposal.id) === -1
+        (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
       )
 
       console.log("votesToFetch: ", votesToFetch)
 
+      // building array (queryList) used to fetch votes through useQueries hook. 
+      // This can be more efficient, simpler, but for now will do. 
       let queryList: string[][] = []
       let proposalsList: string[] = [] 
       let querySum = 0
@@ -79,52 +81,43 @@ export function useVotes() {
           querySum = proposal.votes
         }
       })
-
       console.log("queryList: ", queryList)
 
-      ///////////////////////////
+      // Here actual fetching takes place. 
+      // see:  https://tanstack.com/query/v5/docs/react/reference/useQueries
+      const fetchVotesQuery = async (proposalList: string[]) => await request(
+        apiProductionUrl, 
+        VOTERS_ON_PROPOSALS, 
+        {first: 1000, skip: 0, proposal_in: proposalList })
 
-      const defaultQueryFn = async ({ queryKey }: any) => {
-        const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
-            variables: {
-              first: 1000, 
-              proposal_in: queryKey}
-          });
-        return { error, data } 
-      }
-
-      const results = useQueries({
-        queries: [
-          { queryKey: ["0xf1fa3db021ee087d7158a12ad8b99f26fd15479773e0c9649fd4be900d93e745"], queryFn: defaultQueryFn },
-          { queryKey: ["0x01a80a876f693c2088ade1286255871745cb6b66c66b4149f154676294d73100", "0x581f18bb13fd150876b7a90942c6cc2f2d974806c491586c9ef8c5467b80c3be"], queryFn: defaultQueryFn }
-        ]
+      const useQueriesResult = useQueries({
+        queries: queryList.map(proposalList => (
+            {
+              queryKey: ["votes", proposalList], 
+              queryFn: () => fetchVotesQuery(proposalList)
+            }
+        ))
       })
 
-      console.log("RESULTS: ", results)
-      
-///////////////////////////
+      console.log("useQueriesResult: ", useQueriesResult)
+     
+      useQueriesResult.forEach(result => { 
+        if (result.status === 'success') { 
+          const votesFetched: Vote[] = dataRef.current
+          dataRef.current = [...votesFetched, ...toVotes(result.data)] 
+          } 
+      })
 
-        // const { error, data }: UseSuspenseQueryResult = useSuspenseQuery(VOTERS_ON_PROPOSALS, {
-        //   variables: {
-        //     first: 1000, 
-        //     skip: 0, 
-        //     proposal_in: query}
-        // });
+      const selectedProposals = proposals.map(proposal => proposal.id)
 
-        // if (error) return `Error! ${error}`;
-        // console.log("test: ", test)
-        
-        // const newVotesData: Vote[] = toVotes(data)
-        // setVotesFetchedFrom([...votesFetchedFrom, ...query] ) 
-        // setVotesData([...newVotesData, ...votesData])
-      // })
+      dataRef.current = dataRef.current.filter(vote => 
+        vote.created * 1000  > startDate && 
+        vote.created * 1000 < endDate  && 
+        selectedProposals.indexOf(vote.proposal.id) !== -1 
+      )
 
-      // Still have to filter votes by Date - that is for later. 
-      // first get this to be more stable.. 
+      return dataRef.current
+  }
 
-      // return [...votesData, ...cachedVotes] 
-
-  } 
-
-  return { fetchVotes, votesFetchedFrom };
+  return { fetchVotes, dataRef };
 }

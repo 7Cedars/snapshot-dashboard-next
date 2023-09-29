@@ -32,10 +32,6 @@ export const NetworkDiagram = ({
   }
 
 
-
-
-  
-
   ///////////////////////////// 
 
   // const { cache }  = useApolloClient()
