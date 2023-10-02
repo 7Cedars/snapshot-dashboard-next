@@ -40,14 +40,13 @@ const HeatMap = () => {
 
   // should integrate suspense here. See Apollo docs. 
   return (
-    <div> 
-      <b> Time Range Component </b>    
-          <ChartCanvas
-            VizComponent={ Heatmap }
-            vizName={"heatmap"}
-            maxWidth={2000}
-            height={300}
-            />
+    <div className="border border-gray-300 m-1 p-2 mt-4 rounded-lg "> 
+      <ChartCanvas
+        VizComponent={ Heatmap }
+        vizName={"heatmap"}
+        maxWidth={2000}
+        height={300}
+        />
     </div>
   );
 }

@@ -12,7 +12,7 @@ interface Props {
 
 const SpaceItem = ( {spaceId}: Props) => {
   const { selectedSpaces, removeSpace } = useSpaces() 
-  const appearance = `border-4 overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg `
+  const appearance = `border-4 overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg`
   const space = spaces.find(space => space.id === spaceId)
 
   // console.log(appearance)
@@ -24,7 +24,7 @@ const SpaceItem = ( {spaceId}: Props) => {
     // Is this a bug? 
       <div className='border-gray-400 border-yellow-500 border-gray-500 border-red-500 border-orange-500 
       border-green-500 border-sky-500 border-indigo-500 border-purple-500 border-pink-500
-      flex flex-row border w-80 rounded-lg  my-2 py-2'>
+      flex flex-row bg-gray-100 border w-80 rounded-lg  my-2 py-2'>
           <div className="col-span-2 flex items-center justify-center pl-2">
             
             <label className= {`${appearance} ${tailwindColours[selectedSpaces.indexOf(spaceId)]}`} >

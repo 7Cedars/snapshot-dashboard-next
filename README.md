@@ -16,11 +16,12 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 This dashboard is under active development. 
 
 Sorted on priority, issues to address 
-- limit amount of selected spaces to N (30?) 
-- add counters to categories in search modal 
-- fix list update in search modal  
 - update layout main dashboard (more space efficient) 
-- fix layout dashboard 
+- add counters to categories in search modal 
+- limit amount of selected spaces to N (30?) 
+- fix list update in search modal
+- fix behaviour of time Range slider 
+- fix / implement dynamic resizing of heatmap  
 - limit rerenders of dashboard 
 - implement testing using cyprus  
 - develop landing page 
@@ -28,7 +29,12 @@ Sorted on priority, issues to address
 - deploy on vercel.com
 - enable darkmode 
 - add content of FAQ, landing page 
+- add names in network diagram. 
+- make network diagram interactive.
 - write documentation, add / update comments in code.
+
+Completed issues 
+- Dreate modular ModalDialog 
 
 ## Learn More
 
