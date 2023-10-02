@@ -19,6 +19,8 @@ Sorted on priority, issues to address
 - limit amount of selected spaces to N (30?) 
 - add counters to categories in search modal 
 - fix list update in search modal  
+- update layout main dashboard (more space efficient) 
+- fix layout dashboard 
 - limit rerenders of dashboard 
 - implement testing using cyprus  
 - develop landing page 
