@@ -16,10 +16,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 This dashboard is under active development. 
 
 Sorted on priority, issues to address 
-- update layout main dashboard (more space efficient) 
-- add counters to categories in search modal 
+- fix list update in search modal (excluding selected spaces)
 - limit amount of selected spaces to N (30?) 
-- fix list update in search modal
+- fix all runtime errors
 - fix behaviour of time Range slider 
 - fix / implement dynamic resizing of heatmap  
 - limit rerenders of dashboard 
@@ -34,7 +33,9 @@ Sorted on priority, issues to address
 - write documentation, add / update comments in code.
 
 Completed issues 
+- add counters to categories in search modal 
 - Dreate modular ModalDialog 
+- update layout main dashboard (more space efficient) 
 
 ## Learn More
 

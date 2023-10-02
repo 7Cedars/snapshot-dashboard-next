@@ -2,7 +2,6 @@
 
 import { Fragment, useState, useEffect } from 'react'
 import { Transition, Listbox } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react/24/outline'
 import spaces from '../../../public/data/spacesList'
 import { Space } from '../../types'
@@ -13,23 +12,46 @@ const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
 }
 
-const listCategories = Array.from(
-  new Set(
-    spaces.map((space: Space) => space.categories.flat() ).flat()
-    )
-  ) 
-listCategories.push('all')
-
-console.log("listCategories: ", listCategories ) 
-
 export const SearchDialog = () => {
+  const [listCategories, setListCategories] = useState<string[]>(['all'])
   const [selectedCategory, setSelectedCategory] = useState<string[]>(['all'])
   const [filteredSpaces, setFilteredSpaces ] = useState<Space[]>(spaces.sort(compareVotes).slice(0, 50))
+  const [unfilteredSpaces, setUnfilteredSpaces ] = useState<Space[]>(spaces)
   const [query, setQuery] = useState('')
   const { selectedSpaces, addSpace } = useSpaces()
 
-  const [valueA, setValueA] = useState(10)
-  const [valueB, setValueB] = useState(40)
+  useEffect(() => {
+    const queriedSpaces = spaces.filter((space:Space) => 
+      space.id.includes(query) && space.votesCount > 0
+    )
+
+    setUnfilteredSpaces(queriedSpaces) 
+    console.log("unfilteredSpaces: ", unfilteredSpaces)
+
+    const uniqueCategories = Array.from(
+      new Set(
+        unfilteredSpaces.map((space: Space) => space.categories.flat()).flat()
+        )
+    )
+
+    const listCategories = [`all (${queriedSpaces.length})`]
+    
+    uniqueCategories.forEach(
+      category => {
+        const filteredSpaces = queriedSpaces.filter(space => space.categories
+          .includes(category) 
+          )
+        listCategories.push(`${category} (${filteredSpaces.length})`) 
+      }
+    )
+
+    setListCategories(listCategories)
+    
+    // might have to make the above an object.. 
+    // here should updated selectedCategory -- to make number update in reak time  
+
+  }, [query])
+
 
   // const handleSelection = (space: Space) => {
   
@@ -56,24 +78,18 @@ export const SearchDialog = () => {
 
   useEffect (() => {
     
-    let firstFilter = spaces.filter((space: Space) => 
-      space.categories.some(item => selectedCategory.includes(item))
-    )
+    let filteredSpaces = unfilteredSpaces
+      .filter((space: Space) => space.categories
+        .some(item => selectedCategory.includes(item))
+        )
+      .slice(0, 50)
 
-    if (selectedCategory.includes('all')) {firstFilter = spaces}
-
-    const secondFilter = firstFilter.filter((space: Space) => 
-      selectedSpaces.indexOf(space.id) === -1 
-    ) 
-
-    if (query.length > 0) {
-      const thirdFilter = secondFilter.filter((space:Space) => 
-        space.id.includes(query))
-      setFilteredSpaces(thirdFilter.slice(0, 50)) 
-    } else {
-      setFilteredSpaces(secondFilter.slice(0, 50))
+    if (selectedCategory.includes('all')) {
+      filteredSpaces = unfilteredSpaces.slice(0, 50)
     }
 
+    setFilteredSpaces(filteredSpaces)
+    
   }, [selectedCategory, query ]) // selectedSpaces
 
   return (
