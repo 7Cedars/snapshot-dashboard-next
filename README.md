@@ -16,23 +16,26 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 This dashboard is under active development. 
 
 Sorted on priority, issues to address 
-- fix list update in search modal (excluding selected spaces)
+
 - limit amount of selected spaces to N (30?) 
 - fix all runtime errors
-- fix behaviour of time Range slider 
+- fix behaviour of time Range slider + layouting 
+- make notation in URL more efficient space -> s 
+- load dates in URL on start of app. 
 - fix / implement dynamic resizing of heatmap  
 - limit rerenders of dashboard 
 - implement testing using cyprus  
 - develop landing page 
 - implement notifications 
 - deploy on vercel.com
-- enable darkmode 
+- enable darkmode
 - add content of FAQ, landing page 
 - add names in network diagram. 
 - make network diagram interactive.
 - write documentation, add / update comments in code.
 
 Completed issues 
+- fix list update in search modal (excluding selected spaces) 
 - add counters to categories in search modal 
 - Dreate modular ModalDialog 
 - update layout main dashboard (more space efficient) 

@@ -8,13 +8,18 @@ import { Space } from '../../types'
 import { useSpaces } from '../hooks/useUrl';
 import { ModalDialog } from '../ui/ModalDialog';
 
+type listCategoryProp = {
+  label: string; 
+  value: string;
+}
+
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
 }
 
 export const SearchDialog = () => {
-  const [listCategories, setListCategories] = useState<string[]>(['all'])
-  const [selectedCategory, setSelectedCategory] = useState<string[]>(['all'])
+  const [listCategories, setListCategories] = useState<listCategoryProp[]>([{label: 'all', value: 'all'} ])
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [filteredSpaces, setFilteredSpaces ] = useState<Space[]>(spaces.sort(compareVotes).slice(0, 50))
   const [unfilteredSpaces, setUnfilteredSpaces ] = useState<Space[]>(spaces)
   const [query, setQuery] = useState('')
@@ -22,9 +27,10 @@ export const SearchDialog = () => {
 
   useEffect(() => {
     const queriedSpaces = spaces.filter((space:Space) => 
-      space.id.includes(query) && space.votesCount > 0
+      space.id.includes(query) && 
+      space.votesCount > 0 && 
+      selectedSpaces.indexOf(space.id) === -1
     )
-
     setUnfilteredSpaces(queriedSpaces) 
     console.log("unfilteredSpaces: ", unfilteredSpaces)
 
@@ -34,50 +40,28 @@ export const SearchDialog = () => {
         )
     )
 
-    const listCategories = [`all (${queriedSpaces.length})`]
+    const listCategories = [{
+      label: `all (${queriedSpaces.length})`, 
+      value: 'all'
+    }]
     
     uniqueCategories.forEach(
       category => {
         const filteredSpaces = queriedSpaces.filter(space => space.categories
           .includes(category) 
           )
-        listCategories.push(`${category} (${filteredSpaces.length})`) 
+        listCategories.push({
+          label: `${category} (${filteredSpaces.length})`, 
+          value: category
+        }) 
       }
     )
 
     setListCategories(listCategories)
-    
-    // might have to make the above an object.. 
-    // here should updated selectedCategory -- to make number update in reak time  
-
+  
   }, [query])
 
-
-  // const handleSelection = (space: Space) => {
-  
-    // addSpace(space)
-
-  //   let firstFilter = spaces.filter((space: Space) => 
-  //     space.categories.some(item => selectedCategory.includes(item))
-  //   )
-
-  //   if (selectedCategory.includes('all')) {firstFilter = spaces}
-
-  //   const secondFilter = firstFilter.filter((space: Space) => 
-  //     selectedSpaces.indexOf(space.id) === -1 
-  //   ) 
-
-  //   if (query.length > 0) {
-  //     const thirdFilter = secondFilter.filter((space:Space) => 
-  //       space.id.includes(query))
-  //     setFilteredSpaces(thirdFilter.slice(0, 50)) 
-  //   } else {
-  //     setFilteredSpaces(secondFilter.slice(0, 50))
-  //   }
-  // } 
-
-  useEffect (() => {
-    
+  useEffect (() => {    
     let filteredSpaces = unfilteredSpaces
       .filter((space: Space) => space.categories
         .some(item => selectedCategory.includes(item))
@@ -90,7 +74,7 @@ export const SearchDialog = () => {
 
     setFilteredSpaces(filteredSpaces)
     
-  }, [selectedCategory, query ]) // selectedSpaces
+  }, [selectedCategory, unfilteredSpaces ]) // selectedSpaces
 
   return (
 
@@ -121,7 +105,7 @@ export const SearchDialog = () => {
                   aria-hidden="true"
                 />
 
-              {selectedCategory}
+              {listCategories.find(category => category.value === selectedCategory)?.label }
 
                 <ChevronDownIcon
                   className="h-5 w-5 text-black pointer-events-none "
@@ -135,8 +119,8 @@ export const SearchDialog = () => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute mt-10 z-10 pr-9 max-h-60 border bg-white border-blue-500 overflow-auto rounded-lg py-1 text-base focus:outline-none ">
-                {listCategories.map((category: string, categoryIdx) => (
+              <Listbox.Options className="absolute mt-10 z-10 pr-9 z-20 max-h-60 border bg-white border-blue-500 overflow-auto rounded-lg py-1 text-base focus:outline-none ">
+                {listCategories.map((category: listCategoryProp, categoryIdx) => (
                   <Listbox.Option
                     key={categoryIdx}
                     className={({ active }) =>
@@ -144,7 +128,7 @@ export const SearchDialog = () => {
                         active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'
                       }`
                     }
-                    value={category}
+                    value={category.value}
                     >
                     {({ selected }) => (
                       <>
@@ -153,7 +137,7 @@ export const SearchDialog = () => {
                             selected ? 'font-medium' : 'font-normal'
                           }`}
                         >
-                          {category}
+                          {category.label}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
