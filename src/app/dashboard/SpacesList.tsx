@@ -3,38 +3,15 @@
 import SpaceItem from "./SpaceItem";
 import { useAppDispatch } from "../../redux/hooks";
 import { updateModal } from "../../redux/reducers/userInputReducer";
-import { SelectedSpaces } from "@/types";
+import { useSpaces } from "../hooks/useUrl";
 
-interface spacesListProps {
-  selectedSpaces: SelectedSpaces
-}
 
-const SpacesList = ({selectedSpaces}: spacesListProps ) => {
+const SpacesList = () => {
+  const {selectedSpaces} = useSpaces() 
   const dispatch = useAppDispatch()
-  
-  // const handleClick = async () => {
-  //   console.log("Button pressed")
-    
-   
-    // const skip = 0
-  
-    // const { data, error, loading } = await proposalsFromSpaces({
-    //         variables: { first: 1000, skip: skip, space_in: ['ctcswap.eth']} 
-    //       })
-  
-    // if (loading) return null;
-    // if (error) return `Error! ${error}`;
-  
-    // console.log(data)
-    
-  // }
 
   return (
     <div className="grid grid-cols-1 h-auto place-content-center overflow-x-auto overflow-x-hidden"> 
-      {/* < Button
-        onClick={ handleClick } > 
-        TEST Graph QL query
-      </Button>  */}
 
       <form>
         <input

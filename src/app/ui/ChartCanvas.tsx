@@ -17,23 +17,23 @@ type ChartCanvasProps = {
 
 export const ChartCanvas = ({
   VizComponent,
-  height = 600,
-  maxWidth = 1200,
+  height = 300,
+  maxWidth = 3000,
 }: ChartCanvasProps) => {
 
   // the chart / sandbox will fill the available space until maxWidth is reached
   const chartRef = useRef<HTMLDivElement>(null);
   const chartSize = useDimensions(chartRef);
+  console.log("chartSize @ChartCanvas: ", chartSize )
 
   return (
     // Add a full screen width wrapper with grey background around everything.
     // It has to be "relative". Note that it goes out of the article container if necessary!
 
-      <div className="flex flex-col items-center justify-center">
+      <div  className="flex flex-col items-center justify-center"  >
         <div className="w-full flex justify-center pointer-events-none">
-          <div
-            style={{ height, width: "100%", maxWidth }}
-            ref={chartRef}
+          <div ref={chartRef}
+            style={{ height: height, width: "100%", maxWidth }}
             className="pointer-events-auto"
           >
             <VizComponent height={height} width={chartSize.width} />

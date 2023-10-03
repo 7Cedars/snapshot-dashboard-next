@@ -8,6 +8,7 @@ import { useApolloClient } from '@apollo/client';
 import { useVotes } from '@/app/hooks/useVotes';
 import { toProposals } from '@/app/utils/parsers';
 import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
+import { useDimensions } from '@/app/hooks/useDimensions';
 
 type NetworkDiagramProps = {
   width: number;
@@ -21,7 +22,7 @@ export const NetworkDiagram = ({
   if (width === 0) {
     return null;
   }
-
+  
   const { selectedSpaces } = useSpaces()
   const { dateA, dateB } = useDateRange()
   const { fetchVotes } = useVotes() 

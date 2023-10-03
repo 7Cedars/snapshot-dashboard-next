@@ -1,6 +1,6 @@
 // Based on clone from https://github.com/holtzy/react-graph-gallery
 
-import { useMemo } from "react";
+import { useMemo, useRef } from "react";
 import * as d3 from "d3";
 import { useDateRange, useSpaces } from "@/app/hooks/useUrl";
 import { toHeatmapData } from "../../utils/transposeData";
@@ -8,32 +8,37 @@ import { toShortDateFormat } from "../../utils/utils";
 import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 import { colourCodes } from "../../../../constants";
+import { useDimensions } from "@/app/hooks/useDimensions";
 
-const MARGIN = { top: 10, right: 10, bottom: 30, left: 10 };
+const MARGIN = { top: 10, right: 10, bottom: 20, left: 10 };
 
 interface HeatmapProps {
   width: number;
   height: number;
 };
 
-const nCol = 60
+export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
 
-export const Heatmap = ({ width = 500, height = (width / nCol) }: HeatmapProps) => {
+  // const chartRef = useRef<HTMLDivElement>(null);
+  // console.log("chartRef: ", chartRef)
+  // const chartSize = useDimensions(chartRef);
+  // const nCol = Math.floor(chartSize.width / 23) 
+  // console.log("chartSize: ", chartSize)
+  const nCol = 50
+
   const { dateA, dateB } = useDateRange()
   const startDate = Math.min(dateA, dateB)
   const endDate = Math.max(dateA, dateB)
-  
   
   const { cache }  = useApolloClient()
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
 
-  const { selectedSpaces, spacesColours } = useSpaces()
+  const { selectedSpaces } = useSpaces()
   const selectedProposals = cachedProposals.filter((proposal: any) => {
     return selectedSpaces.includes( proposal.space.id )
   }) 
-
   
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
 

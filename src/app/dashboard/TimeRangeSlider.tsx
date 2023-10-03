@@ -15,7 +15,7 @@ interface dateRangeProps {
   }
 }
 
-const TimeRangeSlider = ({dateRange}: dateRangeProps) => {
+const TimeRangeSlider = () => {
   const { dateA, dateB, handleDates } = useDateRange()
   const { cache }  = useApolloClient()
   const handleDatesDebounced = useDebounce(handleDates, 500)
@@ -27,9 +27,9 @@ const TimeRangeSlider = ({dateRange}: dateRangeProps) => {
   const [valueB, setValueB] = useState(maxVal);
 
   useEffect(() => {
-    setValueA(dateRange.dateA)
-    setValueB(dateRange.dateB)
-  }, [dateRange])
+    setValueA(dateA)
+    setValueB(dateB)
+  }, [dateA, dateB])
 
   // Note: despite only top slider being called, it updates the value of teh slider that is closest to pointer.
   // it gives the impression of interacting with both sliders. 
