@@ -11,7 +11,7 @@ import { proposalsOfSpaceNotCached } from "../utils/checkCache";
 const HeatMap = () => {   
   const { selectedSpaces } = useSpaces()
   const notCached = proposalsOfSpaceNotCached(selectedSpaces)
-  const height = selectedSpaces.length * 30 
+  const height = selectedSpaces.length * 25  + 20
   const spacesToQuery = notCached.notCached
 
   spacesToQuery.push(" ") // if no spaces need to be queried, it queries an empty space. 

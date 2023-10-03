@@ -11,7 +11,8 @@ const Home = () => {
         A Dashboard for Visualising Relational Voting Behaviour on Snapshot 
       </div>
       <div>
-        <Link href='/dashboard'>To the DashBoard</Link>
+        <Link href='/dashboard?d1=1679018147782&d2=1696362727015'>To the DashBoard</Link>
+                                  1696362727015
       </div>
 
     </div> 

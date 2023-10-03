@@ -43,52 +43,52 @@ export const proposalsOfSpaceNotCached = (selectedSpaces: string[]) => {
     }) 
 }
 
-export const votesOfProposalNotCached = (selectedProposals: string[], filterLargeProposals: boolean) => {
-  const { cache }  = useApolloClient()
-  const cachedProposals: Proposal[] = toProposals({proposals: 
-    Object.values(cache.extract())
-    .filter(item => item.__typename === "Proposal")
-  })
+// export const votesOfProposalNotCached = (selectedProposals: string[], filterLargeProposals: boolean) => {
+//   const { cache }  = useApolloClient()
+//   const cachedProposals: Proposal[] = toProposals({proposals: 
+//     Object.values(cache.extract())
+//     .filter(item => item.__typename === "Proposal")
+//   })
 
-  const cachedQueries = Object.values(cache.extract())
-    .filter(item => item.__typename === 'Query')[0]
-  const cachedQueriesFlat = (Array.from(Object.values(cachedQueries))).flat()
+//   const cachedQueries = Object.values(cache.extract())
+//     .filter(item => item.__typename === 'Query')[0]
+//   const cachedQueriesFlat = (Array.from(Object.values(cachedQueries))).flat()
   
-  const cachedVotes: Vote[] = toVotes(cachedQueriesFlat
-    .filter((item: any) => item.__typename === 'Vote' )
-  )
+//   const cachedVotes: Vote[] = toVotes(cachedQueriesFlat
+//     .filter((item: any) => item.__typename === 'Vote' )
+//   )
 
-  const cachedVotesByProposal = selectedProposals.map(proposalId => 
-    cachedVotes.filter(vote => vote.proposal.id === proposalId ))
-  const cachedVoteCount = cachedVotesByProposal.map(array => array.length)
+//   const cachedVotesByProposal = selectedProposals.map(proposalId => 
+//     cachedVotes.filter(vote => vote.proposal.id === proposalId ))
+//   const cachedVoteCount = cachedVotesByProposal.map(array => array.length)
   
-  const savedVotesCount = cachedProposals.map(proposal => proposal.votes)
+//   const savedVotesCount = cachedProposals.map(proposal => proposal.votes)
 
-  const result = selectedProposals.map((proposal, i) => ({
-    proposalId: proposal, 
-    savedVotesCount: savedVotesCount[i], 
-    cachedVoteCount: cachedVoteCount[i]
-  }));
+//   const result = selectedProposals.map((proposal, i) => ({
+//     proposalId: proposal, 
+//     savedVotesCount: savedVotesCount[i], 
+//     cachedVoteCount: cachedVoteCount[i]
+//   }));
 
-  let notCached: string[] = []
-  if (filterLargeProposals === false) {  
-    selectedProposals.forEach((proposal, i) => {
-      if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
-        notCached.push(proposal) 
-      } 
-    })
-  } else {
-    selectedProposals.forEach((proposal, i) => {
-      if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05) 
-          && savedVotesCount[i] < 1000 ) {
-        notCached.push(proposal) 
-      } 
-    })
-  }
+//   let notCached: string[] = []
+//   if (filterLargeProposals === false) {  
+//     selectedProposals.forEach((proposal, i) => {
+//       if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
+//         notCached.push(proposal) 
+//       } 
+//     })
+//   } else {
+//     selectedProposals.forEach((proposal, i) => {
+//       if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05) 
+//           && savedVotesCount[i] < 1000 ) {
+//         notCached.push(proposal) 
+//       } 
+//     })
+//   }
 
-  return ({ 
-    result: result,
-    notCached: notCached
-    }) 
+//   return ({ 
+//     result: result,
+//     notCached: notCached
+//     }) 
 
-}
+// }

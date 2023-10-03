@@ -7,7 +7,7 @@ import { useSpaces } from "../hooks/useUrl";
 
 
 const SpacesList = () => {
-  const {selectedSpaces} = useSpaces() 
+  const { selectedSpaces } = useSpaces() 
   const dispatch = useAppDispatch()
 
   return (

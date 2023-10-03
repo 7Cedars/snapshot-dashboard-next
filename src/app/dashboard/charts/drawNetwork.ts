@@ -1,10 +1,8 @@
 import { Link, Node } from "../../../types";
 import { colourCodes } from "../../../../constants";
-import { useSpaces } from "@/app/hooks/useUrl";
 import d3, { scaleOrdinal, schemeCategory10 } from 'd3';
 
 export const RADIUS = 15;
-
 
 export const drawNetwork = (
   context: CanvasRenderingContext2D,

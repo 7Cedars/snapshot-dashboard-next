@@ -4,10 +4,9 @@
 // function = fetchProposals(proposals: Proposal[], dateRange [number, number], filterOutliers: boolean): votes: Vote[]
 
 import { Proposal, Vote } from "@/types";
-import { useCallback, useEffect, useState, useRef } from "react";
-import { useApolloClient, useLazyQuery} from "@apollo/client";
+import {  useRef } from "react";
+import { useApolloClient } from "@apollo/client";
 import { toProposals, toVotes } from "../utils/parsers";
-import { useSuspenseQuery, UseSuspenseQueryResult } from "@apollo/client";
 import request from "graphql-request";
 import { apiProductionUrl } from "../../../constants";
 

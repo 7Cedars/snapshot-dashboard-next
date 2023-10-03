@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog, Disclosure } from '@headlessui/react'
-import { useAppDispatch, useAppSelector } from '../../redux/hooks'
 import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import { ModalDialog } from '../ui/ModalDialog';
 

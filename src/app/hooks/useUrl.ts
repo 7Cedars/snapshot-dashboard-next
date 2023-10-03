@@ -21,17 +21,17 @@ export function useDateRange() {
   const params = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const { dateA, dateB }  = getDateRangeFromUseSearchParams(params);
+  const { d1, d2 }  = getDateRangeFromUseSearchParams(params);
 
-  const handleDates = (dateA: string, dateB: string) => {
+  const handleDates = (d1: string, d2: string) => {
     // console.log("handleDates called.")
     let newParams = new URLSearchParams(params.toString());
-    newParams.set('dateA', dateA)
-    newParams.set('dateB', dateB)
+    newParams.set('d1', d1)
+    newParams.set('d2', d2)
     router.push(`${pathname}?${newParams.toString()}`);
   };
 
-  return { dateA, dateB, handleDates };
+  return { d1, d2, handleDates };
 }
 
 export function useSpaces() {
@@ -49,7 +49,7 @@ export function useSpaces() {
 
   const addSpace = (space: Space) => {
     let newParams = new URLSearchParams(params.toString());
-    newParams.append('space', space.id)
+    newParams.append('s', space.id)
     router.push(`${pathname}?${newParams.toString()}`);
 
   };
@@ -58,11 +58,11 @@ export function useSpaces() {
   const removeSpace = (spaceId: String) => {
     let newParams = new URLSearchParams(params.toString());
 
-    const newSpaceParams = newParams.getAll('space');
+    const newSpaceParams = newParams.getAll('s');
     const updatedSpaces = newSpaceParams.filter(item => item !== spaceId)
 
-    newParams.delete('space')
-    updatedSpaces.forEach(spaceId => newParams.append('space', spaceId))
+    newParams.delete('s')
+    updatedSpaces.forEach(spaceId => newParams.append('s', spaceId))
 
     router.push(`${pathname}?${newParams.toString()}`);
   };

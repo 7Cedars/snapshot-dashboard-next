@@ -21,8 +21,6 @@ Sorted on priority, issues to address
 - add colours to colour palette 
 - fix all runtime errors
 - fix behaviour of time Range slider + layouting (WIP) 
-- make notation in URL more efficient space -> s 
-- load dates in URL on start of app. 
 - limit rerenders of dashboard 
 - implement testing using cyprus  
 - implement landing page 
@@ -41,7 +39,9 @@ Completed issues
 - add counters to categories in search modal 
 - Dreate modular ModalDialog 
 - update layout main dashboard (more space efficient)
-- fix / implement dynamic resizing of heatmap   
+- fix / implement dynamic resizing of heatmap 
+- make notation in URL more efficient space -> s 
+- load dates in URL on start of app. 
 
 ## Learn More
 

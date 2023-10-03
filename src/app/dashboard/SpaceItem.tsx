@@ -3,7 +3,7 @@
 import spaces from '../../../public/data/spacesList'
 import { MinusCircleIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
-import { colourCodes, tailwindColours } from '../../../constants';
+import { tailwindColours } from '../../../constants';
 
 interface Props {
   key: string; 

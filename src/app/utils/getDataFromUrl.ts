@@ -6,27 +6,27 @@ import { standardDateRange, genesisSnapshot } from "../../../constants";
 
 export function getDateRangeFromUrlParams(
   searchParams: SearchParams
-): {dateA: number, dateB: number} { 
-  const dateAParam = searchParams.dateA;
-  const dateBParam = searchParams.dateB;
-  let dateA = Date.now() - standardDateRange
-  let dateB = Date.now()
-  if ('dateA' in searchParams && dateAParam && 'dateB' in searchParams && dateBParam) {
-    dateA = parseDate(String(dateAParam));
-    dateB = parseDate(String(dateBParam));
+): {d1: number, d2: number} { 
+  const d1Param = searchParams.d1;
+  const d2Param = searchParams.d2;
+  let d1 = Date.now() - standardDateRange
+  let d2 = Date.now()
+  if ('d1' in searchParams && d1Param && 'd2' in searchParams && d2Param) {
+    d1 = parseDate(String(d1Param));
+    d2 = parseDate(String(d2Param));
   }
   return{
-    dateA: dateA,
-    dateB: dateB
+    d1: d1,
+    d2: d2
   }; ;
 }
 
 export function getSpacesFromUrlParams(
   searchParams: SearchParams
 ): SelectedSpaces {
-  const spacesParam = [searchParams.space].flat();
+  const spacesParam = [searchParams.s].flat();
   let selectedSpaces: SelectedSpaces = [];
-  if ('space' in searchParams && spacesParam) {
+  if ('s' in searchParams && spacesParam) {
     selectedSpaces = parseSelectedSpaces(spacesParam);
   }
   return selectedSpaces;

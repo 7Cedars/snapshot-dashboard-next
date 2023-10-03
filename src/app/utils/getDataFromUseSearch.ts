@@ -8,26 +8,26 @@ import { ReadonlyURLSearchParams } from 'next/navigation';
 export function getDateRangeFromUseSearchParams(
   params: ReadonlyURLSearchParams
 ) {
-  const dateAParam = params.get('dateA');
-  const dateBParam = params.get('dateB');
-  let dateA = Date.now() - standardDateRange
-  let dateB = Date.now()
-  if (params.has('dateA') && params.has('dateB') && dateAParam && dateBParam) {
-    dateA = parseDate(dateAParam);
-    dateB = parseDate(dateBParam);
+  const date1Param = params.get('d1');
+  const date2Param = params.get('d2');
+  let d1 = Date.now() - standardDateRange
+  let d2 = Date.now()
+  if (params.has('d1') && params.has('d2') && date1Param && date2Param) {
+    d1 = parseDate(date1Param);
+    d2 = parseDate(date2Param);
   }
   return {
-    dateA: dateA,
-    dateB: dateB
+    d1: d1,
+    d2: d2
   };
 }
 
 export function getSpacesFromUseSearchParams(
   params: ReadonlyURLSearchParams
 ) {
-  const spacesParam = params.getAll('space');
+  const spacesParam = params.getAll('s');
   let selectedSpaces: SelectedSpaces = [];
-  if (params.has('space') && spacesParam) {
+  if (params.has('s') && spacesParam) {
     selectedSpaces = parseSelectedSpaces(spacesParam);
   }
   return selectedSpaces;
