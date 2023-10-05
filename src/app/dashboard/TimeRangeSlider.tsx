@@ -8,7 +8,7 @@ import { useDebounce } from "../hooks/useDebounce";
 
 const TimeRangeSlider = () => {
   const { d1, d2, handleDates } = useDateRange()
-  const handleDatesDebounced = useDebounce(handleDates, 500)
+  const handleDatesDebounced = useDebounce(handleDates, 1000)
 
   const minVal = genesisSnapshot
   const maxVal = Date.now()
@@ -21,17 +21,17 @@ const TimeRangeSlider = () => {
     setValue2(d2)
   }, [d1, d2])
 
-  // Note: despite only top slider being called, it updates the value of teh slider that is closest to pointer.
+  // Note: despite only top slider being called, it updates the value of the slider that is closest to pointer.
   // it gives the impression of interacting with both sliders. 
   const handleValueChange = (value: number) => {
 
-    if (Math.abs(value - d1) < Math.abs(value - d2)) {
+    if (Math.abs(d1 - value) < Math.abs(d2 - value)) {
       setValue1(value)
-      handleDatesDebounced(String(value), String(d2))
     } else {
       setValue2(value)
-      handleDatesDebounced(String(d1), String(value))
     }
+    // console.log("value1: ", d1 - value, "value2: ", d2 - value)
+    handleDatesDebounced(String(value1), String(value2))
   }
 
   return (

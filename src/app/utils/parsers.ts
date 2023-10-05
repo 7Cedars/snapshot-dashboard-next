@@ -1,5 +1,6 @@
-import { Space, StartDate, EndDate, SelectedSpaces, Proposal, Vote} from "../../types";
+import { Space, StartDate, EndDate, SelectedSpaces, Proposal, Vote, SavedSearch} from "../../types";
 import spaces from "../../../public/data/spacesList";
+import { error } from "console";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -92,6 +93,20 @@ export const toProposalId = (object: unknown): string => {
   throw new Error('Incorrect data: some fields are missing');
 }
 
+export const toSavedSearch = (object: unknown): SavedSearch => { 
+  if (!isString(object)) {
+    throw new Error(`Incorrect or missing savedSearch: ${object}`);
+  }
+
+  try {
+    const data: SavedSearch = JSON.parse(object)
+    return data
+
+  } catch (error) {
+    throw new Error(`something went wrong with parsing jason data. Error message: ${error} `);
+  }
+
+}
 
 
 

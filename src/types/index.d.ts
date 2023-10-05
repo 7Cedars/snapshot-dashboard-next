@@ -51,6 +51,7 @@ export interface SearchParams {
 // }
 
 
+
 export interface ProposalsInSpace {
   spaceId: string;
   proposals: Proposal[];
@@ -64,6 +65,14 @@ export interface Node extends d3.SimulationNodeDatum {
 export interface Link extends d3.SimulationLinkDatum<Node> {
   source: Node | number | string; 
   target: Node | number | string; 
+}
+
+export type SavedSearch = { 
+  title: string; 
+  description: string; 
+  startDate: number; 
+  endDate: number; 
+  selectedSpaceIds: string[]; 
 }
 
 export type Notification = {
