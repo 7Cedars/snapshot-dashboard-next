@@ -20,6 +20,11 @@ export const toShortDateFormat = (timestamp: number): string => {
   return `${nameMonths[date.getMonth()]} ${shortYear}`
 }; 
 
+export const toFullDateFormat = (timestamp: number): string => {
+  const date = new Date(timestamp) 
+  return `${date.getDay()} ${nameMonths[date.getMonth()]} ${date.getFullYear()}`
+}; 
+
 export const toTimestamp = (dateFormat: string): string => { 
   return String(Date.parse(dateFormat))
 };

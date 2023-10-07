@@ -6,6 +6,7 @@ import { SavedSearch } from '@/types';
 import { toSavedSearch } from '../utils/parsers';
 import { Button } from '../ui/Button';
 import { useDateRange, useSpaces } from '../hooks/useUrl';
+import { toFullDateFormat } from '../utils/utils';
 
 const exampleSearch1 = {
   title: "Example search 1", 
@@ -21,6 +22,8 @@ export const SavedSearchesDialog = () => {
   const { selectedSpaces } = useSpaces()
   const { d1, d2 } = useDateRange()
   const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
+  const startDate = Math.min(d1, d2)
+  const endDate = Math.max(d1, d2)
 
   console.log({
     titleInput: titleInput, 
@@ -96,15 +99,26 @@ export const SavedSearchesDialog = () => {
         <div className='col-span-1'> 
           DAO Spaces: 
         </div> 
-        <div className='col-span-3'> 
-          HERE thumbnails spaces
+        <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
+          {
+            selectedSpaces.map(spaceId => 
+              <div className= "border-2 border-gray-500 overflow-hidden flex h-8 w-8 flex-col items-center justify-center rounded-full">
+              <img
+                className="h-8 w-8"
+                aria-hidden="true"
+                src={`https://cdn.stamp.fyi/space/${spaceId}?s=96`}
+                alt={`${spaceId}`}
+              />
+              </div>
+            )
+          }
         </div> 
 
         <div className='col-span-1'> 
           Time Range: 
         </div> 
         <div className='col-span-3'> 
-          HERE TIME RANGE
+          {`${toFullDateFormat(startDate)} until ${toFullDateFormat(endDate)}`}
         </div> 
 
         <button  
