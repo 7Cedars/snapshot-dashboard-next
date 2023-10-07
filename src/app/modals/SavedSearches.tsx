@@ -7,14 +7,20 @@ import { toSavedSearch } from '../utils/parsers';
 import { Button } from '../ui/Button';
 import { useDateRange, useSpaces } from '../hooks/useUrl';
 
-export const SavedSearchesDialog = () => {
+const exampleSearch1 = {
+  title: "Example search 1", 
+  description: "This is an example search", 
+  startDate: 1696682542396,
+  endDate: 1649531843772,
+  selectedSpaceIds: ["gcverseofmeta.eth", "deepobjects-voting.eth", "krap.eth", "departedapes.eth"] 
+}
 
+export const SavedSearchesDialog = () => {
   const [titleInput, setTitleInput] = useState<string>('') 
   const [descriptionInput, setDescriptionInput] = useState<string>('') 
-  const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
-  const [searchesToShow, setSearchesToShow ] = useState<SavedSearch[] >([]) 
   const { selectedSpaces } = useSpaces()
   const { d1, d2 } = useDateRange()
+  const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
 
   console.log({
     titleInput: titleInput, 
@@ -22,18 +28,12 @@ export const SavedSearchesDialog = () => {
   })
 
   useEffect(() => {
-    // localStorage.setItem('savedSearches', JSON.stringify(savedSearches));
-    setSearchesToShow([toSavedSearch(localStorage.getItem('savedSearches'))])
-  }, [savedSearches]);
-
-  console.log("savedSearches: ", savedSearches)
-
-  useEffect(() => {
-    const test = toSavedSearch(localStorage.getItem('savedSearches')) 
-    console.log(test)
+    const searchesInStorage = toSavedSearch(localStorage.getItem('savedSearches'))
+    setSavedSearches(searchesInStorage)
   }, []);
 
-  const handleSaveSearch = () => {
+  const handleSaveSearch = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault()
     const newItem = {
       title: titleInput,  
       description: descriptionInput, 
@@ -42,9 +42,13 @@ export const SavedSearchesDialog = () => {
       selectedSpaceIds: selectedSpaces
     }
 
-    localStorage.setItem('savedSearches', JSON.stringify([ ...savedSearches, newItem]));
-    // setSavedSearches([ ...savedSearches, newItem]) 
+    const newSavedSearches = [ ...savedSearches, newItem]
+
+    localStorage.setItem('savedSearches', JSON.stringify(newSavedSearches));
+    setSavedSearches(newSavedSearches) 
   } 
+
+  console.log("savedSearches: ", savedSearches)
 
   const handleDeleteSearch = () => {
     // TO DO 
@@ -61,54 +65,76 @@ export const SavedSearchesDialog = () => {
       title = 'Saved Searches'
       subtitle = 'Save and come back to previous searches here.'
     > 
-
-    <div className="mt-2">
-      <form className="mt-2 border-2 border-red-600 flex-col ">
-        <div>  Save current search </div>
-
-        <div> 
+    {/* Save current search box  */}
+    <div className="w-full">
+      <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-grey-600 rounded-lg ">
+        <div className="col-span-4 text-md font-medium text-gray-900">  
+          Save current search 
+        </div>
+        
+        <div className='py-2 col-span-1' > 
           Title: 
-          <input
-            className="p-2 flex-grow border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
-            type="text"
-            id="titleSavedSearch"
-            placeholder="e.g. Recent Social Dapps" 
-            onChange={(event) => setTitleInput(event.target.value)}
-            />
-        </div>
-
-        <div className='flex-row'> 
+        </div> 
+        <input
+          className="p-2 col-span-3 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+          type="text"
+          id="titleSavedSearch"
+          placeholder="e.g. Recent Social Dapps" 
+          onChange={(event) => setTitleInput(event.target.value)}
+          />
+        
+        <div className='col-span-1'> 
           Description: 
-          <textarea
-            className="p-2 flex-grow border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
-            id="descriptionSavedSearch"
-            placeholder="e.g. This search shows the recent increase in activity of social dapps and how central X is among them." 
-            onChange={(event) => setDescriptionInput(event.target.value)}
-            />
-        </div>
-        <Button onClick={() => handleSaveSearch()} >
-            Save Search
-        </Button>  
+        </div> 
+        <textarea
+          className="p-2 col-span-3 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+          id="descriptionSavedSearch"
+          placeholder="e.g. This search shows the recent increase in activity of social dapps and how central X is among them." 
+          onChange={(event) => setDescriptionInput(event.target.value)}
+          />
+        
+        <div className='col-span-1'> 
+          DAO Spaces: 
+        </div> 
+        <div className='col-span-3'> 
+          HERE thumbnails spaces
+        </div> 
+
+        <div className='col-span-1'> 
+          Time Range: 
+        </div> 
+        <div className='col-span-3'> 
+          HERE TIME RANGE
+        </div> 
+
+        <button  
+          onClick={(event: React.MouseEvent<HTMLElement>) => handleSaveSearch(event)}
+          className='p-2 col-span-4 border border-blue-300 bg-blue-100 text-sm hover:border-blue-500 hover:bg-blue-300 rounded-lg font-medium '
+          > 
+          Save search
+        </button>
       </form> 
 
 
-        <p className="text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
-        <p className="text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
-        <p className="text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
-        <p className=" text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
+      {/* List previous saved searches  */}
+      <div className='border-2 border-green-300'> 
+      <div className="col-span-4 text-md font-medium text-gray-900">  
+        Saved searches 
       </div>
+
+        { savedSearches.map(savedsearch => {
+          return (
+            <div> 
+              {savedsearch.title} 
+              {savedsearch.description}
+            </div>
+          )
+        
+
+          })
+        }
+      </div>
+    </div>
 
   </ModalDialog>
 

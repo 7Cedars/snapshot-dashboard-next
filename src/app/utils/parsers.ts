@@ -93,13 +93,14 @@ export const toProposalId = (object: unknown): string => {
   throw new Error('Incorrect data: some fields are missing');
 }
 
-export const toSavedSearch = (object: unknown): SavedSearch => { 
+// this parser still needs to be developed further. 
+export const toSavedSearch = (object: unknown): SavedSearch[] => { 
   if (!isString(object)) {
     throw new Error(`Incorrect or missing savedSearch: ${object}`);
   }
 
   try {
-    const data: SavedSearch = JSON.parse(object)
+    const data: SavedSearch[] = JSON.parse(object)
     return data
 
   } catch (error) {
@@ -108,7 +109,7 @@ export const toSavedSearch = (object: unknown): SavedSearch => {
 
 }
 
-
+// "[{"title":"","description":"","startDate":1680756100633,"endDate":1696534900633,"selectedSpaceIds":[]}]"
 
 // NB: still need to add parsers for Proposal and Vote inputs. 
 // Never ever trust anything you receive from an outside source... 
