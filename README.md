@@ -20,12 +20,11 @@ Sorted on priority, issues to address
 - limit amount of selected spaces to N (30?) 
 - add colours to colour palette 
 - fix all runtime errors
-- fix behaviour of time Range slider + layouting (WIP) 
 - limit rerenders of dashboard 
 - implement testing using cyprus  
 - implement landing page 
 - implement notifications 
-- implement saved searches
+- implement saved searches (WIP)
 - deploy on vercel.com
 - enable darkmode
 - add content of FAQ, landing page 
@@ -35,6 +34,7 @@ Sorted on priority, issues to address
 - write documentation, add / update comments in code.
 
 Completed issues 
+- fix behaviour of time Range slider + layouting 
 - fix list update in search modal (excluding selected spaces) 
 - add counters to categories in search modal 
 - Dreate modular ModalDialog 

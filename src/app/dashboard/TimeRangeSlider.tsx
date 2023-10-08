@@ -25,7 +25,7 @@ const TimeRangeSlider = () => {
   // it gives the impression of interacting with both sliders. 
   const handleValueChange = (value: number) => {
 
-    if (Math.abs(d1 - value) < Math.abs(d2 - value)) {
+    if (Math.abs(value1 - value) < Math.abs(value2 - value)) {
       setValue1(value)
     } else {
       setValue2(value)
