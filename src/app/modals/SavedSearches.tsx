@@ -1,12 +1,13 @@
 "use client";
 
 import { ModalDialog } from '../ui/ModalDialog';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, FormEventHandler, FormEvent } from 'react';
 import { SavedSearch } from '@/types';
 import { toSavedSearch } from '../utils/parsers';
 import { Button } from '../ui/Button';
 import { useDateRange, useSpaces } from '../hooks/useUrl';
 import { toFullDateFormat } from '../utils/utils';
+import React from 'react';
 
 const exampleSearch1 = {
   title: "Example search 1", 
@@ -20,7 +21,7 @@ export const SavedSearchesDialog = () => {
   const [titleInput, setTitleInput] = useState<string>('') 
   const [descriptionInput, setDescriptionInput] = useState<string>('') 
   const { selectedSpaces } = useSpaces()
-  const { d1, d2 } = useDateRange()
+  const { d1, d2, handleDates } = useDateRange()
   const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
@@ -53,12 +54,16 @@ export const SavedSearchesDialog = () => {
 
   console.log("savedSearches: ", savedSearches)
 
-  const handleDeleteSearch = () => {
+  const handleDeleteSearch = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault()
     // TO DO 
   } 
 
-  const handleSelectSearch = () => {
-    // TO DO 
+  const handleSelectSearch = (savedSearch: any, event: React.FormEvent<HTMLElement>) => {
+    event.preventDefault
+    console.log("at handleSelectSearch: ", savedSearch)
+    
+    // handleDates(String(), String()) 
   } 
 
   return (
@@ -68,8 +73,9 @@ export const SavedSearchesDialog = () => {
       title = 'Saved Searches'
       subtitle = 'Save and come back to previous searches here.'
     > 
-    {/* Save current search box  */}
-    <div className="w-full">
+   
+    <div className="w-full overflow-auto h-full">
+      {/* Save current search box  */}
       <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-grey-600 rounded-lg ">
         <div className="col-span-4 text-md font-medium text-gray-900">  
           Save current search 
@@ -102,7 +108,7 @@ export const SavedSearchesDialog = () => {
         <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
           {
             selectedSpaces.map(spaceId => 
-              <div className= "border-2 border-gray-500 overflow-hidden flex h-8 w-8 flex-col items-center justify-center rounded-full">
+              <div className= "border-2 border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
               <img
                 className="h-8 w-8"
                 aria-hidden="true"
@@ -131,23 +137,72 @@ export const SavedSearchesDialog = () => {
 
 
       {/* List previous saved searches  */}
-      <div className='border-2 border-green-300'> 
-      <div className="col-span-4 text-md font-medium text-gray-900">  
+      <> 
+      <div className="text-md font-medium text-gray-900 w-full overflow-auto">  
         Saved searches 
       </div>
 
         { savedSearches.map(savedsearch => {
           return (
-            <div> 
-              {savedsearch.title} 
-              {savedsearch.description}
-            </div>
+            <form className='col-span-4 grid grid-cols-4 gap-2 border border-gray-500 rounded-lg m-1 p-2' 
+              onSubmit={(event) => handleSelectSearch(savedsearch, event)}> 
+              <div className="col-span-1 text-md font-medium text-gray-900">  
+                Title: 
+              </div>
+              <div className='col-span-3' id='title'> 
+                {savedsearch.title} 
+              </div>
+
+              <div className="col-span-1 text-md font-medium text-gray-900">  
+                  Description:  
+              </div> 
+              <input className='col-span-3' value={savedsearch.description} id='description'/> 
+              <div className='col-span-1'> 
+                DAO Spaces: 
+              </div> 
+              <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
+                {
+                  savedsearch.selectedSpaceIds.map(spaceId => 
+                    <div className= "border-2 border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
+                    <img
+                      className="h-8 w-8"
+                      aria-hidden="true"
+                      src={`https://cdn.stamp.fyi/space/${spaceId}?s=96`}
+                      alt={`${spaceId}`}
+                    />
+                    </div>
+                  )
+                }
+              </div> 
+              <div className='col-span-1'> 
+                Time Range: 
+              </div> 
+              <div className='col-span-3'> 
+                {`${toFullDateFormat(savedsearch.startDate)} until ${toFullDateFormat(savedsearch.endDate)}`}
+              </div> 
+
+              <button  
+                // onClick={(event: FormEvent<HTMLElement>) => handleSelectSearch(event)}
+                type = 'submit'
+                className='p-2 col-span-2 border border-green-300 bg-green-100 text-sm hover:border-green-500 hover:bg-green-300 rounded-lg font-medium'
+                > 
+                Select search
+              </button>
+              <button
+                id = {String(savedsearch.selectedSpaceIds)}
+                type = 'submit'
+                className='p-2 col-span-2 border border-red-300 bg-red-100 text-sm hover:border-red-500 hover:bg-red-300 rounded-lg font-medium '
+                > 
+                Delete search
+              </button>
+
+            </form>
           )
         
 
           })
         }
-      </div>
+      </>
     </div>
 
   </ModalDialog>

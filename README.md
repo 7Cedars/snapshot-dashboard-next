@@ -16,7 +16,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 This dashboard is under active development. 
 
 Sorted on priority, issues to address 
-
 - limit amount of selected spaces to N (30?) 
 - add colours to colour palette 
 - fix all runtime errors

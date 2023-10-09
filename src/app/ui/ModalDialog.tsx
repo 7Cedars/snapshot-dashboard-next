@@ -40,12 +40,12 @@ export const ModalDialog = ({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
           >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-black bg-opacity-25 max-h-screen" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Dialog.Panel className="w-1/2 min-w-fit transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+            <Dialog.Panel className="w-1/2 min-w-fit max-h-[52rem] transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
             
             <div className='flex justify-end '> 
               <button 
@@ -66,8 +66,8 @@ export const ModalDialog = ({
                 <p> {title} </p>
               </Dialog.Title>
 
-              <div className="grid grid-cols-1 mt-2 w-full">
-                <p className="text-gray-500">
+              <div className="grid grid-cols-1 mt-1 w-full">
+                <p className="text-gray-500 mb-2">
                   {subtitle}
                 </p>
         
