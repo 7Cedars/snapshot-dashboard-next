@@ -5,6 +5,7 @@ import { RangeSlider } from "../ui/RangeSlider";
 import { useDateRange } from '../hooks/useUrl';
 import { standardDateRange, genesisSnapshot } from "../../../constants";
 import { useDebounce } from "../hooks/useDebounce";
+import { toShortDateFormat, toFullDateFormat } from "../utils/utils";
 
 const TimeRangeSlider = () => {
   const { d1, d2, handleDates } = useDateRange()
@@ -34,19 +35,22 @@ const TimeRangeSlider = () => {
     handleDatesDebounced(String(value1), String(value2))
   }
 
+  const startDate = Math.min(value1, value2)
+  const endDate = Math.max(value1, value2)
+
   return (
     <div className="p-0"> 
       <RangeSlider
         minVal = {minVal}
         maxVal = {maxVal}
-        minLabel = 'min' 
-        maxLabel = 'max'
+        minLabel = {toShortDateFormat(minVal)} 
+        maxLabel = {toShortDateFormat(maxVal)} 
         valA={value1}
         valB={value2}
         onChangeA={( {target} ) => handleValueChange(Number(target.value)) }
         onChangeB={( {target} ) => handleValueChange(Number(target.value))}
         >
-        Time Range Analysis
+          <b> {`${toFullDateFormat(startDate)} until ${toFullDateFormat(endDate)}`}  </b>
       </RangeSlider>
     </div>
 

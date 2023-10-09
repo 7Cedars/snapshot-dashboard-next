@@ -20,8 +20,8 @@ const exampleSearch1 = {
 export const SavedSearchesDialog = () => {
   const [titleInput, setTitleInput] = useState<string>('') 
   const [descriptionInput, setDescriptionInput] = useState<string>('') 
-  const { selectedSpaces, addSpace, loadSavedSearch } = useSpaces()
-  const { d1, d2, handleDates } = useDateRange()
+  const { selectedSpaces, loadSavedSearch } = useSpaces()
+  const { d1, d2 } = useDateRange()
   const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
@@ -88,13 +88,12 @@ export const SavedSearchesDialog = () => {
       subtitle = 'Save and come back to previous searches here.'
     > 
    
-    <div className="w-full overflow-auto h-full">
+    <div className="w-full h-full">
       {/* Save current search box  */}
-      <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-grey-600 rounded-lg ">
-        <div className="col-span-4 text-md font-medium text-gray-900">  
+      <div className="col-span-4 text-md font-medium flex my-2 justify-center text-gray-900">  
           Save current search 
-        </div>
-        
+      </div>
+      <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-grey-600 rounded-lg">  
         <div className='py-2 col-span-1' > 
           Title: 
         </div> 
@@ -122,13 +121,13 @@ export const SavedSearchesDialog = () => {
         <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
           {
             selectedSpaces.map(spaceId => 
-              <div className= "border-2 border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
-              <img
-                className="h-8 w-8"
-                aria-hidden="true"
-                src={`https://cdn.stamp.fyi/space/${spaceId}?s=96`}
-                alt={`${spaceId}`}
-              />
+              <div className= "border-2 overflow-hidden border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
+                <img
+                  className="h-8 w-8"
+                  aria-hidden="true"
+                  src={`https://cdn.stamp.fyi/space/${spaceId}?s=96`}
+                  alt={`${spaceId}`}
+                />
               </div>
             )
           }
@@ -152,32 +151,27 @@ export const SavedSearchesDialog = () => {
 
       {/* List previous saved searches  */}
       <> 
-      <div className="text-md font-medium text-gray-900 w-full overflow-auto">  
+      <div className="text-md font-medium text-gray-900 w-full flex justify-center overflow-auto mt-6 mb-2">  
         Saved searches 
       </div>
 
         { savedSearches.map(savedsearch => {
           return (
-            <div className='col-span-4 grid grid-cols-4 gap-2 border border-gray-500 rounded-lg m-1 p-2' 
-              onSubmit={(event) => handleSelectSearch(savedsearch, event)}> 
-              <div className="col-span-1 text-md font-medium text-gray-900">  
-                Title: 
-              </div>
-              <div className='col-span-3' id='title'> 
-                {savedsearch.title} 
-              </div>
-
-              <div className="col-span-1 text-md font-medium text-gray-900">  
-                  Description:  
-              </div> 
-              <input className='col-span-3' value={savedsearch.description} id='description'/> 
+            <div className='grid grid-cols-4 gap-1 border border-gray-500 rounded-lg m-1 p-2'> 
+            <div className='col-span-4 text-md font-medium text-gray-900 mb-0'>
+              {savedsearch.title} 
+            </div> 
+            <div className='col-span-4 text-gray-500 mb-4'> 
+              {savedsearch.description}  
+            </div> 
+          
               <div className='col-span-1'> 
                 DAO Spaces: 
               </div> 
               <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
                 {
                   savedsearch.selectedSpaceIds.map(spaceId => 
-                    <div className= "border-2 border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
+                    <div className= "border-2 overflow-hidden  border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
                     <img
                       className="h-8 w-8"
                       aria-hidden="true"

@@ -33,15 +33,15 @@ export const RangeSlider = ({
      
      {/* Labels  */}
      <div className="flex flex-row justify-between w-full "> 
-        <label htmlFor="sliderA" className=" flex-none w-6 pt-2 text-sm font-medium text-gray-500">
+        <label htmlFor="sliderA" className=" flex-none w-16 pt-2 text-sm font-medium text-gray-500">
           { minLabel }
         </label>
 
-        <div className="text-gray-500 text-base text-sm  flex align-items-center pt-2 ">
+        <div className="text-gray-900 text-base text-md  flex align-items-center pt-2 ">
           { children }
         </div>
 
-        <label htmlFor="sliderB" className=" flex-none w-6 pt-2 text-sm text-gray-500">
+        <label htmlFor="sliderB" className=" flex-none w-16 pt-2 text-sm text-gray-500">
         { maxLabel }
         </label>
       </div>
