@@ -9,7 +9,7 @@ import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 import { colourCodes } from "../../../../constants";
 
-const MARGIN = { top: 10, right: 10, bottom: 20, left: 10 };
+const MARGIN = { top: 10, right: 10, bottom: 20, left: 90 };
 
 interface HeatmapProps {
   width: number;
@@ -120,9 +120,9 @@ export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
         y={yPos + yScale.bandwidth() / 2}
         textAnchor="end"
         dominantBaseline="middle"
-        fontSize={10}
+        fontSize={12}
       >
-        {""}
+        {`${name.slice(0,10)}...`}
       </text>
     );
   });

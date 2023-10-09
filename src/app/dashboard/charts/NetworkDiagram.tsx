@@ -58,9 +58,11 @@ export const NetworkDiagram = ({
         'link',
         d3.forceLink<Node, Link>(links).id((d) => d.id)
       )
-      .force('collide', d3.forceCollide().radius(RADIUS))
-      .force('charge', d3.forceManyBody())
+      .force('collide', d3.forceCollide().radius(RADIUS * 2).strength(1))
+      .force('charge', d3.forceManyBody().strength(2))
       .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('charge', d3.forceY(0).strength(.1))
+      .force('charge', d3.forceX(0).strength(.1))
 
       // at each iteration of the simulation, draw the network diagram with the new node positions
       .on('tick', () => {
