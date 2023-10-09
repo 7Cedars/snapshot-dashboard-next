@@ -20,7 +20,7 @@ const exampleSearch1 = {
 export const SavedSearchesDialog = () => {
   const [titleInput, setTitleInput] = useState<string>('') 
   const [descriptionInput, setDescriptionInput] = useState<string>('') 
-  const { selectedSpaces } = useSpaces()
+  const { selectedSpaces, addSpace, loadSavedSearch } = useSpaces()
   const { d1, d2, handleDates } = useDateRange()
   const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
   const startDate = Math.min(d1, d2)
@@ -32,7 +32,11 @@ export const SavedSearchesDialog = () => {
   })
 
   useEffect(() => {
-    const searchesInStorage = toSavedSearch(localStorage.getItem('savedSearches'))
+    let searchesInStorage = toSavedSearch(localStorage.getItem('savedSearches'))
+    if (searchesInStorage.length === 0) {
+      searchesInStorage = [exampleSearch1]
+    }
+
     setSavedSearches(searchesInStorage)
   }, []);
 
@@ -54,16 +58,26 @@ export const SavedSearchesDialog = () => {
 
   console.log("savedSearches: ", savedSearches)
 
-  const handleDeleteSearch = (event: React.MouseEvent<HTMLElement>) => {
+  const handleDeleteSearch = (savedSearch: any, event: React.FormEvent<HTMLElement>) => {
     event.preventDefault()
-    // TO DO 
+    const newSavedSearches = savedSearches.filter(item => item.title !== savedSearch.title)
+
+    const isConfirmed = confirm("Are you sure you want to remove this saved search? You will not be able to recover it.");
+
+    if (isConfirmed) {
+      localStorage.setItem('savedSearches', JSON.stringify(newSavedSearches));
+      setSavedSearches(newSavedSearches) 
+    }
   } 
 
-  const handleSelectSearch = (savedSearch: any, event: React.FormEvent<HTMLElement>) => {
+  const handleSelectSearch = (savedSearch: SavedSearch, event: React.FormEvent<HTMLElement>) => {
     event.preventDefault
-    console.log("at handleSelectSearch: ", savedSearch)
-    
-    // handleDates(String(), String()) 
+
+    loadSavedSearch(
+      savedSearch.selectedSpaceIds, 
+      String(savedSearch.startDate), 
+      String(savedSearch.endDate)
+    )
   } 
 
   return (
@@ -144,7 +158,7 @@ export const SavedSearchesDialog = () => {
 
         { savedSearches.map(savedsearch => {
           return (
-            <form className='col-span-4 grid grid-cols-4 gap-2 border border-gray-500 rounded-lg m-1 p-2' 
+            <div className='col-span-4 grid grid-cols-4 gap-2 border border-gray-500 rounded-lg m-1 p-2' 
               onSubmit={(event) => handleSelectSearch(savedsearch, event)}> 
               <div className="col-span-1 text-md font-medium text-gray-900">  
                 Title: 
@@ -182,21 +196,21 @@ export const SavedSearchesDialog = () => {
               </div> 
 
               <button  
-                // onClick={(event: FormEvent<HTMLElement>) => handleSelectSearch(event)}
-                type = 'submit'
-                className='p-2 col-span-2 border border-green-300 bg-green-100 text-sm hover:border-green-500 hover:bg-green-300 rounded-lg font-medium'
+                type = 'button'
+                onClick={(event) => handleSelectSearch(savedsearch, event)}
+                className='p-2 col-span-3 border border-green-300 bg-green-100 text-sm hover:border-green-500 hover:bg-green-300 rounded-lg font-medium'
                 > 
                 Select search
               </button>
               <button
-                id = {String(savedsearch.selectedSpaceIds)}
-                type = 'submit'
-                className='p-2 col-span-2 border border-red-300 bg-red-100 text-sm hover:border-red-500 hover:bg-red-300 rounded-lg font-medium '
+                type = 'button'
+                onClick={(event) => handleDeleteSearch(savedsearch, event)}
+                className='p-2 col-span-1 border border-red-300 bg-red-100 text-sm hover:border-red-500 hover:bg-red-300 rounded-lg font-medium '
                 > 
                 Delete search
               </button>
 
-            </form>
+            </div>
           )
         
 

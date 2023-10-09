@@ -159,7 +159,7 @@ export const SearchDialog = () => {
         <div key = {space.id} > 
         <button 
           className='border border-blue-300 rounded-lg p-2 mr-1 my-2 w-96 grid justify-items-start'
-          onClick={() => addSpace(space)} 
+          onClick={() => addSpace(space.id)} 
         > 
           <div className={`block truncate font-medium`} >
               {space.id}
