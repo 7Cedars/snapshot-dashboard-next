@@ -8,10 +8,7 @@ import SettingsDialog from "./modals/Settings";
 import SavedSearchesDialog from "./modals/SavedSearches";
 import SearchDialog from './modals/Search';
 import NavBar from './NavBar';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import ReactQueryProviders from './ReactQueryWrapper';
-
-const queryClient = new QueryClient()
 
 export const metadata: Metadata = {
   title: 'Snapshot Dashboard',

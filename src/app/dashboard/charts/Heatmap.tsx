@@ -9,7 +9,7 @@ import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 import { colourCodes } from "../../../../constants";
 
-const MARGIN = { top: 10, right: 10, bottom: 20, left: 90 };
+const MARGIN = { top: 10, right: 10, bottom: 20, left: 120 };
 
 interface HeatmapProps {
   width: number;

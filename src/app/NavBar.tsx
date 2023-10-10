@@ -28,10 +28,10 @@ const NavBar = ( ) => {
 
     <div className="grid grid-cols-10 gap-2 w-4/5 flex">
 
-      <div className="container col-span-2 rounded-lg m-1 pt-4">
-          <Link href='/' className='text-black font-bold pt-1'>
+      <div className="flex flex-row col-span-2 rounded-lg m-1 pt-4">
+          <Link href='/' className='text-black hover:text-blue-800 font-bold pt-1'>
             <HomeIcon
-              className="h-7 w-7 "
+              className="h-7 w-7"
               aria-hidden="true"
             />
           </Link>
@@ -45,7 +45,7 @@ const NavBar = ( ) => {
 
           <div className="container basis-1/4 flex-none rounded-lg p-0 m-0">
             <button 
-              className="text-black font-bold py-2 px-4"
+              className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
               onClick={() => dispatch(updateModal('settings'))} 
               >
@@ -58,7 +58,7 @@ const NavBar = ( ) => {
 
           <div className="container basis-1/4 flex-none rounded-lg p-0 m-0">
             <button 
-              className="text-black font-bold py-2 px-4"
+              className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
               onClick={() => dispatch(updateModal('savedSearches'))}
               >
@@ -71,7 +71,7 @@ const NavBar = ( ) => {
 
           <div className="container basis-1/4 flex-none rounded-lg p-0 m-0">
             <button 
-              className="text-black font-bold py-2 px-4"
+              className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
               onClick={() => dispatch(updateModal('about'))}
               >

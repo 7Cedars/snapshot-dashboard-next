@@ -22,9 +22,26 @@ const SpaceItem = ( {spaceId}: Props) => {
     // it seems that in tailwind CSS
     // each declaration needs to be stated in hardcode, before it can be conditionally. 
     // Is this a bug? 
-      <div className='border-gray-400 border-yellow-500 border-gray-500 border-red-500 border-orange-500 
-      border-green-500 border-sky-500 border-indigo-500 border-purple-500 border-pink-500
-      flex flex-row bg-gray-100 border w-80 rounded-lg  my-2 py-2'>
+      <div className='
+       border-red-500 
+       border-orange-500  
+       border-amber-500 
+       border-yellow-500 
+       border-lime-500 
+       border-green-500 
+       border-emerald-500 
+       border-teal-500 
+       border-cyan-500 
+       border-sky-500  
+       border-blue-500 
+       border-indigo-500  
+       border-violet-500 
+       border-purple-500 
+       border-fuchsia-500 
+       border-pink-500 
+       border-rose-500 
+       border-gray-500 
+       flex flex-row bg-gray-100 border w-80 rounded-lg  my-2 py-2'>
           <div className="col-span-2 flex items-center justify-center pl-2">
             
             <label className= {`${appearance} ${tailwindColours[selectedSpaces.indexOf(spaceId)]}`} >

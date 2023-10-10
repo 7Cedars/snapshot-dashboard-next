@@ -15,14 +15,14 @@ export const toDateFormat = (timestamp: number): string => {
 
 export const toShortDateFormat = (timestamp: number): string => {
   const date = new Date(timestamp) 
-  const shortYear = date.getFullYear().toString().slice(2,4) 
+  const shortYear = date.getFullYear().toString() // .slice(2,4) 
 
   return `${nameMonths[date.getMonth()]} ${shortYear}`
 }; 
 
 export const toFullDateFormat = (timestamp: number): string => {
   const date = new Date(timestamp) 
-  return `${date.getDay()} ${nameMonths[date.getMonth()]} ${date.getFullYear()}`
+  return `${date.getDate()} ${nameMonths[date.getMonth()]} ${date.getFullYear()}`
 }; 
 
 export const toTimestamp = (dateFormat: string): string => { 

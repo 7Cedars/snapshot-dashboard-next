@@ -17,30 +17,30 @@ This dashboard is under active development.
 
 Sorted on priority, issues to address 
 - limit amount of selected spaces to N (30?) 
-- add colours to colour palette 
-- fix all runtime errors
-- limit rerenders of dashboard 
-- implement testing using cyprus  
-- implement landing page 
 - implement notifications 
-- implement saved searches (WIP)
-- deploy on vercel.com
-- enable darkmode
+- implement landing page 
 - add content of FAQ, landing page 
-- add (abbreviated) names in heatmap
-- add names in network diagram. 
+- fix all runtime errors
+- deploy on vercel.com
+- limit rerenders of dashboard - useMemo
+- implement testing using cyprus  
+- load dates in URL on start of app. 
+- enable darkmode
 - make network diagram interactive.
 - write documentation, add / update comments in code.
 
 Completed issues 
 - fix behaviour of time Range slider + layouting 
+- implement saved searches 
+- add (abbreviated) names in heatmap
+- add names in network diagram. 
 - fix list update in search modal (excluding selected spaces) 
 - add counters to categories in search modal 
 - Dreate modular ModalDialog 
 - update layout main dashboard (more space efficient)
 - fix / implement dynamic resizing of heatmap 
 - make notation in URL more efficient space -> s 
-- load dates in URL on start of app. 
+- add colours to colour palette 
 
 ## Learn More
 
