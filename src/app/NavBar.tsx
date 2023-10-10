@@ -9,6 +9,7 @@ import {
  import { useAppDispatch } from "../redux/hooks";
  import { updateModal } from "../redux/reducers/userInputReducer";
  import Link from 'next/link';
+ import { Notification } from './ui/notification';
 
  interface UrlProps {
   searchParams: {
@@ -37,8 +38,10 @@ const NavBar = ( ) => {
           </Link>
       </div>
         
-      <div className="col-span-6 "> </div> 
-    {/* <MySearchBar />  // col-span-6 */}
+      <div className="col-span-6 "> 
+        <Notification /> 
+      </div> 
+
 
     <div className="flex flex-row-reverse col-span-2 rounded-lg py-4 m-0">
           {/* <div className="flex grow h-10 items-center  sm:justify-end sm:gap-x-7  "> */}
