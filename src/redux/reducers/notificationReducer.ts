@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Notification, NotificationWithoutId } from '../../types'
+import { Notification, NotificationWithoutId, NotificationId, NotificationUpdate } from '../../types'
 import { v4 as uuidv4 } from 'uuid';
 
 interface NotificationState {
@@ -23,8 +23,39 @@ export const notificationsSlice = createSlice({
       
       console.log("notification: ", action.payload)
       state.notifications.push(notification)
+    },
+    updateNotification: (state, action: PayloadAction<NotificationUpdate>) => {
+      let notificationToChange = state.notifications.find(
+        notification => { notification.id !== action.payload.id }
+      )
+
+      if (notificationToChange !== undefined) {
+        let updatedMessage = "test"
+        let updatedColour: "red" | "yellow" | "green" | "gray" = "gray"
+        let updatedProgress = 100
+
+        action.payload.message ? 
+          updatedMessage = action.payload.message : notificationToChange.message
+
+        action.payload.colour ? 
+          updatedColour = action.payload.colour : notificationToChange.colour
+
+        action.payload.progress ? 
+          updatedProgress = action.payload.progress : notificationToChange.progress
+
+        notificationToChange = {
+          id: notificationToChange?.id, 
+          message: updatedMessage, 
+          colour: updatedColour,
+          progress: updatedProgress   
+        }
+
+        // IS there a find and replace function for arrays. CHECK! 
+      }
+
+
     }, 
-    removeNotification: (state, action: PayloadAction<Notification>) => {
+    removeNotification: (state, action: PayloadAction<NotificationId>) => {
 
       state.notifications.filter(
         notification => { notification.id !== action.payload.id } 

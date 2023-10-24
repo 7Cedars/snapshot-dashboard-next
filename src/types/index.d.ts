@@ -77,8 +77,20 @@ export type SavedSearch = {
 
 export type Notification = {
   id: string;
-  message: string; 
-  type: string;
+  message: string;
+  colour: "red" | "yellow" | "green" | "gray"
+  progress?: number; 
+}
+
+export type NotificationId = {
+  id: string; 
+}
+
+export type NotificationUpdate = {
+  id: string;
+  message?: string;
+  colour?: "red" | "yellow" | "green" | "gray"
+  progress?: number; 
 }
 
 export type Data = {
