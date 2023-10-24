@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Notification, NotificationWithoutId, NotificationId, NotificationUpdate } from '../../types'
-import { v4 as uuidv4 } from 'uuid';
+import { Notification, NotificationId, NotificationUpdate } from '../../types'
 
 interface NotificationState {
   notifications: Notification[]
@@ -14,49 +13,37 @@ export const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: initialState,
   reducers: {
-    addNotification: (state, action: PayloadAction<NotificationWithoutId>) => {
+    // Note: addNotification can also be used to completely replace a notification. 
+    addNotification: (state, action: PayloadAction<Notification>) => {
+      console.log(`addNotification called. Action Payload: ${action.payload.id} `)
+      const notificationIds = state.notifications.map(notification => notification.id)
+      const index = notificationIds.indexOf(action.payload.id) 
+      console.log(`Notification index: ${index}`)
 
-      const notification = {
-        id: uuidv4(), 
-        ...action.payload
-      } 
-      
-      console.log("notification: ", action.payload)
-      state.notifications.push(notification)
+      if (index === -1) {
+        state.notifications.push(action.payload)
+      } else {
+        state.notifications[index] = action.payload
+      }      
     },
     updateNotification: (state, action: PayloadAction<NotificationUpdate>) => {
-      let notificationToChange = state.notifications.find(
-        notification => { notification.id !== action.payload.id }
-      )
+      console.log("updateNotification called")
+      const notificationIds = state.notifications.map(notification => notification.id)
+      const index = notificationIds.indexOf(action.payload.id) 
 
-      if (notificationToChange !== undefined) {
-        let updatedMessage = "test"
-        let updatedColour: "red" | "yellow" | "green" | "gray" = "gray"
-        let updatedProgress = 100
-
+      if (index !== -1) {
         action.payload.message ? 
-          updatedMessage = action.payload.message : notificationToChange.message
+          state.notifications[index].message = action.payload.message : null 
 
         action.payload.colour ? 
-          updatedColour = action.payload.colour : notificationToChange.colour
+          state.notifications[index].colour = action.payload.colour : null
 
         action.payload.progress ? 
-          updatedProgress = action.payload.progress : notificationToChange.progress
-
-        notificationToChange = {
-          id: notificationToChange?.id, 
-          message: updatedMessage, 
-          colour: updatedColour,
-          progress: updatedProgress   
-        }
-
-        // IS there a find and replace function for arrays. CHECK! 
+          state.notifications[index].progress = action.payload.progress : null
       }
-
-
     }, 
     removeNotification: (state, action: PayloadAction<NotificationId>) => {
-
+      console.log("removeNotification called")
       state.notifications.filter(
         notification => { notification.id !== action.payload.id } 
       )

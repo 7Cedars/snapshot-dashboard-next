@@ -9,7 +9,7 @@ import {
  import { useAppDispatch } from "../redux/hooks";
  import { updateModal } from "../redux/reducers/userInputReducer";
  import Link from 'next/link';
- import { Notification } from './ui/notification';
+ import { NotificationDialog } from './ui/notificationDialog';
 
  interface UrlProps {
   searchParams: {
@@ -39,7 +39,7 @@ const NavBar = ( ) => {
       </div>
         
       <div className="col-span-6 "> 
-        <Notification /> 
+        <NotificationDialog /> 
       </div> 
 
 
