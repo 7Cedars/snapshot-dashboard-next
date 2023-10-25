@@ -38,7 +38,7 @@ const NavBar = ( ) => {
           </Link>
       </div>
         
-      <div className="col-span-6 "> 
+      <div className="col-span-6 pt-4"> 
         <NotificationDialog /> 
       </div> 
 

@@ -13,18 +13,16 @@ export const notificationsSlice = createSlice({
   name: 'notifications',
   initialState: initialState,
   reducers: {
-    // Note: addNotification can also be used to completely replace a notification. 
+    // Note: if there is a duplicate Id, addnotifcation will remove previous notification with this id. 
     addNotification: (state, action: PayloadAction<Notification>) => {
       console.log(`addNotification called. Action Payload: ${action.payload.id} `)
       const notificationIds = state.notifications.map(notification => notification.id)
       const index = notificationIds.indexOf(action.payload.id) 
-      console.log(`Notification index: ${index}`)
 
-      if (index === -1) {
-        state.notifications.push(action.payload)
-      } else {
-        state.notifications[index] = action.payload
-      }      
+      if (index !== -1) {
+        state.notifications.splice(index, 1)
+      }
+      state.notifications[index] = action.payload      
     },
     updateNotification: (state, action: PayloadAction<NotificationUpdate>) => {
       console.log("updateNotification called")
