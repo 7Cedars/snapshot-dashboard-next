@@ -78,7 +78,9 @@ const NavBar = ( ) => {
               className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
               onClick={() => dispatch(notification({
-                id: "test"
+                id: "test", 
+                colour: "red", 
+                visible: false
               }))}
               // onClick={() => dispatch(updateModal('about'))}
               >

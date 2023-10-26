@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Notification, NotificationId, NotificationUpdate } from '../../types'
+import { Notification } from '../../types'
 
 interface NotificationState {
   notifications: Notification[]
@@ -19,20 +19,28 @@ export const notificationsSlice = createSlice({
     */
 
     notification: (state, action: PayloadAction<Notification>) => {
-      console.log(`addNotification called. Action Payload: ${action.payload.id} `)
-      const notificationIds = state.notifications.map(notification => notification.id)
+      console.log(`addNotification called. Action Payload: ${Object.values(action.payload)} `)
+      let notificationIds = state.notifications.map(notification => notification.id)
       let index = notificationIds.indexOf(action.payload.id)
 
-      if (index === -1) {
-        state.notifications.push({
-          id: action.payload.id, 
-          message: "", 
-          colour: "gray",
-          visible: true
-        })
+      console.log("INDEX notification1: ", index)
 
-        index = notificationIds.indexOf(action.payload.id) 
+      if (index === -1) { 
+        const newNotification: Notification = {
+          id: action.payload.id, 
+          message: "",
+          colour:  "gray",
+          durationInMs: "noTimer",
+          progressInPercent: "noProgress",
+          visible: true
+        }
+        state.notifications.push(newNotification)
       }
+      
+      notificationIds = state.notifications.map(notification => notification.id)
+      index = notificationIds.indexOf(action.payload.id) 
+
+      console.log("INDEX notification2: ", index)
 
       action.payload.message ? 
         state.notifications[index].message = action.payload.message : null 
@@ -44,11 +52,15 @@ export const notificationsSlice = createSlice({
       action.payload.durationInMs ? 
         state.notifications[index].durationInMs = action.payload.durationInMs : null
 
+      action.payload.visible ? 
+        state.notifications[index].visible = false : null
+
       action.payload.progressInPercent ? 
         state.notifications[index].progressInPercent = action.payload.progressInPercent : null
 
-      action.payload.visible ? 
-        state.notifications[index].visible = action.payload.visible : null
+       console.log("action.payload.visible: ", action.payload.visible)
+      console.log("state.notifications[index]", Object.keys(state.notifications[index]),  Object.values(state.notifications[index]))
+
 
     }, 
     prioritizeNotification: (state, action: PayloadAction<string>) => {
