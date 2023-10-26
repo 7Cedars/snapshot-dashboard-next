@@ -119,7 +119,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
 
 // toNetworkGraph
 export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
-  console.log("toNetworkGraph called")
+  // console.log("toNetworkGraph called")
 
   const uniqueSpaces = Array.from( 
     new Set(proposals.map((proposal: any) => proposal.space.id))
@@ -151,7 +151,7 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
       )}
   })
 
-  console.log("links: ", links)
+  // console.log("links: ", links)
 
   const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => 
     ({id: space, group: "test"})

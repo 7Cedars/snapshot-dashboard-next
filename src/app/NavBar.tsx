@@ -8,6 +8,7 @@ import {
  } from '@heroicons/react/24/outline'
  import { useAppDispatch } from "../redux/hooks";
  import { updateModal } from "../redux/reducers/userInputReducer";
+ import { notification } from '@/redux/reducers/notificationReducer';
  import Link from 'next/link';
  import { NotificationDialog } from './ui/notificationDialog';
 
@@ -76,7 +77,10 @@ const NavBar = ( ) => {
             <button 
               className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
-              onClick={() => dispatch(updateModal('about'))}
+              onClick={() => dispatch(notification({
+                id: "test"
+              }))}
+              // onClick={() => dispatch(updateModal('about'))}
               >
               <QuestionMarkCircleIcon
                 className="h-7 w-7"

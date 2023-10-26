@@ -1,15 +1,15 @@
 import { useAppDispatch, useAppSelector} from "@/redux/hooks"
 import { XMarkIcon } from "@heroicons/react/24/outline"
 
-const notifications = [{
-  id: "test",
-  message: "TEST TEST",
-  colour: "red", 
-  progress: 50 
-}]
+// const notifications = [{
+//   id: "test",
+//   message: "TEST TEST",
+//   colour: "red", 
+//   progress: 50 
+// }]
 
 export const NotificationDialog = () => {
-  // const { notifications } = useAppSelector(state => state.notification)
+  const { notifications } = useAppSelector(state => state.notification)
 
   // NB You can set colours dynamically in tailwind CSS. 
   // See: https://tailwindcss.com/docs/adding-custom-styles#using-arbitrary-values
