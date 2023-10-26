@@ -20,7 +20,7 @@ export const selectedSpacesSlice = createSlice({
   name: 'userInput',
   initialState: initialState, 
   reducers: {
-    updateModal: (state, action: PayloadAction<'search' |'about' | 'settings' | 'savedSearches' | 'none'>) => {
+    updateModal: (state, action: PayloadAction< 'infoSpace' | 'search' |'about' | 'settings' | 'savedSearches' | 'none'>) => {
       state.modal = action.payload
     },
     updateStopFetching: (state, action: PayloadAction<boolean>) => {

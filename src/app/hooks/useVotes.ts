@@ -12,11 +12,14 @@ import { apiProductionUrl } from "../../../constants";
 
 import { VOTERS_ON_PROPOSALS } from "../utils/queries";
 import { toSelectedProposals } from "../utils/utils";
-import { useQueries, useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
+import { useAppDispatch } from "@/redux/hooks";
+import { notification } from "@/redux/reducers/notificationReducer";
 
 export function useVotes() {
   const { cache }  = useApolloClient()
-  const dataRef = useRef<Vote[]>([]) 
+  const votesDataRef = useRef<Vote[]>([]) 
+  const dispatch = useAppDispatch() 
 
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract())
@@ -47,7 +50,7 @@ export function useVotes() {
       }
       
       // const votesFetched: string[] = [] 
-      const votesFetched: Vote[] = dataRef.current
+      const votesFetched: Vote[] = votesDataRef.current
       const votesFetchedIds: string[] = votesFetched.length > 0 ?  
         Array.from(
           new Set(votesFetched.map(vote => vote.proposal.id)
@@ -98,25 +101,41 @@ export function useVotes() {
         ))
       })
 
-      // console.log("useQueriesResult: ", useQueriesResult)
+      // dispatch(notification({
+      //   id: "queryingGraphQL", 
+      //   message: `querying GraphQL: ${progressQueries.length} of ${votesToFetch} completed.`, 
+      //   colour: "gray", 
+      //   progressInPercent: (progressQueries.length / queryList.length) * 100 
+      // }))
+
+      // if (progressQueries.length === useQueriesResult.length) {
+      //   dispatch(notification({
+      //     id: "queryingGraphQL",
+      //     colour: "invisible" 
+      //    })) 
+      // }
+
+      console.log("useQueriesResult: ", useQueriesResult)
      
       useQueriesResult.forEach(result => { 
         if (result.status === 'success') { 
-          const votesFetched: Vote[] = dataRef.current
-          dataRef.current = [...votesFetched, ...toVotes(result.data)] 
+          const votesFetched: Vote[] = votesDataRef.current
+          votesDataRef.current = [...votesFetched, ...toVotes(result.data)] 
           } 
       })
 
       const selectedProposals = proposals.map(proposal => proposal.id)
 
-      dataRef.current = dataRef.current.filter(vote => 
+      votesDataRef.current = votesDataRef.current.filter(vote => 
         vote.created * 1000  > startDate && 
         vote.created * 1000 < endDate  && 
         selectedProposals.indexOf(vote.proposal.id) !== -1 
       )
 
-      return dataRef.current
+      console.log("votesDataRef.current: ", votesDataRef.current, "votesToFetch: ",votesToFetch)
+
+      return votesDataRef.current
   }
 
-  return { fetchVotes, dataRef };
+  return { fetchVotes, votesDataRef };
 }

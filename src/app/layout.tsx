@@ -7,6 +7,7 @@ import AboutDialog from "./modals/About";
 import SettingsDialog from "./modals/Settings";
 import SavedSearchesDialog from "./modals/SavedSearches";
 import SearchDialog from './modals/Search';
+import InfoSpaceDialog from './modals/InfoSpace';
 import NavBar from './NavBar';
 import ReactQueryProviders from './ReactQueryWrapper';
 
@@ -29,7 +30,7 @@ export default function RootLayout({
             
               <div className="max-h-screen w-full grid grid-cols-1 relative">
             
-                <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
+                <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> <InfoSpaceDialog/>
                 <NavBar/>
 
                 {children}

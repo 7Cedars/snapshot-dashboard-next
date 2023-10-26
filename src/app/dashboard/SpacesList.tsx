@@ -16,7 +16,7 @@ const SpacesList = () => {
       <form>
         <input
           className="p-2 w-full border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
-          type="search"
+          type="search" 
           id="mySearch"
           name="q"
           placeholder="Search and select DAOs…" 

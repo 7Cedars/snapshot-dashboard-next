@@ -7,9 +7,8 @@ import spaces from '../../../public/data/spacesList'
 import { Space } from '../../types'
 import { useSpaces } from '../hooks/useUrl';
 import { ModalDialog } from '../ui/ModalDialog';
-import { addNotification } from '@/redux/reducers/notificationReducer';
+import { notification } from '@/redux/reducers/notificationReducer';
 import { useAppDispatch } from '@/redux/hooks';
-import { Notification } from '../../types';
 
 type listCategoryProp = {
   label: string; 
@@ -83,13 +82,11 @@ export const SearchDialog = () => {
   const handleSelect = (spaceId: string) => {
     
     addSpace(spaceId)
-    const notification: Notification = {
-      id: "test",
-      message: `Space Added ${spaceId}`,
-      colour: "green",
-      progress: 50
-    } 
-    dispatch(addNotification(notification))
+    dispatch(notification({
+      id: "addingSpace",
+      message: `Adding DAO space: ${spaceId}`, 
+      colour: "gray"
+    }))
   }
 
   return (

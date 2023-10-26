@@ -1,9 +1,6 @@
 "use client"
 
 import { 
-  Space
-} from '../../types';
-import { 
   usePathname, 
   useRouter, 
   useSearchParams 

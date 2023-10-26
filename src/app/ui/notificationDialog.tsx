@@ -39,7 +39,7 @@ export const NotificationDialog = () => {
   const { notifications } = useAppSelector(state => state.notification)
   const dispatch = useAppDispatch()
 
-  const notificationToShow = notifications.findLast(notification => notification.visible === true)
+  const notificationToShow = notifications.findLast(notification => notification.colour !== "invisible")
   let colour: "red" | "yellow" | "green" | "gray" | "invisible" = "gray"
   notificationToShow?.colour ? colour = notificationToShow?.colour : null 
 
