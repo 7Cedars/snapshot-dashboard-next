@@ -77,12 +77,7 @@ const NavBar = ( ) => {
             <button 
               className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
-              onClick={() => dispatch(notification({
-                id: "test", 
-                colour: "red", 
-                visible: false
-              }))}
-              // onClick={() => dispatch(updateModal('about'))}
+              onClick={() => dispatch(updateModal('about'))}
               >
               <QuestionMarkCircleIcon
                 className="h-7 w-7"

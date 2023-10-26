@@ -11,7 +11,7 @@ const SpacesList = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <div className="grid grid-cols-1 h-auto place-content-center overflow-x-auto overflow-x-hidden"> 
+    <div className="grid grid-cols-1 place-content-center overflow-x-auto overflow-x-hidden"> 
 
       <form>
         <input

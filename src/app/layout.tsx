@@ -28,7 +28,7 @@ export default function RootLayout({
         <ReduxProvider>
           <ApolloWrapper>
             
-              <div className="max-h-screen w-full grid grid-cols-1 relative">
+              <div className="relative h-screen w-full grid grid-cols-1">
             
                 <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> <InfoSpaceDialog/>
                 <NavBar/>

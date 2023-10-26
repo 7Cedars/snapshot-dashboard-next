@@ -29,11 +29,13 @@ const SpaceItem = ( {spaceId}: Props) => {
     }))
   } 
 
+  // divide-x-2
+
   return (
     spaceId !== '' ? 
-      <div className='border-gray-500 flex flex-row bg-gray-100 border grow rounded-lg my-1 py-2 divide-x-2 '>
+      <div className='border-gray-500 flex flex-row items-center bg-gray-100 border grow rounded-lg my-1 py-1  '> 
         <div className='flex grow'> 
-          <div className="flex items-center justify-center pl-1 ">
+          <div className="flex items-center justify-center pl-2 ">
             <label className= {`border-4 overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg ${tailwindColours[selectedSpaces.indexOf(spaceId)]}`} >
               <img
                 className="h-14 w-14"
@@ -66,14 +68,15 @@ const SpaceItem = ( {spaceId}: Props) => {
           </div>
         </div>
 
-          <div className="flex items-center justify-end pe-6">
+          {/* <div className="flex items-center justify-end pe-2"> */}
+          <div className="grid grid-cols-1 divide-y-2 items-center justify-end pe-2">
             <button 
-              className="font-bold px-1"
+              className="font-bold"
               type="submit"
               onClick={() => handleRemoveSpace(spaceId) }
               >
                 <MinusCircleIcon
-                  className="h-8 w-8 text-red-400 hover:text-red-600 items-center justify-center"
+                  className="h-8 w-8 text-red-300 hover:text-red-500 items-center justify-center"
                   aria-hidden="true"
                 />
             </button>
@@ -83,7 +86,7 @@ const SpaceItem = ( {spaceId}: Props) => {
               onClick={() => dispatch(updateModal('infoSpace'))}
               >
                 <InformationCircleIcon
-                  className="h-8 w-8 text-gray-400 hover:text-gray-600 items-center justify-center"
+                  className="h-8 w-8 text-gray-300 hover:text-gray-500 items-center justify-center"
                   aria-hidden="true"
                 />
             </button>
