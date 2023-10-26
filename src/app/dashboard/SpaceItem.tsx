@@ -1,7 +1,7 @@
 "use client";
 
 import spaces from '../../../public/data/spacesList'
-import { MinusCircleIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
+import { MinusCircleIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
 import { tailwindColours } from '../../../constants';
 import { useAppDispatch } from '@/redux/hooks';
@@ -68,25 +68,25 @@ const SpaceItem = ( {spaceId}: Props) => {
           </div>
         </div>
 
-          {/* <div className="flex items-center justify-end pe-2"> */}
-          <div className="grid grid-cols-1 divide-y-2 items-center justify-end pe-2">
-            <button 
-              className="font-bold"
-              type="submit"
-              onClick={() => handleRemoveSpace(spaceId) }
-              >
-                <MinusCircleIcon
-                  className="h-8 w-8 text-red-300 hover:text-red-500 items-center justify-center"
-                  aria-hidden="true"
-                />
-            </button>
+          <div className="flex items-center justify-end pe-2 opacity-0 hover:opacity-100">
+          {/* <div className="grid grid-cols-1 divide-y-2 items-center justify-end pe-2 opacity-0 hover:opacity-100"> */}
             <button 
               className="font-bold"
               type="submit"
               onClick={() => dispatch(updateModal('infoSpace'))}
               >
                 <InformationCircleIcon
-                  className="h-8 w-8 text-gray-300 hover:text-gray-500 items-center justify-center"
+                  className="h-6 w-6 text-gray-300 hover:text-gray-500 items-center justify-center"
+                  aria-hidden="true"
+                />
+            </button>
+            <button 
+              className="font-bold px-1"
+              type="submit"
+              onClick={() => handleRemoveSpace(spaceId) }
+              >
+                <XMarkIcon
+                  className="h-6 w-6 text-gray-300 hover:text-gray-500 items-center justify-center"
                   aria-hidden="true"
                 />
             </button>

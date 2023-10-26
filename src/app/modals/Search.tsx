@@ -97,7 +97,7 @@ export const SearchDialog = () => {
       subtitle = 'Search and select DAOs to analyse.'
     > 
 
-    <div className='flex'> 
+    <div className='flex w-full'> 
       <form>
         <input
           className="p-2 flex-auto w-11/12 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium mt-4"
@@ -132,12 +132,12 @@ export const SearchDialog = () => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute mt-10 z-10 pr-9 z-20 max-h-60 border bg-white border-blue-500 overflow-auto rounded-lg py-1 text-base focus:outline-none ">
+              <Listbox.Options className="absolute mt-10 z-20 max-h-60 w-48 border bg-white border-blue-500 overflow-auto rounded-lg pl-1 text-base focus:outline-none ">
                 {listCategories.map((category: listCategoryProp, categoryIdx) => (
                   <Listbox.Option
                     key={categoryIdx}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      `relative cursor-default select-none py-1 pl-5 ${
                         active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'
                       }`
                     }
@@ -153,7 +153,7 @@ export const SearchDialog = () => {
                           {category.label}
                         </span>
                         {selected ? (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-0 text-blue-600">
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </span>
                         ) : null}
