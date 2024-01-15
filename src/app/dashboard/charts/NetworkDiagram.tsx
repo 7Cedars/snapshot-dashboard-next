@@ -7,6 +7,7 @@ import { useApolloClient } from '@apollo/client';
 import { useVotes } from '@/app/hooks/useVotes';
 import { toProposals } from '@/app/utils/parsers';
 import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
+import { useDimensions } from '@/app/hooks/useDimensions';
 
 type NetworkDiagramProps = {
   width: number;
@@ -19,8 +20,8 @@ type DataProps = {
 };
 
 export const NetworkDiagram = ({
-  width = 700,
-  height = 300,
+  width = 20000,
+  height = 2000,
 }: NetworkDiagramProps) => {
   if (width === 0) {
     return null;
@@ -36,6 +37,7 @@ export const NetworkDiagram = ({
   // const [votes, setVotes] = useState<Vote[]>() 
   // const [data, setData] = useState<DataProps>({nodes: [], links: []}) 
 
+
   let data: DataProps = {nodes: [], links: []}
 
   console.log("queriesLength at networkdiagram: ", queriesLength)
@@ -50,6 +52,7 @@ export const NetworkDiagram = ({
   const nodes: Node[] = data.nodes.map((d) => ({ ...d }));
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  // const {} = useDimensions(canvasRef) 
 
   useEffect(() => {
     // set dimension of the canvas element

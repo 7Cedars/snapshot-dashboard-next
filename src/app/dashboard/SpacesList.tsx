@@ -11,9 +11,9 @@ const SpacesList = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <div className="grid grid-cols-1 place-content-center overflow-x-auto overflow-x-hidden"> 
+    <> 
 
-      <form>
+      {/* <form>
         <input
           className="p-2 w-full border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
           type="search" 
@@ -23,9 +23,9 @@ const SpacesList = () => {
           onClick={() => dispatch(updateModal('search'))}
           onChange={() => dispatch(updateModal('search'))}
           />
-      </form>
+      </form> */}
 
-      <div className="pb-3 pt-1 max-h-screen overflow-x-auto overflow-x-hidden">
+      {/* <div className="pb-3 pt-1 grid grid-cols-1 overflow-x-auto"> */}
         {selectedSpaces.length === 0 ? 
           <i className="grid justify-items-center my-4 text-gray-500 "> No DAO spaces selected. </i>
           :
@@ -33,8 +33,8 @@ const SpacesList = () => {
             < SpaceItem key = {spaceId} spaceId = {spaceId}/> 
           ))
         }
-      </div>
-    </div>
+      {/* </div> */}
+    </>
   );
 }
 

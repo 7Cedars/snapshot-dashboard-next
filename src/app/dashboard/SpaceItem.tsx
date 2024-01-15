@@ -25,11 +25,10 @@ const SpaceItem = ( {spaceId}: Props) => {
     dispatch(notification({
       id: "spaceRemoved", 
       message: `removing DAO space: ${spaceId}`, 
-      colour: "yellow"
+      colour: "yellow", 
+      progressInPercent: "noProgress"
     }))
   } 
-
-  // divide-x-2
 
   return (
     spaceId !== '' ? 

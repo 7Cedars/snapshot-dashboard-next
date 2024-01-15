@@ -85,7 +85,8 @@ export const SearchDialog = () => {
     dispatch(notification({
       id: "addingSpace",
       message: `Adding DAO space: ${spaceId}`, 
-      colour: "gray"
+      colour: "gray", 
+      progressInPercent: "noProgress"
     }))
 
     const updateList = filteredSpaces.filter(space => space.id != spaceId) 
