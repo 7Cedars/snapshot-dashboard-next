@@ -8,6 +8,7 @@ import { Button } from '../ui/Button';
 import { useDateRange, useSpaces } from '../hooks/useUrl';
 import { toFullDateFormat } from '../utils/utils';
 import React from 'react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const exampleSearch1 = {
   title: "Example search 1", 
@@ -121,7 +122,7 @@ export const SavedSearchesDialog = () => {
         <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
           {
             selectedSpaces.map(spaceId => 
-              <div className= "border-2 overflow-hidden border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
+              <div className= "border-2 overflow-hidden border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full" key = {spaceId}>
                 <img
                   className="h-8 w-8"
                   aria-hidden="true"
@@ -157,7 +158,19 @@ export const SavedSearchesDialog = () => {
 
         { savedSearches.map(savedsearch => {
           return (
-            <div className='grid grid-cols-4 gap-1 border border-gray-500 rounded-lg m-1 p-2'> 
+            <div className='grid grid-cols-4 gap-1 border border-gray-500 rounded-lg m-1 p-2' key = {savedsearch.title} > 
+              <div className='col-span-4 flex justify-end '> 
+                <button 
+                  className="text-black font-bold pt-1 px-1"
+                  type="submit"
+                  onClick={(event) => handleDeleteSearch(savedsearch, event)}
+                  >
+                  <XMarkIcon
+                    className="h-6 w-6"
+                    aria-hidden="true"
+                  />
+                </button>
+              </div>
             <div className='col-span-4 text-md font-medium text-gray-900 mb-0'>
               {savedsearch.title} 
             </div> 
@@ -171,7 +184,7 @@ export const SavedSearchesDialog = () => {
               <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
                 {
                   savedsearch.selectedSpaceIds.map(spaceId => 
-                    <div className= "border-2 overflow-hidden  border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full">
+                    <div className= "border-2 overflow-hidden  border-gray-500 flex h-8 w-8 flex-col items-center justify-center rounded-full" key = {spaceId} >
                     <img
                       className="h-8 w-8"
                       aria-hidden="true"
@@ -192,18 +205,10 @@ export const SavedSearchesDialog = () => {
               <button  
                 type = 'button'
                 onClick={(event) => handleSelectSearch(savedsearch, event)}
-                className='p-2 col-span-3 border border-green-300 bg-green-100 text-sm hover:border-green-500 hover:bg-green-300 rounded-lg font-medium'
+                className='p-2 mt-4 col-span-4 border border-green-400 text-sm text-green-400 hover:bg-green-100 hover:bg-green-300 rounded-lg font-medium'
                 > 
                 Select search
               </button>
-              <button
-                type = 'button'
-                onClick={(event) => handleDeleteSearch(savedsearch, event)}
-                className='p-2 col-span-1 border border-red-300 bg-red-100 text-sm hover:border-red-500 hover:bg-red-300 rounded-lg font-medium '
-                > 
-                Delete search
-              </button>
-
             </div>
           )
         
