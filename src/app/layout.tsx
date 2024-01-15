@@ -31,10 +31,12 @@ export default function RootLayout({
               <div className="relative h-screen w-full grid grid-cols-1">
             
                 <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> <InfoSpaceDialog/>
-                <NavBar/>
-
-                {children}
-              
+                <div > 
+                  <NavBar/>
+                </div> 
+                <div> 
+                 {children}
+                </div> 
               </div>
             
             </ApolloWrapper>
