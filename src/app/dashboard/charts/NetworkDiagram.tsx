@@ -34,9 +34,6 @@ export const NetworkDiagram = ({
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract())
     .filter(item => item.__typename === "Proposal")})
-  // const [votes, setVotes] = useState<Vote[]>() 
-  // const [data, setData] = useState<DataProps>({nodes: [], links: []}) 
-
 
   let data: DataProps = {nodes: [], links: []}
 

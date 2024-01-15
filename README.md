@@ -17,16 +17,16 @@ This dashboard is under active development.
 
 Sorted on priority, issues to address 
 - [x] Simplify page layout (take out some layout pages etc) 
-- [ ] refactor ui saved searches + fix runtime bug (double keys)
+- [x] refactor ui saved searches + fix runtime bug (double keys)
 - [ ] develop landing page + add FAQ
 - [ ] make double selections impossible. 
-- [ ] create & implement loading screens. 
+- [x] create & implement loading screens. -- implemented that it will only draw when data has loaded
 - [x] drop items from search after selection. 
 - [x] fix sizing layout issues 
 - [ ] update time range selector that it includes blue between items. 
-- [ ] fix all runtime errors
+- [ ] fix all runtime errors (WIP: fixed 1, 2 to go)
 - [ ] create unit tests with cyprus 
-- [ ] limit rerenders of dashboard - useMemo
+- [x] limit rerenders of dashboard - useMemo
 - [ ] limit amount of selected spaces to N (30?) 
 - [ ] fix ring colour spaces list
 - [ ] fix consistency of colours between spaceslist, heatmap and network graph. 

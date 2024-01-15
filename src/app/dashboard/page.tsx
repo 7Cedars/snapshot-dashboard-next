@@ -13,17 +13,18 @@ import { useVotes } from '../hooks/useVotes';
 import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
+import { useScreenDimensions } from '../hooks/useScreenDimensions';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
+  const { height, width } = useScreenDimensions()  
   const notCached = proposalsOfSpaceNotCached(selectedSpaces)
-  const heatmapHeight = selectedSpaces.length * 25 + 20
-  const networkDiagramHeight = 1000 - (selectedSpaces.length * 25 + 20)
   const spacesToQuery = notCached.notCached
   const { queriesLength } = useVotes()
   const dispatch = useAppDispatch()
 
-  console.log("queriesLength: ", queriesLength)
+  const heatmapHeight = selectedSpaces.length * 25 + 20
+  const networkDiagramHeight = height - (selectedSpaces.length * 25 + 320)
 
   spacesToQuery.push(" ") // if no spaces need to be queried, it queries an empty space. 
 
@@ -85,7 +86,7 @@ export default function Page() {
               VizComponent={NetworkDiagram}
               vizName={"NetworkDiagram"}
               maxWidth={3000}
-              // height={networkDiagramHeight}
+              height={networkDiagramHeight}
               />
           }
           </div>
