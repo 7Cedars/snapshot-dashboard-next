@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { RADIUS, drawNetwork } from './drawNetwork';
-import { Link, Node } from '../../../types';
+import { Link, NetworkNode, Node, Vote } from '../../../types';
 import { toNetworkGraph } from '@/app/utils/transposeData';
 import { useApolloClient } from '@apollo/client';
 import { useVotes } from '@/app/hooks/useVotes';
@@ -11,6 +11,11 @@ import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
 type NetworkDiagramProps = {
   width: number;
   height: number;
+};
+
+type DataProps = {
+  nodes: NetworkNode[]; 
+  links: any[]
 };
 
 export const NetworkDiagram = ({
@@ -23,17 +28,22 @@ export const NetworkDiagram = ({
   
   const { selectedSpaces } = useSpaces()
   const { d1, d2 } = useDateRange()
-  const { fetchVotes } = useVotes() 
+  const { fetchVotes, queriesLength } = useVotes() 
   const { cache }  = useApolloClient()
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract())
-    .filter(item => item.__typename === "Proposal")})  
+    .filter(item => item.__typename === "Proposal")})
+  // const [votes, setVotes] = useState<Vote[]>() 
+  // const [data, setData] = useState<DataProps>({nodes: [], links: []}) 
 
+  let data: DataProps = {nodes: [], links: []}
+
+  console.log("queriesLength at networkdiagram: ", queriesLength)
   const selectedProposals = cachedProposals.filter(proposal => selectedSpaces.includes(proposal.space.id))
 
   const votes = fetchVotes(selectedSpaces, d1, d2, true)
-  const data = toNetworkGraph(votes, selectedProposals) 
- 
+  if (queriesLength == 0) { data = toNetworkGraph(votes, selectedProposals) }  
+
   // The force simulation mutates links and nodes, so create a copy first
   // Node positions are initialized by d3
   const links: Link[] = data.links.map((d) => ({ ...d }));

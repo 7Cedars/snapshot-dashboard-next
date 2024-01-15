@@ -4,7 +4,7 @@
 // function = fetchProposals(proposals: Proposal[], dateRange [number, number], filterOutliers: boolean): votes: Vote[]
 
 import { Proposal, Vote } from "@/types";
-import {  useRef } from "react";
+import {  useEffect, useRef, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { toProposals, toVotes } from "../utils/parsers";
 import request from "graphql-request";
@@ -18,6 +18,7 @@ import { notification } from "@/redux/reducers/notificationReducer";
 
 export function useVotes() {
   const { cache }  = useApolloClient()
+  const [queriesLength, setQueriesLength] = useState<number>();
   const votesDataRef = useRef<Vote[]>([]) 
   const dispatch = useAppDispatch() 
 
@@ -59,7 +60,7 @@ export function useVotes() {
 
         // console.log("votesFetchedIds: ", votesFetchedIds)
 
-      // onl
+      // only fetch not already fetched. 
       const votesToFetch = proposals.filter(
         (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
       )
@@ -78,7 +79,6 @@ export function useVotes() {
           querySum = querySum + proposal.votes
         } else {
           queryList.push(proposalsList)
-          // console.log("proposalsList: ", proposalsList)
           proposalsList = [proposal.id]
           querySum = proposal.votes
         }
@@ -92,7 +92,7 @@ export function useVotes() {
         VOTERS_ON_PROPOSALS, 
         {first: 1000, skip: 0, proposal_in: proposalList })
 
-      const useQueriesResult = useQueries({
+      const queriesResult = useQueries({
         queries: queryList.map(proposalList => (
             {
               queryKey: ["votes", proposalList], 
@@ -101,23 +101,17 @@ export function useVotes() {
         ))
       })
 
-      // dispatch(notification({
-      //   id: "queryingGraphQL", 
-      //   message: `querying GraphQL: ${progressQueries.length} of ${votesToFetch} completed.`, 
-      //   colour: "gray", 
-      //   progressInPercent: (progressQueries.length / queryList.length) * 100 
-      // }))
+      useEffect(() => {
+        if (queriesResult) { 
+          setQueriesLength(queriesResult.length)
+        } else {
+          setQueriesLength(0)
+        }
+      }, [, queriesResult])
 
-      // if (progressQueries.length === useQueriesResult.length) {
-      //   dispatch(notification({
-      //     id: "queryingGraphQL",
-      //     colour: "invisible" 
-      //    })) 
-      // }
-
-      console.log("useQueriesResult: ", useQueriesResult)
+      // console.log("queriesResult: ", queriesResult)
      
-      useQueriesResult.forEach(result => { 
+      queriesResult.forEach(result => { 
         if (result.status === 'success') { 
           const votesFetched: Vote[] = votesDataRef.current
           votesDataRef.current = [...votesFetched, ...toVotes(result.data)] 
@@ -137,5 +131,5 @@ export function useVotes() {
       return votesDataRef.current
   }
 
-  return { fetchVotes, votesDataRef };
+  return { fetchVotes, votesDataRef, queriesLength };
 }
