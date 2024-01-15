@@ -58,7 +58,18 @@ export const RangeSlider = ({
               max={maxVal}
               value={valA}
               onChange={onChangeA}
+              
             />        
+                 {/* <input
+              id="sliderB"
+              className={`absolute inset-x-[400px] px-4 h-1 mb-12 bg-green-200 appearance-none cursor-pointer dark:bg-gray-700`}
+              name="max"
+              type="range"
+              step="1"
+              min={valA}
+              max={valB}
+              value= {valB}
+            /> */}
           <input
               id="sliderB"
               className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-blue-200/[.01] appearance-none cursor-pointer dark:bg-gray-700`}
@@ -70,6 +81,7 @@ export const RangeSlider = ({
               value= {valB}
               onChange={onChangeB}
             />
+       
         </div>
       </div> 
     </>  

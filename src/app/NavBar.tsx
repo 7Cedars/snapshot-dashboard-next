@@ -26,7 +26,7 @@ const NavBar = ( ) => {
   // console.log(searchParams)
 
   return (
-    <header className="absolute top-0 grid justify-items-center flex flex-wrap w-full text-sm py-0 border-b border-black shadow-md">
+    <header className="absolute top-0 grid justify-items-center flex flex-wrap w-full text-sm py-0 border-b border-black shadow-md z-20">
 
     <div className="grid grid-cols-10 gap-2 w-4/5 flex">
 
@@ -35,7 +35,7 @@ const NavBar = ( ) => {
             <HomeIcon
               className="h-7 w-7"
               aria-hidden="true"
-            />
+            /> 
           </Link>
       </div>
         

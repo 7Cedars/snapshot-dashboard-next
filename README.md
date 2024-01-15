@@ -16,9 +16,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 This dashboard is under active development. 
 
 Sorted on priority, issues to address 
+[ ] Simplify page layout (take out some layout pages etc) 
 [ ] develop landing page + add FAQ
-[ ] Avoid double selections  
-[ ] fix sizing layout issues 
+[ ] render double selections impossible. 
+[ ] create & implement loading screens. 
+[x] drop items from search after selection. 
+[x] fix sizing layout issues 
+[ ] update time range selector that it includes blue between items. 
 [ ] fix all runtime errors
 [ ] create unit tests with cyprus 
 [ ] limit rerenders of dashboard - useMemo

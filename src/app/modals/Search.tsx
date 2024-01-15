@@ -87,6 +87,9 @@ export const SearchDialog = () => {
       message: `Adding DAO space: ${spaceId}`, 
       colour: "gray"
     }))
+
+    const updateList = filteredSpaces.filter(space => space.id != spaceId) 
+    setFilteredSpaces(updateList)
   }
 
   return (
