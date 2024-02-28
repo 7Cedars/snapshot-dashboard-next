@@ -10,7 +10,7 @@ import {
  import { updateModal } from "../redux/reducers/userInputReducer";
  import { notification } from '@/redux/reducers/notificationReducer';
  import Link from 'next/link';
- import { NotificationDialog } from './ui/notificationDialog';
+ import { NotificationDialog } from './ui/NotificationDialog';
 
  interface UrlProps {
   searchParams: {

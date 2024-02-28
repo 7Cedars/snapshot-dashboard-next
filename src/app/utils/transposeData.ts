@@ -1,4 +1,12 @@
-import { Proposal, Node, Vote, NetworkGraph, NetworkLink, NetworkNode } from "../../types";
+import { 
+  Proposal, 
+  Node, 
+  Vote, 
+  NetworkGraph, 
+  NetworkLink, 
+  NetworkNode, 
+  Link 
+} from "../../types";
 
 interface toHeatmapProps {
   proposals: Proposal[]; 
@@ -119,7 +127,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
 
 // toNetworkGraph
 export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
-  // console.log("toNetworkGraph called")
+  console.log("toNetworkGraph called")
 
   const uniqueSpaces = Array.from( 
     new Set(proposals.map((proposal: any) => proposal.space.id))
@@ -132,13 +140,13 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
     }
   ))
 
-  // console.log("voteProposal: ", voteProposal)
+  console.log("voteProposal: ", voteProposal)
 
   const uniqueVoters = Array.from(
     new Set(votes.map(vote => vote.voter))
     )
 
-  // console.log("uniqueVoters: ", uniqueVoters)
+  console.log("uniqueVoters: ", uniqueVoters)
 
   let links: any[] = []
   uniqueVoters.forEach(voter => {
@@ -146,20 +154,31 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
     const voterSpaces = Array.from(
       new Set(voterVotes.map(vote => vote.fullProposal?.space.id))
     )
-    if (voterSpaces.length > 1) {links.push(
-      {source: voterSpaces[0], target: voterSpaces[1]}
-      )}
+    if (voterSpaces.length > 1) voterSpaces.forEach(voterSpace => {
+      if (voterSpace !== voterSpaces[0]) {
+      links.push(
+        { source: voterSpaces[0], target: voterSpace } 
+       )
+      }
+    })
   })
 
-  // console.log("links: ", links)
+ const uniqueLinks = links.reduce
+ 
+ Link[] = Array.from(
+    new Set(links)
+    )
+  uniqueLinks = uniqueLinks.map(link => {return ({...link, strength: .1})})
+
+  console.log("links @transpose data: ", uniqueLinks)
 
   const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => 
-    ({id: space, group: "test"})
+    ({id: space, group: "tbi"})
   )
 
   return {
     nodes: nodes, 
-    links: links
+    links: uniqueLinks
   }
 }
 

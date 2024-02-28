@@ -39,6 +39,8 @@ Sorted on priority, issues to address
 - [ ] go through code and clean up:
   - [ ] console.logs
   - [ ] run linter(?) standardise layout of code. 
+- [ ] Implement weighted graph. - Graph as is says little. 
+- [ ] 
 
 
 

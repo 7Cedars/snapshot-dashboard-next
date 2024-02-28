@@ -8,6 +8,7 @@ import { useVotes } from '@/app/hooks/useVotes';
 import { toProposals } from '@/app/utils/parsers';
 import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
 import { useDimensions } from '@/app/hooks/useDimensions';
+import {dummyData} from '../../../../public/data/dummyNetworkData'
 
 type NetworkDiagramProps = {
   width: number;
@@ -17,6 +18,7 @@ type NetworkDiagramProps = {
 type DataProps = {
   nodes: NetworkNode[]; 
   links: any[]
+  // strengths: number[]
 };
 
 export const NetworkDiagram = ({
@@ -36,6 +38,8 @@ export const NetworkDiagram = ({
     .filter(item => item.__typename === "Proposal")})
 
   let data: DataProps = {nodes: [], links: []}
+  // NB: HERE DUMMY DATA IS INSERTED
+  // data = dummyData 
 
   console.log("queriesLength at networkdiagram: ", queriesLength)
   const selectedProposals = cachedProposals.filter(proposal => selectedSpaces.includes(proposal.space.id))
@@ -66,10 +70,13 @@ export const NetworkDiagram = ({
       // list of forces we apply to get node positions
       .force(
         'link',
-        d3.forceLink<Node, Link>(links).id((d) => d.id)
+        d3
+        .forceLink<Node, Link>(links)
+        .id((d) => d.id)
+        .strength((d) => d.strength)
       )
       .force('collide', d3.forceCollide().radius(RADIUS * 2.5))
-      .force('charge', d3.forceManyBody().strength(12))
+      .force('charge', d3.forceManyBody().strength(2))
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('charge', d3.forceY(1).strength(.3))
       .force('charge', d3.forceX(1).strength(0))

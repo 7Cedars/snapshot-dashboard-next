@@ -65,6 +65,7 @@ export interface Node extends d3.SimulationNodeDatum {
 export interface Link extends d3.SimulationLinkDatum<Node> {
   source: Node | number | string; 
   target: Node | number | string; 
+  strength: number; 
 }
 
 export type SavedSearch = { 
