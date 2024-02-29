@@ -50,7 +50,7 @@ export interface SearchParams {
 //   }
 // }
 
-
+export type Status = "isIdle" | "isLoading" | "isError" | "isSuccess" | "isPrepping" | "isFetching"
 
 export interface ProposalsInSpace {
   spaceId: string;

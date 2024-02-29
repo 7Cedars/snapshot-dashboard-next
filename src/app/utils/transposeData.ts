@@ -157,13 +157,15 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
     if (voterSpaces.length > 1) voterSpaces.forEach(voterSpace => {
       if (voterSpace !== voterSpaces[0]) {
       links.push(
-        { source: voterSpaces[0], target: voterSpace } 
+        { source: voterSpaces[0], target: voterSpace, value: 1 } 
        )
       }
     })
   })
 
- const uniqueLinks = links.reduce
+  console.log("links: ", links)
+
+//  const uniqueLinks = links.reduce
  
 //  Link[] = Array.from(
 //     new Set(links)

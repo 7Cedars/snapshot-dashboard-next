@@ -3,7 +3,6 @@
 import SpacesList from './SpacesList';
 import TimeRangeSlider from './TimeRangeSlider';
 import { ChartCanvas } from '../ui/ChartCanvas';
-import { NetworkDiagram } from './charts/NetworkDiagram';
 import { useSpaces } from '../hooks/useUrl';
 import { proposalsOfSpaceNotCached } from '../utils/checkCache';
 import { UseSuspenseQueryResult, useSuspenseQuery } from '@apollo/client';
@@ -14,10 +13,11 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
 import { useScreenDimensions } from '../hooks/useScreenDimensions';
-import { ForceGraph } from './charts/ForceGraph';
+import { ForceGraph } from './charts/DrawForceGraph';
 import { dummyData } from '../../../public/data/dummyNetworkData';
 import { ReactSVG } from 'react-svg';
-import {PlacedSvgGraph} from './charts/PlacedSvgGraph';
+import { PlacedSvgGraph } from './charts/PlacedSvgGraph';
+import { NetworkDiagram } from './charts/ForceGraph';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
@@ -87,7 +87,7 @@ export default function Page() {
             <p> Loading .... </p>
             :
             <div className='z-20 border-2 border-red-500'> 
-              <PlacedSvgGraph />  
+              <NetworkDiagram />  
             </div> 
             // <ChartCanvas
             //   VizComponent={ForceGraphDrawn} // ForceGraphDrawn // NetworkDiagram

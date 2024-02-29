@@ -1,141 +1,118 @@
-// Copyright 2021-2023 Observable, Inc.
-// Released under the ISC license.
-// https://observablehq.com/@d3/force-directed-graph
-import * as d3 from "d3"
+import * as d3 from 'd3';
+import { useEffect, useRef, useState } from 'react';
+import { toNetworkGraph } from '@/app/utils/transposeData';
+import { useApolloClient } from '@apollo/client';
+import { useVotes } from '@/app/hooks/useVotes';
+import { toProposals } from '@/app/utils/parsers';
+import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
+import { useDimensions } from '@/app/hooks/useDimensions';
+import {dummyData} from '../../../../public/data/dummyNetworkData'
+import { ForceGraph } from './DrawForceGraph';
 
-export function ForceGraph({
-  nodes, // an iterable of node objects (typically [{id}, …])
-  links // an iterable of link objects (typically [{source, target}, …])
-}, {
-  nodeId = d => d.id, // given d in nodes, returns a unique identifier (string)
-  nodeGroup, // given d in nodes, returns an (ordinal) value for color
-  nodeGroups, // an array of ordinal values representing the node groups
-  nodeTitle, // given d in nodes, a title string
-  nodeFill = "currentColor", // node stroke fill (if not using a group color encoding)
-  nodeStroke = "#fff", // node stroke color
-  nodeStrokeWidth = 1.5, // node stroke width, in pixels
-  nodeStrokeOpacity = 1, // node stroke opacity
-  nodeRadius = 5, // node radius, in pixels
-  nodeStrength,
-  linkSource = ({source}) => source, // given d in links, returns a node identifier string
-  linkTarget = ({target}) => target, // given d in links, returns a node identifier string
-  linkStroke = "#999", // link stroke color
-  linkStrokeOpacity = 0.6, // link stroke opacity
-  linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
-  linkStrokeLinecap = "round", // link stroke linecap
-  linkStrength,
-  colors = d3.schemeTableau10, // an array of color strings, for the node groups
-  width = 640, // outer width, in pixels
-  height = 400, // outer height, in pixels
-  invalidation // when this promise resolves, stop the simulation
-} = {}) {
-  // Compute values.
-  console.log("ForceGraph CALLED")
-
-  const N = d3.map(nodes, nodeId).map(intern);
-  const LS = d3.map(links, linkSource).map(intern);
-  const LT = d3.map(links, linkTarget).map(intern);
-  if (nodeTitle === undefined) nodeTitle = (_, i) => N[i];
-  const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
-  const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
-  const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
-  const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
-
-  // Replace the input nodes and links with mutable objects for the simulation.
-  nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
-  links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
-
-  // Compute default domains.
-  if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
-
-  // Construct the scales.
-  const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
-
-  // Construct the forces.
-  const forceNode = d3.forceManyBody();
-  const forceLink = d3.forceLink(links).id(({index: i}) => N[i]);
-  if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
-  if (linkStrength !== undefined) forceLink.strength(linkStrength);
-
-  const simulation = d3.forceSimulation(nodes)
-      .force("link", forceLink)
-      .force("charge", forceNode)
-      .force("center",  d3.forceCenter())
-      .on("tick", ticked);
-
-  const svg = d3.create("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", [-width / 2, -height / 2, width, height])
-      .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-
-  const link = svg.append("g")
-      .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
-      .attr("stroke-opacity", linkStrokeOpacity)
-      .attr("stroke-width", typeof linkStrokeWidth !== "function" ? linkStrokeWidth : null)
-      .attr("stroke-linecap", linkStrokeLinecap)
-    .selectAll("line")
-    .data(links)
-    .join("line");
-
-  const node = svg.append("g")
-      .attr("fill", nodeFill)
-      .attr("stroke", nodeStroke)
-      .attr("stroke-opacity", nodeStrokeOpacity)
-      .attr("stroke-width", nodeStrokeWidth)
-    .selectAll("circle")
-    .data(nodes)
-    .join("circle")
-      .attr("r", nodeRadius)
-      .call(drag(simulation));
-
-  if (W) link.attr("stroke-width", ({index: i}) => W[i]);
-  if (L) link.attr("stroke", ({index: i}) => L[i]);
-  if (G) node.attr("fill", ({index: i}) => color(G[i]));
-  if (T) node.append("title").text(({index: i}) => T[i]);
-  if (invalidation != null) invalidation.then(() => simulation.stop());
-
-  function intern(value) {
-    return value !== null && typeof value === "object" ? value.valueOf() : value;
+export const NetworkDiagram = ({
+  width = 20000,
+  height = 2000,
+}) => {
+  if (width === 0) {
+    return null;
   }
+  
+  const { selectedSpaces } = useSpaces()
+  const { d1, d2 } = useDateRange()
+  const svg = useRef(null) 
+  const { fetchVotes, queriesLength } = useVotes() 
+  const { cache }  = useApolloClient()
+  const cachedProposals = toProposals({
+    proposals: Object.values(cache.extract())
+    .filter(item => item.__typename === "Proposal")})
 
-  function ticked() {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
+  let data = {nodes: [], links: []}
+  // NB: HERE DUMMY DATA IS INSERTED
+  // data = dummyData 
 
-    node
-      .attr("cx", d => d.x)
-      .attr("cy", d => d.y);
-  }
+  console.log("queriesLength at networkdiagram: ", queriesLength)
+  const selectedProposals = cachedProposals.filter(proposal => selectedSpaces.includes(proposal.space.id))
 
-  function drag(simulation) {    
-    function dragstarted(event) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      event.subject.fx = event.subject.x;
-      event.subject.fy = event.subject.y;
+  const votes = fetchVotes(selectedSpaces, d1, d2, true)
+  if (queriesLength > 2) { 
+    data = toNetworkGraph(votes, selectedProposals) 
+  }  
+
+  // The force simulation mutates links and nodes, so create a copy first
+  // Node positions are initialized by d3
+  // const links: Link[] = data.links.map((d) => ({ ...d }));
+  // const nodes: Node[] = data.nodes.map((d) => ({ ...d }));
+
+  useEffect(() => {
+
+    if (svg && data.nodes.length > 0) {
+      d3.select("svg").remove(); // does not work properly... 
+      svg.current.appendChild(ForceGraph(data, { //appendChild
+        nodeId: d => d.id,
+        nodeGroup: d => d.group,
+        nodeTitle: d => `${d.id}\n${d.group}`,
+        linkStrokeWidth: l => Math.sqrt(l.value),
+        width: 400,
+        height: 400, 
+        // invalidation // a promise to stop the simulation when the cell is re-run
+        }), 
+        svg.current
+      )
     }
-    
-    function dragged(event) {
-      event.subject.fx = event.x;
-      event.subject.fy = event.y;
-    }
-    
-    function dragended(event) {
-      if (!event.active) simulation.alphaTarget(0);
-      event.subject.fx = null;
-      event.subject.fy = null;
-    }
-    
-    return d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended);
-  }
+  }, [data])
 
-  console.log("ForceGraph svg: ", svg)
+  console.log("svg.current: ", svg.current)
 
-  return Object.assign(svg.node(), {scales: {color}});
-}
+  return (
+    <div ref = {svg} />   
+  )
+  
+  // const canvasRef = useRef<HTMLCanvasElement>(null);
+  // // const {} = useDimensions(canvasRef) 
+
+  // useEffect(() => {
+  //   // set dimension of the canvas element
+  //   const canvas = canvasRef.current;
+  //   const context = canvas?.getContext('2d');
+
+  //   if (!context) {
+  //     return;
+  //   }
+
+  //   // run d3-force to find the position of nodes on the canvas
+  //   d3.forceSimulation(nodes)
+
+  //     // list of forces we apply to get node positions
+  //     .force(
+  //       'link',
+  //       d3
+  //       .forceLink<Node, Link>(links)
+  //       .id((d) => d.id)
+  //       .strength((d) => d.strength)
+  //     )
+  //     .force('collide', d3.forceCollide().radius(RADIUS * 2.5))
+  //     .force('charge', d3.forceManyBody().strength(2))
+  //     .force('center', d3.forceCenter(width / 2, height / 2))
+  //     .force('charge', d3.forceY(1).strength(.3))
+  //     .force('charge', d3.forceX(1).strength(0))
+
+  //     // at each iteration of the simulation, draw the network diagram with the new node positions
+  //     .on('tick', () => {
+  //       drawNetwork(context, width, height, nodes, links);
+  //     });
+  // }, [width, height, nodes, links]);
+
+  // return (
+  //   <div>
+  //     <canvas
+  //       ref={canvasRef}
+  //       style={{
+  //         width,
+  //         height,
+  //       }}
+  //       width={width}
+  //       height={height}
+  //     />
+  //   </div>
+  // );
+};
