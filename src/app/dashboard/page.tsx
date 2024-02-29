@@ -14,11 +14,10 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
 import { useScreenDimensions } from '../hooks/useScreenDimensions';
-import {ForceGraphDrawn} from './charts/ForceGraphDrawn'
 import { ForceGraph } from './charts/ForceGraph';
 import { dummyData } from '../../../public/data/dummyNetworkData';
 import { ReactSVG } from 'react-svg';
-import PlacedSvgGraph from './charts/PlacedSvgGraph';
+import {PlacedSvgGraph} from './charts/PlacedSvgGraph';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
@@ -87,7 +86,9 @@ export default function Page() {
           { queriesLength && queriesLength > 0 ? 
             <p> Loading .... </p>
             :
-            <PlacedSvgGraph />
+            <div className='z-20 border-2 border-red-500'> 
+              <PlacedSvgGraph />  
+            </div> 
             // <ChartCanvas
             //   VizComponent={ForceGraphDrawn} // ForceGraphDrawn // NetworkDiagram
             //   vizName={"NetworkDiagram"}
