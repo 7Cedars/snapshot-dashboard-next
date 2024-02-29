@@ -1,19 +1,58 @@
 // Copyright 2021-2023 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/force-directed-graph
-import { Link, Node } from "@/types";
 import * as d3 from "d3"
+import { Link, NetworkNode, Node, Vote } from '../../../types';
 
 type ForceGraphProps = {
-  nodes: Node[]; 
-  links: Link[]; 
+  nodes: Node[]
+  links: Iterable<Source>
 }
 
-function ForceGraph({
+type Source = {
+  source: Iterable<Source>
+}  
+
+type Target = {
+  target: Iterable<Target>
+}  
+
+type NodeGroup = {
+  value: Node; 
+  index: number; 
+  iterable: Iterable<Node>;
+}  
+
+
+type ForceGraphOptions = {
+  nodeId?: any; 
+  nodeGroup?: ({ value, index, iterable}: NodeGroup) => any; // given d in nodes, returns an (ordinal) value for color
+  nodeGroups?: string[]; // an array of ordinal values representing the node groups
+  nodeTitle?: string; // given d in nodes, a title string
+  nodeFill?: string;  // node stroke fill (if not using a group color encoding)
+  nodeStroke?: string; // node stroke color
+  nodeStrokeWidth?: number; // node stroke width, in pixels
+  nodeStrokeOpacity?: number; // node stroke opacity
+  nodeRadius?: number; // node radius, in pixels
+  nodeStrength?: number;
+  linkSource?: ({source}: Source) => any; // given d in links, returns a node identifier string // NB: was => source
+  linkTarget?: ({target}: Target) => any; // given d in links, returns a node identifier string // NB: was => target
+  linkStroke?: string; // link stroke color
+  linkStrokeOpacity?: number; // link stroke opacity
+  linkStrokeWidth?: number; // given d in links, returns a stroke width in pixels
+  linkStrokeLinecap?: string; // link stroke linecap
+  linkStrength?: number | undefined;
+  colors?: readonly string[]; // an array of color strings, for the node groups
+  width?: number; // outer width, in pixels
+  height?: number;  // outer height, in pixels
+  invalidation?: Promise<any>; 
+}
+
+export function ForceGraph({
   nodes, // an iterable of node objects (typically [{id}, …])
   links // an iterable of link objects (typically [{source, target}, …])
 }: ForceGraphProps, {
-  nodeId = d => d.id, // given d in nodes, returns a unique identifier (string)
+  nodeId = (d: Node) => d.id, // given d in nodes, returns a unique identifier (string)
   nodeGroup, // given d in nodes, returns an (ordinal) value for color
   nodeGroups, // an array of ordinal values representing the node groups
   nodeTitle, // given d in nodes, a title string
@@ -34,7 +73,7 @@ function ForceGraph({
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
-} = {}) {
+}: ForceGraphOptions = {}) {
   // Compute values.
   const N = d3.map(nodes, nodeId).map(intern);
   const LS = d3.map(links, linkSource).map(intern);

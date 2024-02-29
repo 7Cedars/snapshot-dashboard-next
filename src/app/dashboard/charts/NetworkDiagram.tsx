@@ -45,7 +45,7 @@ export const NetworkDiagram = ({
   const selectedProposals = cachedProposals.filter(proposal => selectedSpaces.includes(proposal.space.id))
 
   const votes = fetchVotes(selectedSpaces, d1, d2, true)
-  if (queriesLength == 0) { data = toNetworkGraph(votes, selectedProposals) }  
+  // if (queriesLength == 0) { data = toNetworkGraph(votes, selectedProposals) }  
 
   // The force simulation mutates links and nodes, so create a copy first
   // Node positions are initialized by d3

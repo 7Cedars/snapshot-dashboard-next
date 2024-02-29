@@ -165,12 +165,12 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
 
  const uniqueLinks = links.reduce
  
- Link[] = Array.from(
-    new Set(links)
-    )
-  uniqueLinks = uniqueLinks.map(link => {return ({...link, strength: .1})})
+//  Link[] = Array.from(
+//     new Set(links)
+//     )
+//   uniqueLinks = uniqueLinks.map(link => {return ({...link, strength: .1})})
 
-  console.log("links @transpose data: ", uniqueLinks)
+//   console.log("links @transpose data: ", uniqueLinks)
 
   const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => 
     ({id: space, group: "tbi"})
@@ -178,7 +178,7 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
 
   return {
     nodes: nodes, 
-    links: uniqueLinks
+    links: links
   }
 }
 
