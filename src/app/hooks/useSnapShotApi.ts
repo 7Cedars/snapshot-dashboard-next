@@ -59,7 +59,7 @@ export function useSnapShotApi() {
   const cachedProposals = useRef<Proposal[]>([]);
   const votesData = useRef<Vote[]>([]) 
   const [queryList, setQueryList] = useState<string[][]>() 
-  const resultQueries = useRef<any>()
+  // const resultQueries = useRef<any>()
   const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>({nodes: [], links: []})
 
   const startDate = Math.min(d1, d2)  
@@ -154,7 +154,7 @@ export function useSnapShotApi() {
     VOTERS_ON_PROPOSALS, 
     {first: 1000, skip: 0, proposal_in: proposalList })
 
-  resultQueries.current = useQueries({
+  const resultQueries = useQueries({
     queries: queryList ? queryList.map(proposalList => (
         {
           queryKey: ["votes", proposalList], 
@@ -168,23 +168,19 @@ export function useSnapShotApi() {
       }
       ))
   })
-  console.log("resultQueries: ", resultQueries.current)
+   
+  // console.log("resultQueries: ", resultQueries)
   
   const filterVotes = () => {
-    
+    statusAtFilterVotes.current = "isLoading" 
     try { 
-      statusAtFilterVotes.current == "isLoading" 
-      resultQueries.current.forEach((result: any) => { 
+      statusAtFilterVotes.current = "isLoading" 
+      resultQueries.forEach((result: any) => { 
         if (result.status === 'success') { 
           console.log("votes @filterVotes: ", toVotes(result.data))
           votesData.current = [...votesData.current, ...toVotes(result.data)] 
           }
       })
-
-      // } catch (error) {
-        //   statusAtFetchVotes.current = "isError"
-        //   console.log(error)
-        // }
     
       // filter votes on date range (because proposal might have run across begin and end date)
       const selectedProposals = cachedProposals.current.map(proposal => proposal.id)
@@ -195,13 +191,13 @@ export function useSnapShotApi() {
         selectedProposals.indexOf(vote.proposal.id) !== -1 
       )
       // setData({...data, votes: votesData.current})
-      statusAtFilterVotes.current == "isSuccess"
+      statusAtFilterVotes.current = "isSuccess"
       console.log("votesData.current after: ", votesData.current)
     } catch (error) {
-      statusAtFilterVotes.current == "isError"
+      statusAtFilterVotes.current = "isError"
       console.log(error)
     }
-    statusAtFilterVotes.current == "isSuccess"
+    statusAtFilterVotes.current = "isSuccess"
   }
 
   const getNetworkData = () => { // votes: Vote[], proposals: Proposal[]
@@ -275,32 +271,32 @@ export function useSnapShotApi() {
   // everytime date of selected proposals are changed, the hook is triggered. 
   // useEffect(() => {
   //   statusCachedProposal.current = "isIdle"
-  //   statusAtFetchVotes.current == "isIdle"
-  //   statusAtgetNetworkData.current == "isIdle"
+  //   statusAtFetchVotes.current = "isIdle"
+  //   statusAtgetNetworkData.current = "isIdle"
   // }, [d1, d2, selectedSpaces])
 
   // data fetching sequencing. 
   useEffect(() => {
     if ( 
-      statusCachedProposal.current == "isIdle" 
+      statusCachedProposal.current === "isIdle" 
       ) fetchCachedProposals() 
     if ( 
-      statusCachedProposal.current == "isSuccess" &&
-      statusfFetchQueryList.current == "isIdle" &&
+      statusCachedProposal.current === "isSuccess" &&
+      statusfFetchQueryList.current === "isIdle" &&
       cachedProposals && 
       d1 && d2 && selectedSpaces 
       ) fetchQueryList() 
     if ( 
-      statusfFetchQueryList.current == "isSuccess" && 
-      statusAtFilterVotes.current == "isIdle" && 
-      resultQueries.current.length > 0
+      statusfFetchQueryList.current === "isSuccess" && 
+      statusAtFilterVotes.current === "isIdle" 
+      // resultQueries.length > 0
       ) filterVotes()  
     if ( 
-      statusAtFilterVotes.current == "isSuccess" && 
-      statusAtgetNetworkData.current == "isIdle"
+      statusAtFilterVotes.current === "isSuccess" && 
+      statusAtgetNetworkData.current === "isIdle"
       ) getNetworkData() 
 
-  }, [ , statusCachedProposal, statusfFetchQueryList, statusAtFilterVotes, statusAtgetNetworkData, resultQueries.current ])
+  }, [ , statusCachedProposal, statusfFetchQueryList, statusAtFilterVotes, statusAtgetNetworkData, resultQueries, votesData.current ])
 
   return { votesData, networkData, resultQueries, statusAtgetNetworkData};
 }

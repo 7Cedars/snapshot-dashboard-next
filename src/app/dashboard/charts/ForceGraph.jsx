@@ -24,26 +24,25 @@ export const ForceGraph = ({
   // }
 
   const svg = useRef(null);
-  const graphExists = useRef(false); 
   const {height: heightDiv, width: widthDiv} = useDimensions(svg)
   console.log({
     heightDiv: heightDiv, 
     widthDiv: widthDiv
   })
 
-  // const {  networkData, statusAtgetNetworkData} = useSnapShotApi() 
-  // console.log({
-  //   networkData: networkData, 
-  //   statusAtgetNetworkData: statusAtgetNetworkData
-  // })
+  const {  networkData, statusAtgetNetworkData} = useSnapShotApi() 
+  console.log({
+    networkData: networkData, 
+    statusAtgetNetworkData: statusAtgetNetworkData
+  })
 
   // const svg = useRef(null) 
 
   useEffect(() => {
 
-    if (svg && widthDiv != 0) { // && statusAtgetNetworkData.current == "isSuccess"
-      // d3.select("svg").remove(); // does not work properly...
-      const graph = DrawForceGraph(dummyData, { //appendChild // networkData
+    if (svg && widthDiv != 0) { // && statusAtgetNetworkData.current == "isSuccess" 
+      svg.current.replaceChildren()
+      svg.current.appendChild( DrawForceGraph(dummyData, { //appendChild // networkData
         nodeId: d => d.id,
         nodeGroup: d => d.group,
         nodeRadius: d => d.activity, 
@@ -52,11 +51,7 @@ export const ForceGraph = ({
         width: widthDiv,
         height: heightDiv == 0 ? 400: heightDiv
         // invalidation // a promise to stop the simulation when the cell is re-run
-        }, 
-        dummyData)
-
-        svg.current.replaceChildren()
-        svg.current.appendChild(graph, svg.current)
+        }), svg.current)
     }
   }, [widthDiv, heightDiv]) //statusAtgetNetworkData.current
 

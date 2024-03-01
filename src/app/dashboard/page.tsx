@@ -102,14 +102,14 @@ export default function Page() {
           </div>
 
           {/* Heatmap */}
-          <div className="border border-gray-300 mt-4 rounded-lg"> 
+          {/* <div className="border border-gray-300 mt-4 rounded-lg"> 
             <ChartCanvas
               VizComponent={ Heatmap }
               vizName={"heatmap"}
               maxWidth={3000}
               height={heatmapHeight}
               />
-          </div>
+          </div> */}
           
         </div>
       </div> 

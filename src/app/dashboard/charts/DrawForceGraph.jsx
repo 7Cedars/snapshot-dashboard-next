@@ -30,7 +30,7 @@ export function DrawForceGraph({
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
-}, metaData = {}) {
+} = {}) {
   // Compute values.
   console.log("ForceGraph CALLED")
   console.log("nodeRadius: ", nodeRadius)
