@@ -46,12 +46,14 @@ export const ForceGraph = ({
       const graph = DrawForceGraph(dummyData, { //appendChild // networkData
         nodeId: d => d.id,
         nodeGroup: d => d.group,
+        nodeRadius: d => d.activity, 
         nodeTitle: d => `${d.id}\n${d.group}`,
         linkStrokeWidth: l => Math.sqrt(l.value),
         width: widthDiv,
         height: heightDiv == 0 ? 400: heightDiv
         // invalidation // a promise to stop the simulation when the cell is re-run
-        })
+        }, 
+        dummyData)
 
         svg.current.replaceChildren()
         svg.current.appendChild(graph, svg.current)

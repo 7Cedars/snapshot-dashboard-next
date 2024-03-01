@@ -89,7 +89,7 @@ export default function Page() {
           { queriesLength && queriesLength > 0 ? 
             <p> Loading .... </p>
             :
-            <div className='z-20 h-full w-full border-2 border-red-500' > 
+            <div className='z-20 h-full w-full' > 
               <ForceGraph />  
             </div> 
             // <ChartCanvas
@@ -102,14 +102,14 @@ export default function Page() {
           </div>
 
           {/* Heatmap */}
-          {/* <div className="border border-gray-300 mt-4 rounded-lg"> 
+          <div className="border border-gray-300 mt-4 rounded-lg"> 
             <ChartCanvas
               VizComponent={ Heatmap }
               vizName={"heatmap"}
               maxWidth={3000}
               height={heatmapHeight}
               />
-          </div> */}
+          </div>
           
         </div>
       </div> 
