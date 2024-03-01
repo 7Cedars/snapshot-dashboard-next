@@ -3,7 +3,7 @@
 // https://observablehq.com/@d3/force-directed-graph
 import * as d3 from "d3"
 
-export function ForceGraph({
+export function DrawForceGraph({
   nodes, // an iterable of node objects (typically [{id}, …])
   links // an iterable of link objects (typically [{source, target}, …])
 }, {
@@ -12,10 +12,12 @@ export function ForceGraph({
   nodeGroups, // an array of ordinal values representing the node groups
   nodeTitle, // given d in nodes, a title string
   nodeFill = "currentColor", // node stroke fill (if not using a group color encoding)
+  nodeColour, // node stroke fill (if not using a group color encoding)
   nodeStroke = "#fff", // node stroke color
   nodeStrokeWidth = 1.5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius = 5, // node radius, in pixels
+  nodeRadia = [2, 3, 1, 5, 9, 16, 5, 15],
   nodeStrength,
   linkSource = ({source}) => source, // given d in links, returns a node identifier string
   linkTarget = ({target}) => target, // given d in links, returns a node identifier string
@@ -24,7 +26,7 @@ export function ForceGraph({
   linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
   linkStrokeLinecap = "round", // link stroke linecap
   linkStrength,
-  colors = d3.schemeTableau10, // an array of color strings, for the node groups
+  colors = [`#383867`, `#584c77`, `#33431e`, `#a36629`, `#92462f`, `#b63e36`, `#b74a70`, `#946943`],  // d3.schemeTableau10, // an array of color strings, for the node groups
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
@@ -33,10 +35,12 @@ export function ForceGraph({
   console.log("ForceGraph CALLED")
 
   const N = d3.map(nodes, nodeId).map(intern);
+  console.log("N: ", N)
   const LS = d3.map(links, linkSource).map(intern);
   const LT = d3.map(links, linkTarget).map(intern);
   if (nodeTitle === undefined) nodeTitle = (_, i) => N[i];
   const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
+  console.log("T: ", T)
   const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
   const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
   const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
@@ -49,7 +53,8 @@ export function ForceGraph({
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
 
   // Construct the scales.
-  const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
+  const color =  nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
+  const radius = d3.scaleOrdinal(nodeGroups, nodeRadia);
 
   // Construct the forces.
   const forceNode = d3.forceManyBody();
@@ -86,12 +91,26 @@ export function ForceGraph({
     .selectAll("circle")
     .data(nodes)
     .join("circle")
-      .attr("r", nodeRadius)
-      .call(drag(simulation));
+      .attr("r",  nodeRadius) //
+      .call(drag(simulation))
+      // .attr("r", function(d) {      
+      //   d.weight = link.filter(function(l) {
+      //   return l.source.index == d.index || l.target.index == d.index
+      //   }).data();
+        
+      //   console.log(d.weight)
+
+      //   if(d.weight < 2){return "2px"}
+      //   else if(d.weight >= 2 && d.weight < 6){return "5px"}
+      //   else if(d.weight >= 6 && d.weight < 21){return "10px"}
+      //   else if(d.weight >= 21){return "15px"}
+      //   else{return "200px"}
+      //   }) 
 
   if (W) link.attr("stroke-width", ({index: i}) => W[i]);
   if (L) link.attr("stroke", ({index: i}) => L[i]);
-  if (G) node.attr("fill", ({index: i}) => color(G[i]));
+  if (N) node.attr("fill", ({index: i}) => color(N[i]));  //
+  // if (N) node.attr("r", ({index: i}) => radius[i]);  //
   if (T) node.append("title").text(({index: i}) => T[i]);
   if (invalidation != null) invalidation.then(() => simulation.stop());
 

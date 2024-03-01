@@ -6,65 +6,62 @@ import { useVotes } from '@/app/hooks/useVotes';
 import { toProposals } from '@/app/utils/parsers';
 import { useSpaces, useDateRange } from '@/app/hooks/useUrl';
 import { useDimensions } from '@/app/hooks/useDimensions';
-import {dummyData} from '../../../../public/data/dummyNetworkData'
-import { ForceGraph } from './DrawForceGraph';
+import { DrawForceGraph } from './DrawForceGraph';
+import { useSnapShotApi } from '@/app/hooks/useSnapShotApi';
+import { dummyData } from '../../../../public/data/dummyNetworkData';
 
-export const NetworkDiagram = ({
-  width = 20000,
-  height = 2000,
+export const ForceGraph = ({
+  // width = 20000,
+  // height = 2000,
 }) => {
-  if (width === 0) {
-    return null;
-  }
   
-  const { selectedSpaces } = useSpaces()
-  const { d1, d2 } = useDateRange()
-  const svg = useRef(null) 
-  const { fetchVotes, queriesLength } = useVotes() 
-  const { cache }  = useApolloClient()
-  const cachedProposals = toProposals({
-    proposals: Object.values(cache.extract())
-    .filter(item => item.__typename === "Proposal")})
+  // if (width === 0) {
+  //   return null;
+  // }
 
-  let data = {nodes: [], links: []}
-  // NB: HERE DUMMY DATA IS INSERTED
-  // data = dummyData 
+  // if (height === 0) {
+  //   return null;
+  // }
 
-  console.log("queriesLength at networkdiagram: ", queriesLength)
-  const selectedProposals = cachedProposals.filter(proposal => selectedSpaces.includes(proposal.space.id))
+  const svg = useRef(null);
+  const graphExists = useRef(false); 
+  const {height: heightDiv, width: widthDiv} = useDimensions(svg)
+  console.log({
+    heightDiv: heightDiv, 
+    widthDiv: widthDiv
+  })
 
-  const votes = fetchVotes(selectedSpaces, d1, d2, true)
-  if (queriesLength > 2) { 
-    data = toNetworkGraph(votes, selectedProposals) 
-  }  
+  // const {  networkData, statusAtgetNetworkData} = useSnapShotApi() 
+  // console.log({
+  //   networkData: networkData, 
+  //   statusAtgetNetworkData: statusAtgetNetworkData
+  // })
 
-  // The force simulation mutates links and nodes, so create a copy first
-  // Node positions are initialized by d3
-  // const links: Link[] = data.links.map((d) => ({ ...d }));
-  // const nodes: Node[] = data.nodes.map((d) => ({ ...d }));
+  // const svg = useRef(null) 
 
   useEffect(() => {
 
-    if (svg && data.nodes.length > 0) {
-      d3.select("svg").remove(); // does not work properly... 
-      svg.current.appendChild(ForceGraph(data, { //appendChild
+    if (svg && widthDiv != 0) { // && statusAtgetNetworkData.current == "isSuccess"
+      // d3.select("svg").remove(); // does not work properly...
+      const graph = DrawForceGraph(dummyData, { //appendChild // networkData
         nodeId: d => d.id,
         nodeGroup: d => d.group,
         nodeTitle: d => `${d.id}\n${d.group}`,
         linkStrokeWidth: l => Math.sqrt(l.value),
-        width: 400,
-        height: 400, 
+        width: widthDiv,
+        height: heightDiv == 0 ? 400: heightDiv
         // invalidation // a promise to stop the simulation when the cell is re-run
-        }), 
-        svg.current
-      )
+        })
+
+        svg.current.replaceChildren()
+        svg.current.appendChild(graph, svg.current)
     }
-  }, [data])
+  }, [widthDiv, heightDiv]) //statusAtgetNetworkData.current
 
   console.log("svg.current: ", svg.current)
 
   return (
-    <div ref = {svg} />   
+    <div ref = {svg} className='h-full' />   
   )
   
   // const canvasRef = useRef<HTMLCanvasElement>(null);

@@ -30,6 +30,7 @@ export const toTimestamp = (dateFormat: string): string => {
 };
 
 export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endDate}: Props  ) => {
+  console.log("toSelectedProposals CALLED, proposals: ", proposals)
 
   const withinTimeRange = (timeStamp: number ): boolean => {
     if (startDate === null || endDate === null) { return true }  
@@ -48,6 +49,8 @@ export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endD
           amongSelectedSpaces(proposal.space.id) ) 
       { selectedProposals.push(proposal) }
     })
+  
+  console.log("selectedProposals @toSelectedProposals: ",selectedProposals)
 
   return selectedProposals
 }; 

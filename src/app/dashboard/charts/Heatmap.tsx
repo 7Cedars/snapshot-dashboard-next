@@ -27,6 +27,7 @@ export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
+  console.log("cachedProposals @Heatmap: ", cachedProposals)
 
   const { selectedSpaces } = useSpaces()
   const selectedProposals = cachedProposals.filter((proposal: any) => {

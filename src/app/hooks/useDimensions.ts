@@ -8,9 +8,10 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 export const useDimensions = (targetRef: React.RefObject<HTMLDivElement>) => {
 
   const getDimensions = () => {
+
     return {
-      width: targetRef.current ? targetRef.current.offsetWidth : 0,
-      height: targetRef.current ? targetRef.current.offsetHeight : 0
+      height: targetRef.current ? targetRef.current.offsetHeight : 0,  // : 0, 
+      width: targetRef.current ? targetRef.current.offsetWidth : 0
     };
   };
 
@@ -20,14 +21,17 @@ export const useDimensions = (targetRef: React.RefObject<HTMLDivElement>) => {
     setDimensions(getDimensions());
   };
 
+  useLayoutEffect(() => {
+    handleResize();
+  }, [ ]);
+
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [ ]);
 
-  useLayoutEffect(() => {
-    handleResize();
-  }, []);
+
+
 
   return dimensions;
 }

@@ -13,11 +13,13 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
 import { useScreenDimensions } from '../hooks/useScreenDimensions';
-import { ForceGraph } from './charts/DrawForceGraph';
+import { DrawForceGraph } from './charts/DrawForceGraph';
 import { dummyData } from '../../../public/data/dummyNetworkData';
 import { ReactSVG } from 'react-svg';
-import { PlacedSvgGraph } from './charts/PlacedSvgGraph';
-import { NetworkDiagram } from './charts/ForceGraph';
+// import { PlacedSvgGraph } from './charts/PlacedSvgGraph';
+import { ForceGraph } from './charts/ForceGraph';
+import { useDimensions } from '../hooks/useDimensions';
+import { useRef } from 'react';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
@@ -29,6 +31,7 @@ export default function Page() {
 
   const heatmapHeight = selectedSpaces.length * 25 + 20
   const networkDiagramHeight = height - (selectedSpaces.length * 25 + 320)
+  
 
   spacesToQuery.push(" ") // if no spaces need to be queried, it queries an empty space. 
 
@@ -75,8 +78,8 @@ export default function Page() {
         </div>
       </div>
       
-      <div className='flex flex-grow h-full space-y-0 pt-4 grid grid-cols-1 pe-12'> 
-        <div className='mt-20 p-2 border border-gray-500 border-l-0 rounded-r-lg shadow-lg bg-gray-100 flex flex-col'>
+      <div className='flex flex-grow space-y-0 pt-4 grid grid-cols-1 pe-12'> 
+        <div className='mt-20 p-2 border border-gray-500 border-l-0 rounded-r-lg shadow-lg bg-gray-100 flex flex-col grow'>
           
           {/* Time range slider */}
           <TimeRangeSlider/> 
@@ -86,8 +89,8 @@ export default function Page() {
           { queriesLength && queriesLength > 0 ? 
             <p> Loading .... </p>
             :
-            <div className='z-20 border-2 border-red-500'> 
-              <NetworkDiagram />  
+            <div className='z-20 h-full w-full border-2 border-red-500' > 
+              <ForceGraph />  
             </div> 
             // <ChartCanvas
             //   VizComponent={ForceGraphDrawn} // ForceGraphDrawn // NetworkDiagram
@@ -99,14 +102,14 @@ export default function Page() {
           </div>
 
           {/* Heatmap */}
-          <div className="border border-gray-300 mt-4 rounded-lg"> 
+          {/* <div className="border border-gray-300 mt-4 rounded-lg"> 
             <ChartCanvas
               VizComponent={ Heatmap }
               vizName={"heatmap"}
               maxWidth={3000}
               height={heatmapHeight}
               />
-          </div>
+          </div> */}
           
         </div>
       </div> 
