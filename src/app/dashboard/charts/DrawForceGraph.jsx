@@ -13,8 +13,8 @@ export function DrawForceGraph({
   nodeGroups, // an array of ordinal values representing the node groups
   nodeTitle, // given d in nodes, a title string
   nodeFill = "currentColor", // node stroke fill (if not using a group color encoding)
-  nodeStroke = "#fff", // node stroke color
-  nodeStrokeWidth = 1.5, // node stroke width, in pixels
+  nodeStroke = "#584c77", // node stroke color
+  nodeStrokeWidth = 5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius,  // = 5, // node radius, in pixels
   nodeRadia, // = [2, 3, 1, 5, 9, 16, 5, 15],

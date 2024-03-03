@@ -33,7 +33,7 @@ export const dummyData = {
     { source: 'Rob', target: 'Antoine', value: 1 },
     { source: 'Tata', target: 'Tutu', value: 9 },
     { source: 'Tata', target: 'Titi', value: 9},
-    { source: 'Tata', target: 'Toto', value: 9  },
+    { source: 'Tata', target: 'Toto', value: 27  },
     { source: 'Tata', target: 'Tita', value: 9 },
     { source: 'Tita', target: 'Toto', value: 9 },
     { source: 'Tita', target: 'Titi', value: 9},

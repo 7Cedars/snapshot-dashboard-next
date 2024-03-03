@@ -15,7 +15,7 @@
 // state = fetchedProposals (previously checked proposals) 
 // function = fetchProposals(proposals: Proposal[], dateRange [number, number], maxVotesProposal: boolean): votes: Vote[]
 
-import { Link, NetworkNode, Proposal, Status, Vote } from "@/types";
+import { Link, NetworkNode, Proposal, SelectedSpaces, Status, Vote } from "@/types";
 import {  useEffect, useRef, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { toProposals, toVotes } from "../utils/parsers";
@@ -27,6 +27,7 @@ import { toSelectedProposals } from "../utils/utils";
 import { useQueries } from "@tanstack/react-query";
 import { useAppDispatch } from "@/redux/hooks";
 import { useDateRange, useSpaces } from "./useUrl";
+import { QueryClient } from '@tanstack/react-query'
 
 interface VoteProposal extends Vote {
   fullProposal: Proposal | undefined;
@@ -49,12 +50,16 @@ export function useSnapShotApi() {
   const maxVotesProposal: number = 1000 // for now set as static. Can be a value later on.  
 
   const statusCachedProposal = useRef<Status>("isIdle") 
-  const statusfFetchQueryList = useRef<Status>("isIdle") 
+  const statusfFetchQueryList = useRef<Status>("isIdle")
+  const statusfFetchVotes = useRef<Status>("isIdle")  
   const statusAtFilterVotes = useRef<Status>("isIdle")
   const statusAtgetNetworkData = useRef<Status>("isIdle")
-  const [statusfetchVote, setStatusfetchVote] = useState<Status>("isIdle")
+  const d1Ref = useRef<number>(d1)
+  const d2Ref = useRef<number>(d2) 
+  const selectedSpacesRef = useRef<SelectedSpaces>(selectedSpaces)
 
   const [data, setData] = useState<Data>() 
+  const fetchedVotes = useRef<any>() 
   
   const cachedProposals = useRef<Proposal[]>([]);
   const votesData = useRef<Vote[]>([]) 
@@ -68,6 +73,7 @@ export function useSnapShotApi() {
   console.log({
     statusCachedProposal: statusCachedProposal.current, 
     statusfFetchQueryList: statusfFetchQueryList.current,
+    statusfFetchVotes: statusfFetchVotes.current,
     statusAtFilterVotes: statusAtFilterVotes.current,
     statusAtgetNetworkData: statusAtgetNetworkData.current
   })
@@ -85,7 +91,7 @@ export function useSnapShotApi() {
       console.log("fetchedCachedProposals: ", fetchedCachedProposals)
       statusCachedProposal.current = "isSuccess"
       cachedProposals.current = fetchedCachedProposals 
-      setData({cachedProposals: fetchedCachedProposals})
+      // setData({cachedProposals: fetchedCachedProposals})
     } catch (error) {
       statusCachedProposal.current = "isError"
       console.log(error)
@@ -110,20 +116,20 @@ export function useSnapShotApi() {
     proposals = proposals.filter(proposal => proposal.votes < maxVotesProposal)
     console.log("filtered proposals: ", proposals)
     
-    const votesFetched: Vote[] = votesData.current
-    const votesFetchedIds: string[] = votesFetched.length > 0 ?  
-      Array.from(
-        new Set(votesFetched.map(vote => vote.proposal.id)
-        )
-      ) : []
+    // const votesFetched: Vote[] = votesData.current
+    // const votesFetchedIds: string[] = votesFetched.length > 0 ?  
+    //   Array.from(
+    //     new Set(votesFetched.map(vote => vote.proposal.id)
+    //     )
+    //   ) : []
 
-    // only fetch not already fetched. 
-    const votesToFetch = proposals.filter(
-      (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
-    )
-    if ( votesToFetch.length === 0 ) statusfFetchQueryList.current = "isSuccess"
+    // // only fetch votes for proposals that have not already been fetched. 
+    // const votesToFetch = proposals.filter(
+    //   (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
+    // )
+    // if ( votesToFetch.length === 0 ) statusfFetchQueryList.current = "isSuccess"
 
-    console.log("votesToFetch: ", votesToFetch)
+    // console.log("votesToFetch: ", votesToFetch)
 
     // building array (queryList) used to fetch votes through useQueries hook. 
     // This can be more efficient, simpler, but for now will do. 
@@ -131,8 +137,8 @@ export function useSnapShotApi() {
     let proposalsList: string[] = [] 
     let querySum = 0
 
-    votesToFetch.forEach(proposal => {
-      if (querySum + proposal.votes < maxVotesProposal ) {
+    proposals.forEach(proposal => {
+      if (querySum + proposal.votes < 1000 ) {
         proposalsList.push(proposal.id)
         querySum = querySum + proposal.votes
       } else {
@@ -141,43 +147,59 @@ export function useSnapShotApi() {
         querySum = proposal.votes
       }
     })
-    setQueryList(queryLists) // note that this induces a state change, triggering useQueries below. Hopefully. 
     console.log("queryList: ", queryList)
-    setData({...data, queryList: queryLists})
+    setQueryList(queryLists) 
+    // setData({...data, queryList: queryLists})
 
     statusfFetchQueryList.current = "isSuccess"
   }
 
-  // Here actual fetching is done. 
-  const fetchVotesQuery = async (proposalList: string[]) => await request(
+  // useEffect(() => {
+    // Here actual fetching is done.
+    // statusfFetchVotes.current = "isLoading"
+
+    // £todo: can I set this in a try / catch logic? 
+    const fetchVotesQuery = async (proposalList: string[]) => await request(
     apiProductionUrl, 
     VOTERS_ON_PROPOSALS, 
     {first: 1000, skip: 0, proposal_in: proposalList })
 
-  const resultQueries = useQueries({
-    queries: queryList ? queryList.map(proposalList => (
+    const resultQueries = useQueries({
+      queries: queryList ? queryList.map(proposalList => (
+          {
+            queryKey: ["votes", proposalList], 
+            queryFn: () => fetchVotesQuery(proposalList), 
+            staleTime: Infinity
+          }
+      )) 
+      : [].map(proposalList => (
         {
           queryKey: ["votes", proposalList], 
           queryFn: () => fetchVotesQuery(proposalList)
         }
-    )) 
-    : [].map(proposalList => (
-      {
-        queryKey: ["votes", proposalList], 
-        queryFn: () => fetchVotesQuery(proposalList)
+        ))
+    })
+    console.log("resultQueries: ", resultQueries)
+
+    useEffect(() => {
+      if (resultQueries && queryList ) { 
+        if (resultQueries.length == queryList?.length && statusfFetchQueryList.current == "isSuccess") {
+          statusfFetchVotes.current = "isSuccess"
+          fetchedVotes.current = resultQueries
+        }
       }
-      ))
-  })
-   
-  // console.log("resultQueries: ", resultQueries)
-  
+    }, [resultQueries ])
+
+    
+  // }, [ statusfFetchQueryList.current ])
+
   const filterVotes = () => {
     statusAtFilterVotes.current = "isLoading" 
+
     try { 
-      statusAtFilterVotes.current = "isLoading" 
-      resultQueries.forEach((result: any) => { 
+      fetchedVotes.current.forEach((result: any) => { 
         if (result.status === 'success') { 
-          console.log("votes @filterVotes: ", toVotes(result.data))
+          console.log("votes @fetchVotes: ", toVotes(result.data))
           votesData.current = [...votesData.current, ...toVotes(result.data)] 
           }
       })
@@ -200,7 +222,7 @@ export function useSnapShotApi() {
     statusAtFilterVotes.current = "isSuccess"
   }
 
-  const getNetworkData = () => { // votes: Vote[], proposals: Proposal[]
+  const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     statusAtgetNetworkData.current = "isLoading"
 
     if (cachedProposals) {
@@ -241,7 +263,7 @@ export function useSnapShotApi() {
         })
 
         const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => 
-          ({id: space, group: "tbi"})
+          ({id: space, group: String(i)})
         )
 
         statusAtgetNetworkData.current = "isSuccess"
@@ -268,12 +290,14 @@ export function useSnapShotApi() {
   //   console.log("links @transpose data: ", uniqueLinks)
   }
 
-  // everytime date of selected proposals are changed, the hook is triggered. 
-  // useEffect(() => {
-  //   statusCachedProposal.current = "isIdle"
-  //   statusAtFetchVotes.current = "isIdle"
-  //   statusAtgetNetworkData.current = "isIdle"
-  // }, [d1, d2, selectedSpaces])
+  const fetchData = () => {
+    statusCachedProposal.current = "isIdle"
+    statusfFetchQueryList.current = "isIdle"
+    statusAtFilterVotes.current = "isIdle"
+    statusAtgetNetworkData.current = "isIdle"
+
+    fetchCachedProposals()
+  }
 
   // data fetching sequencing. 
   useEffect(() => {
@@ -287,16 +311,22 @@ export function useSnapShotApi() {
       d1 && d2 && selectedSpaces 
       ) fetchQueryList() 
     if ( 
-      statusfFetchQueryList.current === "isSuccess" && 
-      statusAtFilterVotes.current === "isIdle" 
-      // resultQueries.length > 0
+      // statusfFetchQueryList.current === "isSuccess" && 
+      statusfFetchVotes.current == "isSuccess" && 
+      statusAtFilterVotes.current === "isIdle"   
       ) filterVotes()  
     if ( 
       statusAtFilterVotes.current === "isSuccess" && 
       statusAtgetNetworkData.current === "isIdle"
       ) getNetworkData() 
 
-  }, [ , statusCachedProposal, statusfFetchQueryList, statusAtFilterVotes, statusAtgetNetworkData, resultQueries, votesData.current ])
+  }, [ , 
+    statusCachedProposal.current, 
+    statusfFetchQueryList.current, 
+    statusfFetchVotes.current, 
+    statusAtFilterVotes.current, 
+    statusAtgetNetworkData.current 
+    ])
 
-  return { votesData, networkData, resultQueries, statusAtgetNetworkData};
+  return { fetchData, votesData, networkData, statusAtgetNetworkData};
 }

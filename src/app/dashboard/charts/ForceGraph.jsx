@@ -13,8 +13,7 @@ import { dummyData } from '../../../../public/data/dummyNetworkData';
 export const ForceGraph = ({
   // width = 20000,
   // height = 2000,
-}) => {
-  
+}) => {  
   // if (width === 0) {
   //   return null;
   // }
@@ -30,11 +29,16 @@ export const ForceGraph = ({
     widthDiv: widthDiv
   })
 
-  const {  networkData, statusAtgetNetworkData} = useSnapShotApi() 
+  const { fetchData, networkData, statusAtgetNetworkData} = useSnapShotApi() 
   console.log({
     networkData: networkData, 
     statusAtgetNetworkData: statusAtgetNetworkData
   })
+
+
+  useEffect(() => {
+    fetchData() 
+  }, [ ] )
 
   // const svg = useRef(null) 
 
