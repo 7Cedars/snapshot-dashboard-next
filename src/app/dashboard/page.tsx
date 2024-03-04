@@ -8,7 +8,7 @@ import { proposalsOfSpaceNotCached } from '../utils/checkCache';
 import { UseSuspenseQueryResult, useSuspenseQuery } from '@apollo/client';
 import { PROPOSALS_FROM_SPACES } from '../utils/queries';
 import { Heatmap } from './charts/Heatmap';
-import { useVotes } from '../hooks/useVotes';
+import { useVotes } from '../hooks/useVotesOld';
 import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';

@@ -99,7 +99,8 @@ export type UrlDataPayload = {
 
 export type NetworkNode = {
   id: string;
-  group: string
+  group: string; 
+  radius?: number;
 }
 
 export type NetworkLink = {

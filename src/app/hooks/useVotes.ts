@@ -1,10 +1,16 @@
-// create a hook that takes a list of proposals, dateRange and boolean if props need to be filtered on length. 
-// hook checks cache, calls graphQL API for missing votes. 
-// state = fetchedProposals (previously checked proposals) 
-// function = fetchProposals(proposals: Proposal[], dateRange [number, number], filterOutliers: boolean): votes: Vote[]
+// This is a refactoring of useVotes hook. 
 
-import { Proposal, Vote } from "@/types";
-import {  useEffect, useRef, useState } from "react";
+// To be Implemented: 
+// Proper error handling 
+// proper state handing, useRef. 
+// Fetching votes should be done automatically, not through calling a function. -- it should not take any props. 
+// Output should be 
+//  - networkData object (node, links, values - etc)
+//  - heatmapData object (as a function that can be called for specific DAOs)  
+//  - loading states (all seperate): FetchProposals, FetchVotes, TransposeNetworkData, TransposeHeatMapData 
+
+import { Proposal, Status, Vote } from "@/types";
+import { useEffect, useRef, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { toProposals, toVotes } from "../utils/parsers";
 import request from "graphql-request";
@@ -13,123 +19,207 @@ import { apiProductionUrl } from "../../../constants";
 import { VOTERS_ON_PROPOSALS } from "../utils/queries";
 import { toSelectedProposals } from "../utils/utils";
 import { useQueries } from "@tanstack/react-query";
-import { useAppDispatch } from "@/redux/hooks";
-import { notification } from "@/redux/reducers/notificationReducer";
+import { useDateRange, useSpaces } from "./useUrl";
 
 export function useVotes() {
   const { cache }  = useApolloClient()
-  const [queriesLength, setQueriesLength] = useState<number>();
-  const votesDataRef = useRef<Vote[]>([]) 
-  const dispatch = useAppDispatch() 
+  const { d1, d2 } = useDateRange() 
+  const { selectedSpaces } = useSpaces() 
+  const maxVotesProposal: number = 1000 // for now set as static. Can be a value later on.  
 
-  const cachedProposals = toProposals({
-    proposals: Object.values(cache.extract())
-    .filter(item => item.__typename === "Proposal")
-  })
+  const statusCachedProposal = useRef<Status>("isIdle") 
+  const statusfFetchQueryList = useRef<Status>("isIdle")
+  const statusfFetchVotes = useRef<Status>("isIdle")  
+  const statusAtFilterVotes = useRef<Status>("isIdle")
 
-  const fetchVotes = (
+  const fetchedVotes = useRef<any>()   
+  const cachedProposals = useRef<Proposal[]>([]);
+  const votesData = useRef<Vote[]>([]) 
+  const [queryList, setQueryList] = useState<string[][]>() 
 
-    selectedSpaces: string[], 
-    dateA: number, 
-    dateB: number, 
-    filterOutliers: boolean) => {
+  const startDate = Math.min(d1, d2)  
+  const endDate = Math.max(d1, d2)
 
-      const startDate = Math.min(dateA, dateB)  
-      const endDate = Math.max(dateA, dateB)
+  // console.log({
+  //   statusCachedProposal: statusCachedProposal.current, 
+  //   statusfFetchQueryList: statusfFetchQueryList.current,
+  //   statusfFetchVotes: statusfFetchVotes.current,
+  //   statusAtFilterVotes: statusAtFilterVotes.current
+  // })
+  // console.log("data @useVotes: ", data)
+
+  const fetchCachedProposals = () => {
+    statusCachedProposal.current = "isLoading"
+
+    try {
+      const fetchedCachedProposals = toProposals({
+        proposals: Object.values(cache.extract())
+        .filter(item => item.__typename === "Proposal")
+      })
+      // console.log("fetchedCachedProposals: ", fetchedCachedProposals)
+      statusCachedProposal.current = "isSuccess"
+      cachedProposals.current = fetchedCachedProposals 
+    } catch (error) {
+      statusCachedProposal.current = "isError"
+      console.log(error)
+    }
+  }
+
+  // creates a list of GraphQL queries to fetch voters on proposals from selected spaces during selected time period.. 
+  const fetchQueryList = () => {
+    statusfFetchQueryList.current = "isLoading"
     
-      // selecting cached proposals from which to fetch votes 
-      let proposals: Proposal[] = toSelectedProposals({
-        proposals: cachedProposals,
-        selectedSpaces,
-        startDate,
-        endDate,
-      })
+    // console.log("cachedProposals: ", cachedProposals) 
+    // console.log("selectedSpaces: ", selectedSpaces)
 
-      // for now, only proposals with fewer than 1000 votes are fetched. 
-      if (filterOutliers === true) {
-        proposals = proposals.filter(proposal => proposal.votes < 1000)
+    // selecting cached proposals from which to fetch votes 
+    let proposals: Proposal[] = toSelectedProposals({
+      proposals: cachedProposals.current,
+      selectedSpaces,
+      startDate: Math.min(d1, d2),
+      endDate: Math.max(d1, d2)
+    })
+    // console.log("unfiltered proposals: ", proposals)
+    proposals = proposals.filter(proposal => proposal.votes < maxVotesProposal)
+    // console.log("filtered proposals: ", proposals)
+    
+    const votesFetched: Vote[] = votesData.current
+    const votesFetchedIds: string[] = votesFetched.length > 0 ?  
+      Array.from(
+        new Set(votesFetched.map(vote => vote.proposal.id)
+        )
+      ) : []
+
+    // only fetch votes for proposals that have not already been fetched. 
+    const votesToFetch = proposals.filter(
+      (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
+    )
+    if ( votesToFetch.length === 0 ) statusfFetchQueryList.current = "isSuccess"
+
+    // console.log("votesToFetch: ", votesToFetch)
+
+    // building array (queryList) used to fetch votes through useQueries hook. 
+    // This can be more efficient, simpler, but for now will do. 
+    let queryLists: string[][] = []
+    let proposalsList: string[] = [] 
+    let querySum = 0
+
+    proposals.forEach(proposal => {
+      if (querySum + proposal.votes < 1000 ) {
+        proposalsList.push(proposal.id)
+        querySum = querySum + proposal.votes
+      } else {
+        queryLists.push(proposalsList)
+        proposalsList = [proposal.id]
+        querySum = proposal.votes
       }
-      
-      // const votesFetched: string[] = [] 
-      const votesFetched: Vote[] = votesDataRef.current
-      const votesFetchedIds: string[] = votesFetched.length > 0 ?  
-        Array.from(
-          new Set(votesFetched.map(vote => vote.proposal.id)
-          )
-        ) : []
+    })
+    // console.log("queryList: ", queryList)
+    setQueryList(queryLists) 
+    // setData({...data, queryList: queryLists})
 
-        // console.log("votesFetchedIds: ", votesFetchedIds)
+    statusfFetchQueryList.current = "isSuccess"
+  }
 
-      // only fetch not already fetched. 
-      const votesToFetch = proposals.filter(
-        (proposal) => votesFetchedIds.indexOf(proposal.id) === -1
-      )
+  // £todo: can I set this in a try / catch logic? 
+  const fetchVotesQuery = async (proposalList: string[]) => await request(
+    apiProductionUrl, 
+    VOTERS_ON_PROPOSALS, 
+    {first: 1000, skip: 0, proposal_in: proposalList }
+  )
 
-      // console.log("votesToFetch: ", votesToFetch)
-
-      // building array (queryList) used to fetch votes through useQueries hook. 
-      // This can be more efficient, simpler, but for now will do. 
-      let queryList: string[][] = []
-      let proposalsList: string[] = [] 
-      let querySum = 0
-
-      votesToFetch.forEach(proposal => {
-        if (querySum + proposal.votes < 1000 ) {
-          proposalsList.push(proposal.id)
-          querySum = querySum + proposal.votes
-        } else {
-          queryList.push(proposalsList)
-          proposalsList = [proposal.id]
-          querySum = proposal.votes
+  const resultQueries = useQueries({
+    queries: queryList ? queryList.map(proposalList => (
+        {
+          queryKey: ["votes", proposalList], 
+          queryFn: () => fetchVotesQuery(proposalList), 
+          staleTime: Infinity
         }
-      })
-      // console.log("queryList: ", queryList)
+    )) 
+    : [].map(proposalList => (
+      {
+        queryKey: ["votes", proposalList], 
+        queryFn: () => fetchVotesQuery(proposalList)
+      }
+    ))
+  })
+  // console.log("resultQueries: ", resultQueries)
 
-      // Here actual fetching takes place. 
-      // see:  https://tanstack.com/query/v5/docs/react/reference/useQueries
-      const fetchVotesQuery = async (proposalList: string[]) => await request(
-        apiProductionUrl, 
-        VOTERS_ON_PROPOSALS, 
-        {first: 1000, skip: 0, proposal_in: proposalList })
+  useEffect(() => {
+    if (resultQueries && queryList ) { 
+      if (resultQueries.length == queryList?.length && statusfFetchQueryList.current == "isSuccess") {
+        statusfFetchVotes.current = "isSuccess"
+        fetchedVotes.current = resultQueries
+      }
+    }
+  }, [resultQueries ])
 
-      const queriesResult = useQueries({
-        queries: queryList.map(proposalList => (
-            {
-              queryKey: ["votes", proposalList], 
-              queryFn: () => fetchVotesQuery(proposalList)
-            }
-        ))
-      })
+  const filterVotes = () => {
+    statusAtFilterVotes.current = "isLoading" 
 
-      useEffect(() => {
-        if (queriesResult) { 
-          setQueriesLength(queriesResult.length)
-        } else {
-          setQueriesLength(0)
-        }
-      }, [, queriesResult])
-
-      // console.log("queriesResult: ", queriesResult)
-     
-      queriesResult.forEach(result => { 
+    try { 
+      fetchedVotes.current.forEach((result: any) => { 
         if (result.status === 'success') { 
-          const votesFetched: Vote[] = votesDataRef.current
-          votesDataRef.current = [...votesFetched, ...toVotes(result.data)] 
-          } 
+          // console.log("votes @fetchVotes: ", toVotes(result.data))
+          votesData.current = [...votesData.current, ...toVotes(result.data)] 
+          }
       })
-
-      const selectedProposals = proposals.map(proposal => proposal.id)
-
-      votesDataRef.current = votesDataRef.current.filter(vote => 
-        vote.created * 1000  > startDate && 
+    
+      // filter votes on date range (because proposal might have run across begin and end date)
+      const selectedProposals = cachedProposals.current.map(proposal => proposal.id)
+      // console.log("votesData.current before: ", votesData.current)
+      votesData.current = votesData.current.filter(vote => 
+        vote.created * 1000 > startDate && 
         vote.created * 1000 < endDate  && 
         selectedProposals.indexOf(vote.proposal.id) !== -1 
       )
-
-      console.log("votesDataRef.current: ", votesDataRef.current, "votesToFetch: ",votesToFetch)
-
-      return votesDataRef.current
+      // setData({...data, votes: votesData.current})
+      statusAtFilterVotes.current = "isSuccess"
+      // console.log("votesData.current after: ", votesData.current)
+    } catch (error) {
+      statusAtFilterVotes.current = "isError"
+      console.log(error)
+    }
+    statusAtFilterVotes.current = "isSuccess"
   }
 
-  return { fetchVotes, votesDataRef, queriesLength };
+  // an additional function to force fetch data. a redundancy. 
+  const forceFetchData = () => {
+    statusCachedProposal.current = "isIdle"
+    statusfFetchQueryList.current = "isIdle"
+    statusAtFilterVotes.current = "isIdle"
+    fetchCachedProposals()
+  }
+  
+  // Whenever date range or selection of DAO's is changed, the hook updates automatically.  
+  useEffect(() => {
+    statusCachedProposal.current = "isIdle"
+    statusfFetchQueryList.current = "isIdle"
+    statusAtFilterVotes.current = "isIdle"
+    fetchCachedProposals()
+  }, [d1, d2, selectedSpaces])
+
+  // data fetching sequencing. 
+  useEffect(() => {
+    if ( 
+      statusCachedProposal.current === "isIdle" 
+      ) fetchCachedProposals() 
+    if ( 
+      statusCachedProposal.current === "isSuccess" &&
+      statusfFetchQueryList.current === "isIdle" &&
+      cachedProposals && 
+      d1 && d2 && selectedSpaces 
+      ) fetchQueryList() 
+    if ( 
+      statusfFetchVotes.current == "isSuccess" && 
+      statusAtFilterVotes.current === "isIdle"   
+      ) filterVotes()
+  }, [ , 
+    statusCachedProposal.current, 
+    statusfFetchQueryList.current, 
+    statusfFetchVotes.current, 
+    statusAtFilterVotes.current, 
+    ])
+
+  return { forceFetchData, cachedProposals, votesData };
 }

@@ -12,7 +12,7 @@ export function DrawForceGraph({
   nodeGroup, // given d in nodes, returns an (ordinal) value for color
   nodeGroups, // an array of ordinal values representing the node groups
   nodeTitle, // given d in nodes, a title string
-  nodeFill = "currentColor", // node stroke fill (if not using a group color encoding)
+  nodeFill = "#ffffff", // node stroke fill (if not using a group color encoding)
   nodeStroke = "#584c77", // node stroke color
   nodeStrokeWidth = 5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
@@ -53,6 +53,7 @@ export function DrawForceGraph({
   // Replace the input nodes and links with mutable objects for the simulation.
   nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
   links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
+  // Here I think should set backgtound images. 
 
   // Compute default domains.
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
@@ -77,6 +78,19 @@ export function DrawForceGraph({
       .attr("height", height)
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+  
+
+  const backgroundImage = svg.append("defs").append("pattern")
+      .attr('id','daoIcon')
+      .attr("x", 1)
+      .attr("y", 1)
+      .attr("width", 1)
+      .attr("height", 1)
+      .attr('patternUnits',"objectBoundingBox")
+    .append('image')
+      .attr('href',`https://cdn.stamp.fyi/space/manablog-org.eth?s=96`)
+      .attr('height', 40) // = radius X2 
+      .attr('width', 40) 
 
   const link = svg.append("g")
       .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
@@ -87,9 +101,8 @@ export function DrawForceGraph({
     .data(links)
     .join("line");
 
-  const node = svg.append("g")
-      .attr("fill", nodeFill)
-      .attr("stroke", nodeStroke)
+  const node = svg.append("g")   
+      .attr("fill", "url(#daoIcon)") // nodeFill `url(${new URL(`https://cdn.stamp.fyi/space/manablog-org.eth?s=96`)})`
       .attr("stroke-opacity", nodeStrokeOpacity)
       .attr("stroke-width", nodeStrokeWidth)
     .selectAll("circle")
@@ -97,12 +110,25 @@ export function DrawForceGraph({
     .join("circle")
       .attr("r",  8) // standard nodeRadius in case radius not defined. 
       .call(drag(simulation))
-
+    
   if (W) link.attr("stroke-width", ({index: i}) => W[i]);
   if (L) link.attr("stroke", ({index: i}) => L[i]);
   if (R) node.attr("r", ({index: i}) => R[i]);
-  if (N) node.attr("fill", ({index: i}) => color(N[i]));  //
-  if (T) node.append("title").text(({index: i}) => T[i]);
+  if (N) node.attr("stroke", ({index: i}) => color(N[i]));  
+
+  // The following also (obv) not. 
+  // if (N) node.append("image")
+  //   .attr("xlink:href", ({index: i}) => `https://cdn.stamp.fyi/space/${N[i]}?s=96`)
+  //   .attr("width", "24px")
+  //   .attr("height", "24px") //
+  // if (T) node.append("title").text(({index: i}) => T[i]).attr("fill", "#000000") .call(text => text.append("title").text("TRYOUT!")) ;
+  //  if (T) node.append("text")
+  //       .attr("x", 8)
+  //       .attr("y", "0.31em")
+  //       .attr("fill", "#000000")
+  //       .text("TRYOUT!")
+        // .call(text => text.append("title").text("TRYOUT!"))
+
   if (invalidation != null) invalidation.then(() => simulation.stop());
 
   function intern(value) {
