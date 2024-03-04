@@ -12,20 +12,17 @@ export function DrawForceGraph({
   nodeGroup, // given d in nodes, returns an (ordinal) value for color
   nodeGroups, // an array of ordinal values representing the node groups
   nodeTitle, // given d in nodes, a title string
-  nodeFill = "#ffffff", // node stroke fill (if not using a group color encoding)
-  nodeStroke = "#584c77", // node stroke color
   nodeStrokeWidth = 5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius,  // = 5, // node radius, in pixels
-  nodeRadia, // = [2, 3, 1, 5, 9, 16, 5, 15],
-  nodeStrength,
+  nodeStrength = -60,
   linkSource = ({source}) => source, // given d in links, returns a node identifier string
   linkTarget = ({target}) => target, // given d in links, returns a node identifier string
   linkStroke = "#999", // link stroke color
   linkStrokeOpacity = 0.6, // link stroke opacity
   linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
   linkStrokeLinecap = "round", // link stroke linecap
-  linkStrength,
+  linkStrength = .10,
   colors = [`#383867`, `#584c77`, `#33431e`, `#a36629`, `#92462f`, `#b63e36`, `#b74a70`, `#946943`],  // d3.schemeTableau10, // an array of color strings, for the node groups
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
@@ -49,11 +46,11 @@ export function DrawForceGraph({
 
   console.log("R: ", R)
   console.log("W: ", W)
+  console.log("N: ", N)
 
   // Replace the input nodes and links with mutable objects for the simulation.
   nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
   links = d3.map(links, (_, i) => ({source: LS[i], target: LT[i]}));
-  // Here I think should set backgtound images. 
 
   // Compute default domains.
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
@@ -79,18 +76,20 @@ export function DrawForceGraph({
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
   
-
-  const backgroundImage = svg.append("defs").append("pattern")
-      .attr('id','daoIcon')
+ // setting background patterns for each selected DAO. 
+  nodes.forEach((node, i) => 
+    svg.append("defs").append("pattern")
+      .attr('id',`${node.id}`) // name = node.id 
       .attr("x", 1)
       .attr("y", 1)
       .attr("width", 1)
       .attr("height", 1)
       .attr('patternUnits',"objectBoundingBox")
     .append('image')
-      .attr('href',`https://cdn.stamp.fyi/space/manablog-org.eth?s=96`)
-      .attr('height', 40) // = radius X2 
-      .attr('width', 40) 
+      .attr('href',`https://cdn.stamp.fyi/space/${node.id}?s=96`)
+      .attr('height', R[i] * 2) // = radius X2 
+      .attr('width', R[i] * 2) 
+    )
 
   const link = svg.append("g")
       .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
@@ -102,7 +101,6 @@ export function DrawForceGraph({
     .join("line");
 
   const node = svg.append("g")   
-      .attr("fill", "url(#daoIcon)") // nodeFill `url(${new URL(`https://cdn.stamp.fyi/space/manablog-org.eth?s=96`)})`
       .attr("stroke-opacity", nodeStrokeOpacity)
       .attr("stroke-width", nodeStrokeWidth)
     .selectAll("circle")
@@ -114,21 +112,8 @@ export function DrawForceGraph({
   if (W) link.attr("stroke-width", ({index: i}) => W[i]);
   if (L) link.attr("stroke", ({index: i}) => L[i]);
   if (R) node.attr("r", ({index: i}) => R[i]);
-  if (N) node.attr("stroke", ({index: i}) => color(N[i]));  
-
-  // The following also (obv) not. 
-  // if (N) node.append("image")
-  //   .attr("xlink:href", ({index: i}) => `https://cdn.stamp.fyi/space/${N[i]}?s=96`)
-  //   .attr("width", "24px")
-  //   .attr("height", "24px") //
-  // if (T) node.append("title").text(({index: i}) => T[i]).attr("fill", "#000000") .call(text => text.append("title").text("TRYOUT!")) ;
-  //  if (T) node.append("text")
-  //       .attr("x", 8)
-  //       .attr("y", "0.31em")
-  //       .attr("fill", "#000000")
-  //       .text("TRYOUT!")
-        // .call(text => text.append("title").text("TRYOUT!"))
-
+  if (N) node.attr("stroke", ({index: i}) => color(N[i]));
+  if (N) node.attr("fill", ({index: i}) => `url(#${N[i]})`);  // And here fill is set by the pattern of node name :) 
   if (invalidation != null) invalidation.then(() => simulation.stop());
 
   function intern(value) {
