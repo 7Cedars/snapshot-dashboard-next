@@ -1,37 +1,19 @@
 "use client"; 
 
-import SpacesList from './SpacesList';
 import TimeRangeSlider from './TimeRangeSlider';
-import { ChartCanvas } from '../ui/ChartCanvas';
 import { useSpaces } from '../hooks/useUrl';
-import { proposalsOfSpaceNotCached } from '../utils/checkCache';
-import { UseSuspenseQueryResult, useSuspenseQuery } from '@apollo/client';
-import { PROPOSALS_FROM_SPACES } from '../utils/queries';
-import { Heatmap } from './charts/Heatmap';
-import { useVotes } from '../hooks/useVotesOld';
+// import { useVotes } from '../hooks/useVotesOld';
 import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
-import { useScreenDimensions } from '../hooks/useScreenDimensions';
-import { DrawForceGraph } from './charts/DrawForceGraph';
-import { dummyData } from '../../../public/data/dummyNetworkData';
-import { ReactSVG } from 'react-svg';
-// import { PlacedSvgGraph } from './charts/PlacedSvgGraph';
 import { ForceGraph } from './charts/ForceGraph';
-import { useDimensions } from '../hooks/useDimensions';
-import { useRef } from 'react';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
-  const { height, width } = useScreenDimensions()  
-  const { queriesLength } = useVotes()
+  // const { queriesLength } = useVotes()
   const dispatch = useAppDispatch()
 
-  const heatmapHeight = selectedSpaces.length * 25 + 20
-  const networkDiagramHeight = height - (selectedSpaces.length * 25 + 320)
-
   return ( 
-    
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0 border-2 border-red-800">
       <div className='w-96 h-full space-y-0 pt-4 grid grid-cols-1 ps-12'> 
         <div className='mt-20 p-2 border border-gray-500 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col  overflow-auto'>
@@ -71,19 +53,19 @@ export default function Page() {
           
           {/* Network Diagram */}
           <div className="border border-gray-300 mt-4 rounded-lg items-center flex-auto"> 
-          { queriesLength && queriesLength > 0 ? 
-            <p> Loading .... </p>
-            :
+          {/* { queriesLength && queriesLength > 0 ? 
+            <p> Loading .... </p> */}
+            {/* : */}
             <div className='z-20 h-full w-full' > 
               <ForceGraph />  
             </div> 
-            // <ChartCanvas
+            {/* // <ChartCanvas
             //   VizComponent={ForceGraphDrawn} // ForceGraphDrawn // NetworkDiagram
             //   vizName={"NetworkDiagram"}
             //   maxWidth={3000}
             //   height={networkDiagramHeight}
             //   />
-          }
+          // } */}
           </div>
 
           {/* Heatmap */}

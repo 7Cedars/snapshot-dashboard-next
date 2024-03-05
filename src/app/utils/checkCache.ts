@@ -1,8 +1,5 @@
-import { Space, Proposal, Vote } from "@/types"
+import { Space, Proposal } from "@/types"
 import spaces from "../../../public/data/spacesList"
-import { useApolloClient } from "@apollo/client"
-import { toProposals, toVotes } from "./parsers"
-
 
 export const proposalsOfSpaceNotCached = (selectedSpaces: string[], cachedProposals: Proposal[] ) => {
   // checkes if all proposals have been loaded for list of spaces. 

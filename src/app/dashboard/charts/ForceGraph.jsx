@@ -3,11 +3,19 @@ import { useDimensions } from '@/app/hooks/useDimensions';
 import { DrawForceGraph } from './DrawForceGraph';
 import { dummyData } from '../../../../public/data/dummyNetworkData';
 import { useNetworkData } from '@/app/hooks/useNetworkData';
+import { useProposals } from '@/app/hooks/useProposals';
 
 export const ForceGraph = () => {  
   const svg = useRef(null);
   const { networkData } = useNetworkData()
+  const { allProposals, selectedProposals, status } = useProposals()
   const { height: heightDiv, width: widthDiv } = useDimensions(svg)
+
+  console.log("from useProposal: ", {
+    allProposals: allProposals, 
+    selectedProposals: selectedProposals, 
+    status: status
+  })
   
   console.log({
     heightDiv: heightDiv, 
