@@ -24,28 +24,13 @@ import { useRef } from 'react';
 export default function Page() {
   const { selectedSpaces } = useSpaces()
   const { height, width } = useScreenDimensions()  
-  const notCached = proposalsOfSpaceNotCached(selectedSpaces)
-  const spacesToQuery = notCached.notCached
   const { queriesLength } = useVotes()
   const dispatch = useAppDispatch()
 
   const heatmapHeight = selectedSpaces.length * 25 + 20
   const networkDiagramHeight = height - (selectedSpaces.length * 25 + 320)
-  
 
-  spacesToQuery.push(" ") // if no spaces need to be queried, it queries an empty space. 
-
-  const { error }: UseSuspenseQueryResult = useSuspenseQuery(PROPOSALS_FROM_SPACES, {
-    variables: { 
-      first: 1000, 
-      skip: 0, 
-      space_in: spacesToQuery} 
-  });
-
-  if (error) return `Error! ${error}`; // needs to be transformed to proper notification 
-
-
-  return (    
+  return ( 
     
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0 border-2 border-red-800">
       <div className='w-96 h-full space-y-0 pt-4 grid grid-cols-1 ps-12'> 

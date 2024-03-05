@@ -3,6 +3,7 @@
 // Released under the ISC license.
 // https://observablehq.com/@d3/force-directed-graph
 import * as d3 from "d3"
+import { colourCodes } from '../../../../constants' // '../../../constants';
 
 export function DrawForceGraph({
   nodes, // an iterable of node objects (typically [{id}, …])
@@ -23,7 +24,7 @@ export function DrawForceGraph({
   linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
   linkStrokeLinecap = "round", // link stroke linecap
   linkStrength = .10,
-  colors = [`#383867`, `#584c77`, `#33431e`, `#a36629`, `#92462f`, `#b63e36`, `#b74a70`, `#946943`],  // d3.schemeTableau10, // an array of color strings, for the node groups
+  colors = colourCodes,  // d3.schemeTableau10, // an array of color strings, for the node groups
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
@@ -77,6 +78,7 @@ export function DrawForceGraph({
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
   
  // setting background patterns for each selected DAO. 
+ // £ack https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3 
   nodes.forEach((node, i) => 
     svg.append("defs").append("pattern")
       .attr('id',`${node.id}`) // name = node.id 

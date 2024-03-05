@@ -1,4 +1,4 @@
-import { Link, NetworkNode, Proposal, Status, Vote } from "@/types";
+import { Link, NetworkNode, Proposal, Status, Vote, NetworkLink } from "@/types";
 import { useSpaces } from "./useUrl"
 import { useVotes } from "./useVotes"
 import { useEffect, useRef, useState } from "react";
@@ -6,6 +6,11 @@ import { fromVotesToRadius } from '@/app/utils/utils';
 
 interface VoteWithProposal extends Vote {
   fullProposal: Proposal | undefined;
+}
+
+type BuildLinksProps = {
+  links: NetworkLink[];
+  voterSpace: String[];
 }
 
 export function useNetworkData() {
@@ -56,6 +61,40 @@ export function useNetworkData() {
             }
           })
         })
+
+        ////// EDITING HERE //////
+      
+        let networkLinks: NetworkLink[] = []; // { source: "", target: "", value: 0 }
+
+        uniqueVoters.forEach(voter => {
+          const voterVotes = votesWithProposal.filter(
+            vote => vote.voter === voter
+            )
+          const voterSpaces = Array.from(
+            new Set(voterVotes.map(vote => vote.fullProposal?.space.id))
+            )
+
+          if (voterSpaces.length > 1) voterSpaces.forEach(voterSpaceSource => {
+            voterSpaces.forEach(voterSpaceTarget => {
+              let selectedNetworkLink = networkLinks.filter(networkLink => 
+                networkLink.source === voterSpaceSource && 
+                networkLink.target === voterSpaceTarget 
+                )[0]
+                
+              selectedNetworkLink ? 
+                selectedNetworkLink = {...selectedNetworkLink, value: selectedNetworkLink.value + 1 }
+              :
+              !selectedNetworkLink && voterSpaceSource && voterSpaceTarget ? 
+                selectedNetworkLink = {source: voterSpaceSource, target: voterSpaceTarget, value: 1 } 
+              : 
+              null 
+            })
+          })
+        })
+
+        console.log("networkLinks: ", networkLinks)
+
+        ////// EDITING HERE //////
 
         const radia = fromVotesToRadius({votesWithProposal: votesWithProposal , selectedSpaces: uniqueSpaces, minRadius: 10, maxRadius: 20})
         const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => { 

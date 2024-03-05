@@ -20,20 +20,22 @@ import { VOTERS_ON_PROPOSALS } from "../utils/queries";
 import { toSelectedProposals } from "../utils/utils";
 import { useQueries } from "@tanstack/react-query";
 import { useDateRange, useSpaces } from "./useUrl";
+import { useProposals } from "./useProposals";
 
 export function useVotes() {
   const { cache }  = useApolloClient()
   const { d1, d2 } = useDateRange() 
   const { selectedSpaces } = useSpaces() 
+  const { allProposals, selectedProposals, status } = useProposals() 
   const maxVotesProposal: number = 1000 // for now set as static. Can be a value later on.  
 
-  const statusCachedProposal = useRef<Status>("isIdle") 
+  // const statusCachedProposal = useRef<Status>("isIdle") 
   const statusfFetchQueryList = useRef<Status>("isIdle")
   const statusfFetchVotes = useRef<Status>("isIdle")  
   const statusAtFilterVotes = useRef<Status>("isIdle")
 
   const fetchedVotes = useRef<any>()   
-  const cachedProposals = useRef<Proposal[]>([]);
+  // const cachedProposals = useRef<Proposal[]>([]);
   const votesData = useRef<Vote[]>([]) 
   const [queryList, setQueryList] = useState<string[][]>() 
 
@@ -48,22 +50,22 @@ export function useVotes() {
   // })
   // console.log("data @useVotes: ", data)
 
-  const fetchCachedProposals = () => {
-    statusCachedProposal.current = "isLoading"
+  // const fetchCachedProposals = () => {
+  //   statusCachedProposal.current = "isLoading"
 
-    try {
-      const fetchedCachedProposals = toProposals({
-        proposals: Object.values(cache.extract())
-        .filter(item => item.__typename === "Proposal")
-      })
-      // console.log("fetchedCachedProposals: ", fetchedCachedProposals)
-      statusCachedProposal.current = "isSuccess"
-      cachedProposals.current = fetchedCachedProposals 
-    } catch (error) {
-      statusCachedProposal.current = "isError"
-      console.log(error)
-    }
-  }
+  //   try {
+  //     const fetchedCachedProposals = toProposals({
+  //       proposals: Object.values(cache.extract())
+  //       .filter(item => item.__typename === "Proposal")
+  //     })
+  //     // console.log("fetchedCachedProposals: ", fetchedCachedProposals)
+  //     statusCachedProposal.current = "isSuccess"
+  //     cachedProposals.current = fetchedCachedProposals 
+  //   } catch (error) {
+  //     statusCachedProposal.current = "isError"
+  //     console.log(error)
+  //   }
+  // }
 
   // creates a list of GraphQL queries to fetch voters on proposals from selected spaces during selected time period.. 
   const fetchQueryList = () => {
@@ -73,14 +75,14 @@ export function useVotes() {
     // console.log("selectedSpaces: ", selectedSpaces)
 
     // selecting cached proposals from which to fetch votes 
-    let proposals: Proposal[] = toSelectedProposals({
-      proposals: cachedProposals.current,
-      selectedSpaces,
-      startDate: Math.min(d1, d2),
-      endDate: Math.max(d1, d2)
-    })
+    // let proposals: Proposal[] = toSelectedProposals({
+    //   proposals: cachedProposals,
+    //   selectedSpaces,
+    //   startDate: Math.min(d1, d2),
+    //   endDate: Math.max(d1, d2)
+    // })
     // console.log("unfiltered proposals: ", proposals)
-    proposals = proposals.filter(proposal => proposal.votes < maxVotesProposal)
+    const proposals = selectedProposals.filter(proposal => proposal.votes < maxVotesProposal)
     // console.log("filtered proposals: ", proposals)
     
     const votesFetched: Vote[] = votesData.current
@@ -166,12 +168,12 @@ export function useVotes() {
       })
     
       // filter votes on date range (because proposal might have run across begin and end date)
-      const selectedProposals = cachedProposals.current.map(proposal => proposal.id)
+      const selectedProposalsId = selectedProposals.map(proposal => proposal.id)
       // console.log("votesData.current before: ", votesData.current)
       votesData.current = votesData.current.filter(vote => 
         vote.created * 1000 > startDate && 
         vote.created * 1000 < endDate  && 
-        selectedProposals.indexOf(vote.proposal.id) !== -1 
+        selectedProposalsId.indexOf(vote.proposal.id) !== -1 
       )
       // setData({...data, votes: votesData.current})
       statusAtFilterVotes.current = "isSuccess"
@@ -185,7 +187,6 @@ export function useVotes() {
 
   // an additional function to force fetch data. a redundancy. 
   const forceFetchData = () => {
-    statusCachedProposal.current = "isIdle"
     statusfFetchQueryList.current = "isIdle"
     statusAtFilterVotes.current = "isIdle"
     fetchCachedProposals()

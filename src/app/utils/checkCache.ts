@@ -4,12 +4,7 @@ import { useApolloClient } from "@apollo/client"
 import { toProposals, toVotes } from "./parsers"
 
 
-export const proposalsOfSpaceNotCached = (selectedSpaces: string[]) => {
-  const { cache }  = useApolloClient()
-  const cachedProposals: Proposal[] = toProposals({proposals: 
-    Object.values(cache.extract())
-    .filter(item => item.__typename === "Proposal")
-  })
+export const proposalsOfSpaceNotCached = (selectedSpaces: string[], cachedProposals: Proposal[] ) => {
   // checkes if all proposals have been loaded for list of spaces. 
   // does this by comparing votesCount as stated in spacesList, to sum of votes of cached proposals. 
   // These two do not always align completely, so a margin (by percentage) is included.  
