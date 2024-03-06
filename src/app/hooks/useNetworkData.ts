@@ -4,6 +4,7 @@ import { useVotes } from "./useVotes"
 import { useEffect, useMemo, useRef, useState } from "react";
 import { fromVotesToRadius } from '@/app/utils/utils';
 import { useProposals } from "./useProposals";
+import { colourCodes } from "../../../constants";
 
 interface VoteWithProposal extends Vote {
   fullProposal: Proposal | undefined;
@@ -33,19 +34,52 @@ export function useNetworkData() {
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     statusAtgetNetworkData.current = "isLoading"
 
+    const votesWithProposal: VoteWithProposal[] = selectedVotes.current.map(vote => ({
+      ...vote,
+      fullProposal: selectedProposals?.find(proposal => proposal.id === vote.proposal.id)
+      }))
+    console.log("votesWithProposal: ", votesWithProposal)
+
+    // if (votesWithProposal && selectedSpaces) {
+
+    //   let links; 
+
+    //   const votersPerSpace = selectedSpaces.map(space => 
+    //     Array.from(
+    //       new Set(
+    //         votesWithProposal.map(vote => {if (vote.fullProposal && vote.fullProposal.space.id === space) return vote.voter })
+    //       )
+    //     )
+    //   )
+    //   console.log("votersPerSpace: ", votersPerSpace)
+    //   votersPerSpace.forEach((sourceVoters, i) => 
+    //     votersPerSpace.forEach((TargetVoters, j) => {
+    //       console.log({
+    //         sourceVoters: sourceVoters, 
+    //         TargetVoters: TargetVoters
+    //       })
+    //     const filteredArray = sourceVoters.filter(voter => TargetVoters.includes(voter)).length;
+    //     console.log("filteredArray: ", filteredArray)
+
+    //     links.push({source: selectedSpaces[i], target: selectedSpaces[j], value: filteredArray ? filteredArray : 0 }) 
+        
+    //     })
+
+    //   ) 
+    //   console.log("links at reduce: ", links)    
+    // } 
+
+    
+
     if (selectedProposals) {
       try {
         let links: any[] = []
 
-        const votesWithProposal: VoteWithProposal[] = selectedVotes.current.map(vote => ({
-          ...vote,
-          fullProposal: selectedProposals.find(proposal => proposal.id === vote.proposal.id)
-          }))
-        console.log("votesWithProposal: ", votesWithProposal)
-        
         const uniqueVoters = Array.from(
           new Set(selectedVotes.current.map(vote => vote.voter))
           )
+        
+
         // console.log("uniqueVoters: ", uniqueVoters)
 
         // The following is a very inefficient, would like to use reduce instead. 
@@ -58,8 +92,10 @@ export function useNetworkData() {
           if (voterSpaces.length > 1) voterSpaces.forEach(
             voterSpaceSource => voterSpaces.forEach(
               voterSpaceTarget => {
-                const index = links.findIndex(link => link.source == voterSpaceSource && link.target == voterSpaceTarget) 
-                index != -1 ? links[index].value += 1 : links.push({source: voterSpaceSource, target: voterSpaceTarget, value: 1 })
+                if (voterSpaceSource != voterSpaceTarget) {
+                  const index = links.findIndex(link => link.source == voterSpaceSource && link.target == voterSpaceTarget) 
+                  index != -1 ? links[index].value += 1 : links.push({source: voterSpaceSource, target: voterSpaceTarget, value: 1 })
+                }
               }
             )
           )
@@ -71,7 +107,8 @@ export function useNetworkData() {
           return ({
               id: space, 
               group: String(i), 
-              radius:radia[i]
+              radius: radia[i],
+              colour: colourCodes[selectedSpaces.indexOf(space)]
             })
           })
         statusAtgetNetworkData.current = "isSuccess"
@@ -79,8 +116,8 @@ export function useNetworkData() {
         console.log("FINAL NETWORK DATA: ", {
           nodes: nodes, links: links
         })
-        
-        networkData.current = { nodes: nodes, links: links }
+
+        if (statusAtgetNetworkData.current == "isSuccess") networkData.current = { nodes: nodes, links: links }
       
       } catch (error) {
         statusAtgetNetworkData.current = "isError"

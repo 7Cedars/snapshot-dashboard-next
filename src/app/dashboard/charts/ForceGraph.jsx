@@ -30,10 +30,11 @@ export const ForceGraph = () => {
       svg && 
       widthDiv != 0) {// && statusAtgetNetworkData.current == "isSuccess" 
         svg.current.replaceChildren()
-        svg.current.appendChild( DrawForceGraph(networkData.current, { //appendChild // networkData.current
+        svg.current.appendChild( DrawForceGraph(networkData.current , { //appendChild // networkData.current // dummyData
           nodeId: d => d.id,
           nodeGroup: d => d.group,
           nodeRadius: d => d.radius, 
+          nodeColour: d => d.colour, 
           nodeTitle: d => `${d.id}`,
           linkStrokeWidth: l => Math.sqrt(l.value),
           width: widthDiv,

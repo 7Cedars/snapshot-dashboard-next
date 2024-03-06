@@ -3,7 +3,7 @@
 import spaces from '../../../public/data/spacesList'
 import { MinusCircleIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
-import { tailwindColours } from '../../../constants';
+import { colourCodes, tailwindColours } from '../../../constants';
 import { useAppDispatch } from '@/redux/hooks';
 import { notification } from '@/redux/reducers/notificationReducer';
 import { updateModal } from '@/redux/reducers/userInputReducer';
@@ -13,6 +13,26 @@ interface Props {
   spaceId: string;
 }
 
+export const borderColours = [
+  `border-gray-500`, 
+  `border-red-500`, 
+  `border-orange-500`,  
+  `border-amber-500`,
+  `border-yellow-500`, 
+  `border-lime-500`,
+  `border-green-500`,
+  `border-emerald-500`,
+  `border-teal-500`,
+  `border-cyan-500`,
+  `border-sky-500`, 
+  `border-blue-500`,
+  `border-indigo-500`, 
+  `border-violet-500`,
+  `border-purple-500`,
+  `border-fuchsia-500`,
+  `border-pink-500`,
+  `border-rose-500`
+]
 
 const SpaceItem = ( {spaceId}: Props) => {
   const { selectedSpaces, removeSpace } = useSpaces() 
@@ -28,14 +48,15 @@ const SpaceItem = ( {spaceId}: Props) => {
       colour: "yellow", 
       progressInPercent: "noProgress"
     }))
-  } 
+  }
+// + tailwindColours[selectedSpaces.indexOf(spaceId)]
 
   return (
     spaceId !== '' ? 
       <div className='border-gray-500 flex flex-row items-center bg-gray-100 border grow rounded-lg my-1 py-1  '> 
         <div className='flex grow'> 
           <div className="flex items-center justify-center pl-2 ">
-            <label className= {`border-4 overflow-hidden flex h-14 w-14 flex-col items-center justify-center rounded-full shadow-lg ${tailwindColours[selectedSpaces.indexOf(spaceId)]}`} >
+            <label className= {`border-4 overflow-hidden flex h-12 w-12 flex-col items-center justify-center rounded-full shadow-lg ${borderColours[selectedSpaces.indexOf(spaceId) % 18]}`} >
               <img
                 className="h-14 w-14"
                 aria-hidden="true"

@@ -3,7 +3,6 @@
 // Released under the ISC license.
 // https://observablehq.com/@d3/force-directed-graph
 import * as d3 from "d3"
-import { colourCodes } from '../../../../constants' // '../../../constants';
 
 export function DrawForceGraph({
   nodes, // an iterable of node objects (typically [{id}, …])
@@ -16,6 +15,7 @@ export function DrawForceGraph({
   nodeStrokeWidth = 5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius,  // = 5, // node radius, in pixels
+  nodeColour,
   nodeStrength = -100,
   linkSource = ({source}) => source, // given d in links, returns a node identifier string
   linkTarget = ({target}) => target, // given d in links, returns a node identifier string
@@ -24,7 +24,7 @@ export function DrawForceGraph({
   linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
   linkStrokeLinecap = "round", // link stroke linecap
   linkStrength = .025,
-  colors = colourCodes,  // d3.schemeTableau10, // an array of color strings, for the node groups
+  // colors = colourCodes,  // d3.schemeTableau10, // an array of color strings, for the node groups
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
@@ -42,10 +42,12 @@ export function DrawForceGraph({
   console.log("T: ", T)
   const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
   const R = nodeRadius == null ? null : d3.map(nodes, nodeRadius);
+  const C = nodeColour == null ? null : d3.map(nodes, nodeColour);
   const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
   const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
 
   console.log("R: ", R)
+  console.log("C: ", C)
   console.log("W: ", W)
   console.log("N: ", N)
 
@@ -57,7 +59,7 @@ export function DrawForceGraph({
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
 
   // Construct the scales.
-  const color =  nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
+  // const color =  nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
 
   // Construct the forces.
   const forceNode = d3.forceManyBody();
@@ -114,7 +116,7 @@ export function DrawForceGraph({
   if (W) link.attr("stroke-width", ({index: i}) => W[i]);
   if (L) link.attr("stroke", ({index: i}) => L[i]);
   if (R) node.attr("r", ({index: i}) => R[i]);
-  if (N) node.attr("stroke", ({index: i}) => color(N[i]));
+  if (C) node.attr("stroke", ({index: i}) => C[i]);
   if (N) node.attr("fill", ({index: i}) => `url(#${N[i]})`);  // And here fill is set by the pattern of node name :) 
   if (invalidation != null) invalidation.then(() => simulation.stop());
 
@@ -160,5 +162,5 @@ export function DrawForceGraph({
 
   console.log("ForceGraph svg: ", svg)
 
-  return Object.assign(svg.node(), {scales: {color}});
+  return Object.assign(svg.node()) // , {scales: {color}});
 }
