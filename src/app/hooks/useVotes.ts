@@ -24,11 +24,11 @@ import { toVotes } from "../utils/parsers";
 export function useVotes() {
   const { d1, d2 } = useDateRange() 
   const { selectedProposals } = useProposals() 
-  // console.log("useProposal Data @useVotes: ", {
-  //   allProposals: allProposals, 
-  //   selectedProposals: selectedProposals, 
-  //   status: status
-  // })
+  console.log("useProposal Data @useVotes: ", {
+    // allProposals: allProposals, 
+    selectedProposals: selectedProposals, 
+    // status: status
+  })
 
   const statusfFetchQueryList = useRef<Status>("isIdle")
   const statusfFetchVotes = useRef<Status>("isIdle")  

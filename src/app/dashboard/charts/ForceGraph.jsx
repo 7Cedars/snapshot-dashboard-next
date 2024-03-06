@@ -24,20 +24,24 @@ export const ForceGraph = () => {
   console.log("networkData: ", networkData)
 
   useEffect(() => {
-    if (svg && widthDiv != 0) { // && statusAtgetNetworkData.current == "isSuccess" 
-      svg.current.replaceChildren()
-      svg.current.appendChild( DrawForceGraph(dummyData, { //appendChild // networkData
-        nodeId: d => d.id,
-        nodeGroup: d => d.group,
-        nodeRadius: d => d.activity, 
-        nodeTitle: d => `${d.id}`,
-        linkStrokeWidth: l => Math.sqrt(l.value),
-        width: widthDiv,
-        height: heightDiv == 0 ? 400: heightDiv
-        // invalidation // a promise to stop the simulation when the cell is re-run
-        }), svg.current)
-    }
-  }, [widthDiv, heightDiv]) //statusAtgetNetworkData.current
+    if (
+      networkData?.current?.nodes && 
+      networkData?.current?.links &&
+      svg && 
+      widthDiv != 0) {// && statusAtgetNetworkData.current == "isSuccess" 
+        svg.current.replaceChildren()
+        svg.current.appendChild( DrawForceGraph(networkData.current, { //appendChild // networkData.current
+          nodeId: d => d.id,
+          nodeGroup: d => d.group,
+          nodeRadius: d => d.radius, 
+          nodeTitle: d => `${d.id}`,
+          linkStrokeWidth: l => Math.sqrt(l.value),
+          width: widthDiv,
+          height: heightDiv == 0 ? 400: heightDiv
+          // invalidation // a promise to stop the simulation when the cell is re-run
+          }), svg.current)
+      }
+  }, [widthDiv, heightDiv, networkData.current]) //statusAtgetNetworkData.current
 
   console.log("svg.current: ", svg.current)
 

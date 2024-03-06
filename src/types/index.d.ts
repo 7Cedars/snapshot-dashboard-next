@@ -66,7 +66,7 @@ export interface Link extends d3.SimulationLinkDatum<Node> {
   source: Node | number | string; 
   target: Node | number | string; 
   value: number; 
-  colour: string; 
+  colour?: string; 
   activity?: number; 
 }
 

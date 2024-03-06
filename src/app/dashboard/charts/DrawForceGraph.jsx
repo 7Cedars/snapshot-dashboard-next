@@ -16,14 +16,14 @@ export function DrawForceGraph({
   nodeStrokeWidth = 5, // node stroke width, in pixels
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius,  // = 5, // node radius, in pixels
-  nodeStrength = -60,
+  nodeStrength = -100,
   linkSource = ({source}) => source, // given d in links, returns a node identifier string
   linkTarget = ({target}) => target, // given d in links, returns a node identifier string
   linkStroke = "#999", // link stroke color
   linkStrokeOpacity = 0.6, // link stroke opacity
   linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
   linkStrokeLinecap = "round", // link stroke linecap
-  linkStrength = .10,
+  linkStrength = .025,
   colors = colourCodes,  // d3.schemeTableau10, // an array of color strings, for the node groups
   width = 640, // outer width, in pixels
   height = 400, // outer height, in pixels
