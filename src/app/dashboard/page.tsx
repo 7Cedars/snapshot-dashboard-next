@@ -7,6 +7,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
 import { ForceGraph } from './charts/ForceGraph';
+import { savefile } from '../utils/LoadSpaces';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()

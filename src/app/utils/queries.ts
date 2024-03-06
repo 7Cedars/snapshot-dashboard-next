@@ -43,7 +43,7 @@ export const LIST_SPACES = gql`
 `
 
 export const PROPOSALS_FROM_SPACES = gql`
-  query proposalsFromSpaces($first: Int!, $skip:Int!, $space_in:[String!]!){
+  query proposalsFromSpaces($first:Int!, $skip:Int!, $space_in:[String!]!){
     proposals(
       first: $first,
       skip: $skip,
