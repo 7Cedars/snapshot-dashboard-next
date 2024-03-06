@@ -20,6 +20,7 @@ import { toSelectedProposals } from "../utils/utils";
 import { useQueries } from "@tanstack/react-query";
 import { useDateRange, useSpaces } from "./useUrl";
 import { useProposals } from "./useProposals";
+import { toVotes } from "../utils/parsers";
 
 export function useVotes() {
   const { d1, d2 } = useDateRange() 
@@ -34,131 +35,112 @@ export function useVotes() {
   const fetchedVotesIndex = useRef<number>(0)
   const votesData = useRef<Vote[]>([]) 
   const [fetchedVotesFrom, setFetchedVotesFrom] = useState<string[]>([]) 
-  const [fetchVotesFrom, setFetchVotesFrom] = useState<string[]>([]) 
+  const fetchVotesFrom = useRef<string[][]>([]) 
+  const [allVotes, setAllVotes] = useState<Vote[]>([]) 
+
+  console.log("fetchVotesFrom: ", fetchVotesFrom)
 
   const startDate = Math.min(d1, d2)  
   const endDate = Math.max(d1, d2)
 
-  const { loading, error, data} = useQuery(
-    VOTERS_ON_PROPOSALS, 
-    { variables: 
-      { 
-        first: 1000, 
-        skip: 0, 
-        proposal_in: [
-          "0x48fcd4a240c501616aad34609083af3685a33b306c6b84c7a5f31cd580b98c90", 
-          "0x87448bea7e8f6d5ac08e4f522e41785f5504cd3eafb2ea5ddddc6710415da046"
-        ] // fetchVotesFrom
-      },
-      onError: (error) => console.log("Error @useQuery: ", error) 
-    }
-  );
-  // const cachedQueries = Object.values(cache.extract()).filter(item => item.__typename === "Query")
-  // const cachedVotes = cachedQueries ? Object.values(cachedQueries[0]) : []
+  const fetchQueryList = () => {
+    statusfFetchQueryList.current = "isLoading"
 
-  // console.log("cachedVotes: ", cachedVotes)
+    const filteredProposals = selectedProposals?.filter(proposal => proposal.votes < maxVotesProposal)
+    console.log("filteredProposals: ", filteredProposals)
+    console.log("allVotes: ", allVotes)
 
-  console.log("fetchVotesFrom: ", fetchVotesFrom)
-  console.log("data @useVotes: ", {
-    data: data
-  })
+    // only fetch votes for proposals that have not already been fetched. 
+    const unfetchedProposals = filteredProposals?.filter(proposal => 
+      fetchedVotesFrom.indexOf(proposal.id) === -1
+    )
+    console.log("unfetchedProposals: ", unfetchedProposals)
+    if ( unfetchedProposals?.length === 0 ) statusfFetchQueryList.current = "isSuccess"
 
-  console.log("selectedProposals @useVotes: ", selectedProposals )
+    // building array (queryList) used to fetch votes through useQueries hook. 
+    // This can be more efficient, simpler, but for now will do. 
+    let queryLists: string[][] = []
+    let proposalsList: string[] = [] 
+    let querySum = 0
 
-  console.log("status @useVotes: ", {
-    statusfFetchQueryList: statusfFetchQueryList,
-    statusfFetchVotes: statusfFetchVotes, 
-    statusFilterVotes: statusFilterVotes, 
-    loading: loading
-  })
-  
-  console.log("fetchVotesFrom: ", fetchVotesFrom)
-  console.log("fetchedVotesIndex.current: ", fetchedVotesIndex.current)
+    unfetchedProposals?.forEach(proposal => {
+      if (querySum + proposal.votes < 1000 ) {
+        proposalsList.push(proposal.id)
+        querySum = querySum + proposal.votes
+      } else {
+        queryLists.push(proposalsList)
+        proposalsList = [proposal.id]
+        querySum = proposal.votes
+      }
+    })
 
+    statusfFetchQueryList.current = "isSuccess"
+    fetchVotesFrom.current = queryLists   
+  }
+
+  // useEffect trigger with selectedProposal to update fetchVotesFrom 
   // useEffect(() => {
-  //   statusfFetchQueryList.current = "isLoading"
-  //   console.log("useEffect to create query list triggered")
+  //   if (selectedProposals) {
+  //     const selectedProposalsIds = selectedProposals.map(proposal => proposal.id)
+  //     const nonFetchedIds = selectedProposalsIds.filter(proposalId => fetchedVotesFrom.indexOf(proposalId) == -1)
 
-  //   let querySum = 0
-  //   let queryList: string[] = []
-    
-  //   if (
-  //     selectedProposals && 
-  //     selectedProposals.length > 0 && 
-  //     !loading && 
-  //     !error
-  //     ) {    
-  //       const filteredProposals: Proposal[] = selectedProposals.filter(proposal => proposal.votes < maxVotesProposal)
-  //       const nonfetchedProposals: Proposal[] = filteredProposals.filter(proposal => fetchedVotesFrom.indexOf(proposal.id) == -1)
-  //       const fetchList = nonfetchedProposals.map(proposal => proposal.id)
-        
-  //       setFetchVotesFrom(fetchList)
+  //     if (
+  //       nonFetchedIds && 
+  //       statusfFetchQueryList.current != "isLoading" && 
+  //       statusfFetchVotes.current != "isLoading"
+  //       ) {
+  //       console.log("fetchVotesFrom trigger POSITIVE")
+  //       statusfFetchVotes.current = "isLoading"
+  //       fetchQueryList() 
+  //       }
+  //     }
+  // }, [selectedProposals])
 
-        // nonfetchedProposals.forEach(proposal => {
-        //   if (querySum + proposal.votes < 1000) {
-        //     queryList.push(proposal.id)
-        //     querySum = querySum + proposal.votes
-        //     console.log("queryList: ", queryList) 
-        //     console.log("querySum: ", querySum) 
-        //   } else {
-        //     // console.log("conditional for setting fetchVotesFrom triggered1. queryList: ", queryList) 
-        //     setFetchVotesFrom(queryList)
-        //     setFetchedVotesFrom([...fetchedVotesFrom, ...queryList])
-        //     querySum = 0
-        //     queryList = []
-        //     statusfFetchQueryList.current = "isSuccess"
-        //   }
-        //   if (queryList.length === filteredProposals.length) {
-        //     // console.log("conditional for setting fetchVotesFrom triggered2. queryList: ", queryList) 
-        //     setFetchVotesFrom(queryList)
-        //     setFetchedVotesFrom([...fetchedVotesFrom, ...queryList]) // note that it is trcky to set this before successful loading - but for now will do. 
-        //     querySum = 0
-        //     queryList = []
-        //     statusfFetchQueryList.current = "isSuccess"
-        //   }
-        // })
-  //   }
-  // }, [ selectedProposals, loading, error ])
-
-  // useEffect(() => {
-  //   if (
-  //     voterData && 
-  //     !error 
-  //   ) fetchedVotesIndex.current = fetchedVotesIndex.current + 1
-  // }, [ voterData ])
 
   // £todo: can I set this in a try / catch logic? 
-  // const fetchVotesQuery = async (proposalList: string[]) => await request(
+  // Here actual fetching of votes happens. 
+  // const fetchVotesQuery = async (fetchList: string[]) => await request(
   //   apiProductionUrl, 
   //   VOTERS_ON_PROPOSALS, 
-  //   {first: 1000, skip: 0, proposal_in: proposalList }
+  //   {first: 1000, skip: 0, proposal_in: fetchList }
   // )
 
   // const resultQueries = useQueries({
-  //   queries: queryList ? queryList.map(proposalList => (
+  //   queries: fetchVotesFrom.current  ? fetchVotesFrom.current.map(fetchList => (
   //       {
-  //         queryKey: ["votes", proposalList], 
-  //         queryFn: () => fetchVotesQuery(proposalList), 
+  //         queryKey: ["votes", fetchList], 
+  //         queryFn: () => fetchVotesQuery(fetchList), 
   //         staleTime: Infinity
   //       }
-  //   )) 
-  //   : [].map(proposalList => (
-  //     {
-  //       queryKey: ["votes", proposalList], 
-  //       queryFn: () => fetchVotesQuery(proposalList)
-  //     }
-  //   ))
-  // })
-  // // console.log("resultQueries: ", resultQueries)
+  //     )) 
+  //     : [].map(fetchList => (
+  //       {
+  //         queryKey: ["votes", fetchList], 
+  //         queryFn: () => fetchVotesQuery(fetchList)
+  //       }
+  //     ))
+  //   })
+  // console.log("resultQueries: ", resultQueries)
 
+  // trigger to reload fetchlist. 
   // useEffect(() => {
-  //   if (resultQueries && queryList ) { 
-  //     if (resultQueries.length == queryList?.length && statusfFetchQueryList.current == "isSuccess") {
-  //       statusfFetchVotes.current = "isSuccess"
-  //       fetchedVotes.current = resultQueries
-  //     }
+  //   console.log("reload FetchList triggered")
+  //   if (resultQueries?.length == fetchVotesFrom.current?.length) {
+  //     resultQueries.forEach((result: any) => {
+  //         // console.log("votes @fetchVotes: ", toVotes(result.data))
+  //         result.status === 'success' ? 
+  //           setAllVotes([...allVotes, ...toVotes(result.data)]) 
+  //           : 
+  //           console.log("Error with fethcing votes: ", result)
+  //         setFetchedVotesFrom([...fetchedVotesFrom, ...fetchVotesFrom.current.flat()])
+  //         statusfFetchVotes.current = "isSuccess"
+  //       })
   //   }
-  // }, [resultQueries ])
+  // }, [resultQueries])
+
+
+
+  ////////////////////////////////////////////////////////////////////
 
   // const filterVotes = () => {
   //   statusFilterVotes.current = "isLoading" 

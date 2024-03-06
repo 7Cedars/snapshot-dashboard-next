@@ -11,28 +11,31 @@ export function useProposals() {
   const { selectedSpaces } = useSpaces()
   const { d1, d2 } = useDateRange()
   const { cache }  = useApolloClient()
-  const status = useRef<Status>("isIdle")  
-  const [uncachedSpaces, setUncachedSpaces] = useState<string[]>([]);  
-  const [selectedProposals, setSelectedProposals] = useState<Proposal[]>();  // needs to be proply typed. 
-  const [allProposals, setAllProposals] = useState<Proposal[]>();  // needs to be proply typed. 
+  const status = useRef<Status>("isIdle")
+  const unfetchedSpaces = useRef<String[]>([]);   
+  const fetchedSpaces = useRef<String[]>([]); 
+  const [selectedProposals, setSelectedProposals] = useState<Proposal[]>();  
+  const [allProposals, setAllProposals] = useState<Proposal[]>();  
 
   const { networkStatus, data } : UseSuspenseQueryResult = useSuspenseQuery(PROPOSALS_FROM_SPACES, {
     variables: { 
       first: 1000, 
       skip: 0, 
-      space_in: uncachedSpaces ? uncachedSpaces : [" "]} 
+      space_in: unfetchedSpaces.current ? unfetchedSpaces.current : [" "]}
+      // context: { fetchOptions: { cache: "force-cache" } }, 
   });
 
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
-  const { notCached } = proposalsOfSpaceNotCached(selectedSpaces, cachedProposals)
-  console.log("cachedProposals: ", cachedProposals)
-  console.log("notCached: ", notCached)
-  console.log("uncachedSpaces: ", uncachedSpaces)
-  console.log("networkStatus: ", networkStatus) 
-  console.log("allProposals: ", allProposals )
-  console.log("selectedProposals: ", selectedProposals )
+  // const testCachedProposals =  Object.values(cache.extract())
+ 
+  console.log("cachedProposals @useProposals: ", cachedProposals)
+  console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
+  console.log("networkStatus @useProposals: ", networkStatus) 
+  console.log("allProposals @useProposals: ", allProposals )
+  console.log("selectedProposals @useProposals: ", selectedProposals )
+  console.log("status @useProposals: ", status )
 
   // translating networkStatus to human readable format. 
   // see for network status values: https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L4
@@ -53,12 +56,17 @@ export function useProposals() {
 
   // triggering the hook when selectedSpaces is changed 
   useEffect(() => {
+    const notFetched = selectedSpaces?.filter(spaceId => fetchedSpaces.current.indexOf(spaceId) == -1)
+    console.log("notFetched spaces: ", notFetched)
+
     if (
       status.current == "isIdle" && 
+      networkStatus != 1 && 
       selectedSpaces.length > 0 && 
-      notCached.length > 0 
+      notFetched.length > 0 
       ) {
-      setUncachedSpaces(notCached) 
+        unfetchedSpaces.current = notFetched
+        fetchedSpaces.current = [...fetchedSpaces.current, ...notFetched]
     }
   }, [ selectedSpaces ])
 
@@ -72,19 +80,19 @@ export function useProposals() {
     } 
   }, [ networkStatus, data ])
 
-    // updating state selectedProposals when useSuspenseQuery is finished, and when datRangechanges . 
-    useEffect(() => {
-      if (allProposals && d1 && d2 && selectedSpaces) {
-        const proposals: Proposal[] = toSelectedProposals({
-          proposals: allProposals,
-          selectedSpaces: selectedSpaces,
-          startDate: Math.min(d1, d2),
-          endDate: Math.max(d1, d2)
-        })
-        setSelectedProposals(proposals)
-        status.current = "isIdle"
-      } 
-    }, [, d1, d2, allProposals])
+  // updating state selectedProposals when useSuspenseQuery is finished, and when datRangechanges . 
+  useEffect(() => {
+    if (allProposals && d1 && d2 && selectedSpaces) {
+      const proposals: Proposal[] = toSelectedProposals({
+        proposals: allProposals,
+        selectedSpaces: selectedSpaces,
+        startDate: Math.min(d1, d2),
+        endDate: Math.max(d1, d2)
+      })
+      setSelectedProposals(proposals)
+      status.current = "isIdle"
+    } 
+  }, [, d1, d2, allProposals])
 
 
   return { allProposals, selectedProposals, status };
