@@ -50,7 +50,7 @@ export const RangeSlider = ({
         <div className="flex flex-row justify-center relative "> 
           <input
               id="sliderA"
-              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-gray-300 rounded-lg appearance-none cursor-pointer dark:bg-gray-700`}
+              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-gray-300 rounded-lg accent-blue-500 appearance-none dark:bg-gray-700`}
               name="min"
               type="range"
               step="1"
@@ -60,19 +60,9 @@ export const RangeSlider = ({
               onChange={onChangeA}
               
             />        
-                 {/* <input
-              id="sliderB"
-              className={`absolute inset-x-[400px] px-4 h-1 mb-12 bg-green-200 appearance-none cursor-pointer dark:bg-gray-700`}
-              name="max"
-              type="range"
-              step="1"
-              min={valA}
-              max={valB}
-              value= {valB}
-            /> */}
           <input
               id="sliderB"
-              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-blue-200/[.01] appearance-none cursor-pointer dark:bg-gray-700`}
+              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-blue-200/[.01] accent-blue-500 appearance-none cursor-pointer dark:bg-gray-700`} // 
               name="max"
               type="range"
               step="1"

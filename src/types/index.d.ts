@@ -12,6 +12,7 @@ export interface Space {
   id: string;
   votesCount: number;
   categories: string[];
+  about: string; 
 }
 
 export interface Vote {
