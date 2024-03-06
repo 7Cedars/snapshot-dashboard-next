@@ -1,5 +1,4 @@
 import { UseSuspenseQueryResult, useApolloClient, useSuspenseQuery } from "@apollo/client";
-import { proposalsOfSpaceNotCached } from "../utils/checkCache";
 import { useDateRange, useSpaces } from "./useUrl";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
 import { toProposals } from "../utils/parsers";
@@ -16,6 +15,7 @@ export function useProposals() {
   const fetchedSpaces = useRef<String[]>([]); 
   const [selectedProposals, setSelectedProposals] = useState<Proposal[]>();  
   const [allProposals, setAllProposals] = useState<Proposal[]>();  
+  const maxVotesProposal: number = 1000 // for now set as static. Can be a value later on.  
 
   const { networkStatus, data } : UseSuspenseQueryResult = useSuspenseQuery(PROPOSALS_FROM_SPACES, {
     variables: { 
@@ -24,18 +24,13 @@ export function useProposals() {
       space_in: unfetchedSpaces.current ? unfetchedSpaces.current : [" "]}
       // context: { fetchOptions: { cache: "force-cache" } }, 
   });
-
-  const cachedProposals = toProposals({
-    proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
-  })
-  // const testCachedProposals =  Object.values(cache.extract())
  
-  console.log("cachedProposals @useProposals: ", cachedProposals)
-  console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
-  console.log("networkStatus @useProposals: ", networkStatus) 
-  console.log("allProposals @useProposals: ", allProposals )
-  console.log("selectedProposals @useProposals: ", selectedProposals )
-  console.log("status @useProposals: ", status )
+  // console.log("cachedProposals @useProposals: ", cachedProposals)
+  // console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
+  // console.log("networkStatus @useProposals: ", networkStatus) 
+  // console.log("allProposals @useProposals: ", allProposals )
+  // console.log("selectedProposals @useProposals: ", selectedProposals )
+  // console.log("status @useProposals: ", status )
 
   // translating networkStatus to human readable format. 
   // see for network status values: https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L4
@@ -57,7 +52,7 @@ export function useProposals() {
   // triggering the hook when selectedSpaces is changed 
   useEffect(() => {
     const notFetched = selectedSpaces?.filter(spaceId => fetchedSpaces.current.indexOf(spaceId) == -1)
-    console.log("notFetched spaces: ", notFetched)
+    // console.log("notFetched spaces: ", notFetched)
 
     if (
       status.current == "isIdle" && 
@@ -68,7 +63,7 @@ export function useProposals() {
         unfetchedSpaces.current = notFetched
         fetchedSpaces.current = [...fetchedSpaces.current, ...notFetched]
     }
-  }, [ selectedSpaces ])
+  }, [ , selectedSpaces ])
 
   // updating state allProposals when useSuspenseQuery is finished. 
   useEffect(() => {
@@ -87,7 +82,8 @@ export function useProposals() {
         proposals: allProposals,
         selectedSpaces: selectedSpaces,
         startDate: Math.min(d1, d2),
-        endDate: Math.max(d1, d2)
+        endDate: Math.max(d1, d2), 
+        maxVotes: maxVotesProposal
       })
       setSelectedProposals(proposals)
       status.current = "isIdle"

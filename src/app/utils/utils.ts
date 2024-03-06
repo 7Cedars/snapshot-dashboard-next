@@ -5,6 +5,7 @@ interface ToSelectedProposalsProps {
   selectedSpaces: string[], 
   startDate: number | null, 
   endDate: number | null 
+  maxVotes?: number
 }
 
 interface VoteWithProposal extends Vote {
@@ -41,7 +42,7 @@ export const toTimestamp = (dateFormat: string): string => {
   return String(Date.parse(dateFormat))
 };
 
-export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endDate}: ToSelectedProposalsProps  ) => {
+export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endDate, maxVotes}: ToSelectedProposalsProps  ) => {
   // console.log("toSelectedProposals CALLED, proposals: ", proposals)
 
   const withinTimeRange = (timeStamp: number ): boolean => {
@@ -54,11 +55,16 @@ export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endD
     return selectedSpaces.includes(spaceId)
   }
 
+  const belowMaxVotes = (votes: number): boolean => {
+    return maxVotes ? votes < maxVotes : true
+  }
+
   const selectedProposals: Proposal[] = [] 
   proposals.map((proposal: Proposal) => {
       if (withinTimeRange(proposal.start) &&
           withinTimeRange(proposal.end) && 
-          amongSelectedSpaces(proposal.space.id) ) 
+          amongSelectedSpaces(proposal.space.id) && 
+          belowMaxVotes(proposal.votes)) 
       { selectedProposals.push(proposal) }
     })
   
