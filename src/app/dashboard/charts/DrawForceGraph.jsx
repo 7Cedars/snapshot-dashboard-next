@@ -16,7 +16,7 @@ export function DrawForceGraph({
   nodeStrokeOpacity = 1, // node stroke opacity
   nodeRadius,  // = 5, // node radius, in pixels
   nodeColour,
-  nodeStrength = -100,
+  nodeStrength = -150,
   linkSource = ({source}) => source, // given d in links, returns a node identifier string
   linkTarget = ({target}) => target, // given d in links, returns a node identifier string
   linkStroke = "#999", // link stroke color

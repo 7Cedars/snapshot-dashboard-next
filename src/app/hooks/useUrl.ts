@@ -52,7 +52,7 @@ export function useSpaces() {
   };
 
   // because deleting single item is not supported yet: need to delete all, and then repopulate. 
-  const removeSpace = (spaceId: String) => {
+  const removeSpace = (spaceId: string) => {
     let newParams = new URLSearchParams(params.toString());
 
     const newSpaceParams = newParams.getAll('s');

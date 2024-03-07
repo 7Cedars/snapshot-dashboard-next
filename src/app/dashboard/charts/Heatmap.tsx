@@ -8,35 +8,37 @@ import { toShortDateFormat } from "../../utils/utils";
 import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 import { colourCodes } from "../../../../constants";
+import { useAppSelector } from "@/redux/hooks";
 
-const MARGIN = { top: 10, right: 10, bottom: 20, left: 120 };
+const MARGIN = { top: 2, right: 2, bottom: 20, left: 2 };
 
 interface HeatmapProps {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number
 };
 
-export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
-  const nCol = 50
-
-  const { d1, d2 } = useDateRange()
+export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { width = 500, height = 100 }: HeatmapProps
+  const nCol = 20
+  const { d1, d2 } = useDateRange() 
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
-  
+  // const { selectedSpaces: selectedSpacesFromUrl } = useSpaces()
   const { cache }  = useApolloClient()
+  const { modal: selectedSpace } = useAppSelector(state => state.userInput)
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
-  console.log("cachedProposals @Heatmap: ", cachedProposals)
+  console.log("cachedProposals @Heatmap:", cachedProposals)
 
-  const { selectedSpaces } = useSpaces()
   const selectedProposals = cachedProposals.filter((proposal: any) => {
-    return selectedSpaces.includes( proposal.space.id )
+    return selectedSpace?.includes( proposal.space.id )
   }) 
+  console.log("selectedProposals @Heatmap: ", selectedProposals)
   
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
 
-  // console.log("dataMap: ", dataMap)
+  console.log("dataMap @Heatmap: ", dataMap)
+
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
@@ -45,7 +47,7 @@ export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
   const allYGroups = useMemo(() => [...new Set(dataMap.map((d) => d.y))], [dataMap]);
   const allXGroups = useMemo(() => [...new Set(dataMap.map((d) => d.x))], [dataMap]);
 
-  // console.log("data inside Heatmap: ", data)
+  console.log("data inside Heatmap: ", allYGroups, allYGroups)
 
   // x and y scales
   const xScale = useMemo(() => {
@@ -75,7 +77,7 @@ export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
   const allRects = dataMap.map((d, i) => {
 
     const colorScale = d3
-    .scaleSequential(["#f3f4f6", colourCodes[selectedSpaces.indexOf(d.y)]]) 
+    .scaleSequential(["#ffffff", colourCodes[selectedSpace.indexOf(d.y)]]) // #f3f4f6 // selectedSpace.indexOf(d.y)
     .domain([min, max / 10]);
 
     return (
@@ -89,10 +91,12 @@ export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
         opacity={1}
         fill={colorScale(d.value)}
         rx={3}
-        stroke={"#f3f4f6"}
+        stroke={"#ffffff"} // #f3f4f6
       />
     );
   });
+
+  console.log("allRects: ", allRects)
 
   const xLabels = allXGroups.map((timestamp, i) => {
     const xPos = xScale(timestamp) ?? 0;
@@ -112,35 +116,18 @@ export const Heatmap = ({ width = 500, height = 1 }: HeatmapProps) => {
       }
   });
 
-  const yLabels = allYGroups.map((name, i) => {
-    const yPos = yScale(name) ?? 0;
-    return (
-      <text
-        key={i}
-        x={-5}
-        y={yPos + yScale.bandwidth() / 2}
-        textAnchor="end"
-        dominantBaseline="middle"
-        fontSize={12}
-      >
-        {`${name.slice(0,10)}...`}
-      </text>
-    );
-  });
+  console.log("xLabels: ", xLabels)
 
   return (
-    <div>
-      <svg width={width} height={height}>
-        <g
-          width={boundsWidth}
-          height={boundsHeight}
-          transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
-        >
-          {allRects}
-          {xLabels}
-          {yLabels}
-        </g>
-      </svg>
-    </div>
+    <svg width={width} height={height}>
+      <g
+        width={boundsWidth}
+        height={boundsHeight}
+        transform={`translate(${[MARGIN.left, MARGIN.top].join(",")})`}
+      >
+        {allRects}
+        {xLabels}
+      </g>
+    </svg>
   );
 };

@@ -30,7 +30,7 @@ export default function RootLayout({
             
               <div className="relative h-screen w-full grid grid-cols-1">
             
-                <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> <InfoSpaceDialog/>
+                  <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> <InfoSpaceDialog/>
                 <div > 
                   <NavBar/>
                 </div> 

@@ -61,15 +61,12 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
     )
 
   const intersectionRangeProposal = ({startRange, endRange, startProposal, endProposal}: IntersectionProps): number => {
-
     // console.log("intersectionRangeProposal: ",startRange, endRange, startProposal, endProposal)
 
     if (startProposal > endRange || startRange > endProposal ) {return 0} 
     else {
       const intervalLength = Math.min(endRange, endProposal) - Math.max(startRange, startProposal) 
       const proposalLength = endProposal - startProposal
-
-      
 
       return intervalLength / proposalLength
     }
@@ -88,7 +85,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
       }) 
     ))
 
-    // console.log("DATA: ", data)
+    console.log("basic data structure: ", data)
 
     proposals.forEach((proposal: any) => 
       data.forEach(point => {
@@ -120,7 +117,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
   //   })
   // })
 
-  // console.log("DATA at Heatmap data: ", data)
+  console.log("DATA at Heatmap data: ", data)
   
   return data
 }

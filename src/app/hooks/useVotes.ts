@@ -1,14 +1,5 @@
 // This is a refactoring of useVotes hook. 
 
-// To be Implemented: 
-// Proper error handling 
-// proper state handing, useRef. 
-// Fetching votes should be done automatically, not through calling a function. -- it should not take any props. 
-// Output should be 
-//  - networkData object (node, links, values - etc)
-//  - heatmapData object (as a function that can be called for specific DAOs)  
-//  - loading states (all seperate): FetchProposals, FetchVotes, TransposeNetworkData, TransposeHeatMapData 
-
 import { Proposal, Status, Vote } from "@/types";
 import { useEffect, useRef, useState } from "react";
 import { useApolloClient, useQuery } from "@apollo/client";
@@ -20,6 +11,12 @@ import { useQueries } from "@tanstack/react-query";
 import { useDateRange, useSpaces } from "./useUrl";
 import { useProposals } from "./useProposals";
 import { toVotes } from "../utils/parsers";
+
+
+interface VoteWithProposal extends Vote {
+  fullProposal?: Proposal | undefined;
+}
+
 
 export function useVotes() {
   const { d1, d2 } = useDateRange() 
@@ -52,7 +49,7 @@ export function useVotes() {
 
   const [fetchListState, setFetchListState] = useState<string[][]>() 
   const [allVotes, setAllVotes] = useState<Vote[]>() 
-  const [selectedVotes, setSelectedVotes] = useState<Vote[]>() 
+  const [selectedVotes, setSelectedVotes] = useState<VoteWithProposal[]>() 
   console.log("states @useVotes: ", { 
     fetchListState: fetchListState,
     allVotes: allVotes, 
@@ -142,6 +139,8 @@ export function useVotes() {
     statusFilterVotes.current = "isLoading" 
     
     let votes: Vote[] = []
+    let votesWithProposal: VoteWithProposal[] = []
+
     if (selectedProposals && d1 && d2 && allVotes) {
       try { 
         // also filter votes on date range (because proposal might have run across begin or end of date range)
@@ -154,12 +153,18 @@ export function useVotes() {
           vote.created * 1000 < endDate  && 
           selectedProposalsId.indexOf(vote.proposal.id) !== -1 
         )
+        
+        votesWithProposal = !votes ? [] : votes.map(vote => ({
+          ...vote,
+          fullProposal: selectedProposals?.find(proposal => proposal.id === vote.proposal.id)
+          }))
+
       } catch (error) {
         statusFilterVotes.current = "isError"
         console.log(error)
       }
       statusFilterVotes.current = "isSuccess"
-      setSelectedVotes(votes)
+      setSelectedVotes(votesWithProposal)
     }
   }
 
