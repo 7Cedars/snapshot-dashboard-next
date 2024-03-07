@@ -1,7 +1,6 @@
 "use client"
 
 import Link from 'next/link'
-import { savefile } from './utils/LoadSpaces';
 
 const Home = () => {
 
@@ -14,10 +13,6 @@ const Home = () => {
       <div>
         <Link href='/dashboard?d1=1679018147782&d2=1696362727015'>To the DashBoard</Link>
       </div>
-      <button onClick={() => savefile() }> 
-        Save File 
-      </button>
-
     </div> 
 
   );

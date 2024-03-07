@@ -1,6 +1,6 @@
 "use client";
 
-import spaces from '../../../public/data/spacesList'
+import { spaces } from '../../../public/data/spacesList'
 import { MinusCircleIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
 import { colourCodes, tailwindColours } from '../../../constants';

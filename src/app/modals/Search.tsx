@@ -3,7 +3,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Transition, Listbox } from '@headlessui/react'
 import { ChevronDownIcon, CheckIcon , TagIcon} from '@heroicons/react/24/outline'
-import spaces from '../../../public/data/spacesList'
+import { spaces } from '../../../public/data/spacesList'
 import { Space } from '../../types'
 import { useSpaces } from '../hooks/useUrl';
 import { ModalDialog } from '../ui/ModalDialog';
@@ -14,6 +14,8 @@ type listCategoryProp = {
   label: string; 
   value: string;
 }
+
+console.log("spaces: ", spaces)
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
