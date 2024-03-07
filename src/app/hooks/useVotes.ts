@@ -33,26 +33,33 @@ export function useVotes() {
   const statusfFetchQueryList = useRef<Status>("isIdle")
   const statusfFetchVotes = useRef<Status>("isIdle")  
   const statusFilterVotes = useRef<Status>("isIdle")
-  // console.log("status @useVotes: ", { 
-  //   statusfFetchQueryList: statusfFetchQueryList,
-  //   statusfFetchVotes: statusfFetchVotes,
-  //   statusFilterVotes: statusFilterVotes
-  // })
+  const status = useRef<Status>("isIdle")
+  console.log("status @useVotes: ", { 
+    statusfFetchQueryList: statusfFetchQueryList,
+    statusfFetchVotes: statusfFetchVotes,
+    statusFilterVotes: statusFilterVotes, 
+    status: status
+  })
 
   const fetchedProposals = useRef<String[]>([]); 
   const fetchLists = useRef<string[][]>([]) 
-  // console.log("refs @useVotes: ", { 
-  //   fetchedProposals: fetchedProposals,
-  //   fetchLists: fetchLists
-  // })
+  const fetchedVotes = useRef<any[]>([]) 
+  console.log("refs @useVotes: ", { 
+    fetchedProposals: fetchedProposals,
+    fetchLists: fetchLists, 
+    fetchedVotes: fetchedVotes
+  })
 
-  const allVotes = useRef<Vote[]> ([])  
-  const selectedVotes = useRef<Vote[]> ([])  
-  console.log("data @useVotes: ", {
+  const [fetchListState, setFetchListState] = useState<string[][]>() 
+  const [allVotes, setAllVotes] = useState<Vote[]>() 
+  const [selectedVotes, setSelectedVotes] = useState<Vote[]>() 
+  console.log("states @useVotes: ", { 
+    fetchListState: fetchListState,
     allVotes: allVotes, 
     selectedVotes: selectedVotes
   })
 
+  /////////////////// Creating Fetch Lists /////////////////////
   const fetchQueryList = () => {
     console.log("Fetchquery List triggered")
     statusfFetchQueryList.current = "isLoading"
@@ -85,35 +92,16 @@ export function useVotes() {
     fetchLists.current = queryLists   
   }
 
-  // useEffect trigger with selectedProposal to update fetchLists 
-  useEffect(() => {
-    console.log("updateFetchlists triggered")
-    if (selectedProposals) {
-      const selectedProposalsIds = selectedProposals.map(proposal => proposal.id)
-      const nonFetchedIds = selectedProposalsIds.filter(proposalId => fetchedProposals.current.indexOf(proposalId) == -1)
-      console.log("nonFetchedIds: ", nonFetchedIds)
-
-      if (
-        nonFetchedIds && 
-        statusfFetchQueryList.current != "isLoading" && 
-        statusfFetchVotes.current != "isLoading"
-        ) {
-        console.log("fetchLists trigger POSITIVE")
-        fetchQueryList() 
-        }
-      }
-  }, [ selectedProposals ])
-
+  /////////////////// Fetching Votes /////////////////////
   // £todo: can I set this in a try / catch logic? 
-  // Here actual fetching of votes happens. 
   const fetchVotesQuery = async (fetchList: string[]) => await request(
     apiProductionUrl, 
     VOTERS_ON_PROPOSALS, 
     {first: 1000, skip: 0, proposal_in: fetchList }
   )
 
-  const resultQueries = useQueries({
-    queries: fetchLists.current  ? fetchLists.current.map(fetchList => (
+  let fetchedVotes2 = useQueries({
+    queries: fetchListState  ? fetchListState.map(fetchList => (
         {
           queryKey: ["votes", fetchList], 
           queryFn: () => fetchVotesQuery(fetchList), 
@@ -127,41 +115,41 @@ export function useVotes() {
         }
       ))
     })
-  console.log("resultQueries: ", resultQueries)
+  console.log("resultQueries: ", fetchedVotes2)
 
-  // trigger to reload fetchlist. 
-  useEffect(() => {
-    console.log("reload FetchList triggered")
+  // handling status of statusfFetchVotes
+  // notice that status is simplified: only loading or success - errors are handled on one to one basis.  
+  // useEffect(() => {
+  //   if (fetchedVotes.current.filter(result => result.status == "loading").length > 0) {
+  //     statusfFetchVotes.current = "isLoading"
+  //   } else {
+  //     let votes: Vote[] = []
+  //     fetchedVotes2.forEach((result: any) => {
+  //       result.status === 'success' ? 
+  //         votes = [...toVotes(result.data), ...votes]
+  //         : 
+  //         console.log("Error with fethcing votes: ", result)  
+  //     })
+  //     console.log("votes @useVotes: ", votes )
+  //     setAllVotes(votes) 
+  //     statusfFetchVotes.current = "isSuccess"
+  //     fetchedVotes2 = []
+  //   }
+  // }, [fetchedVotes.current, fetchLists.current])
 
-    if (resultQueries.filter(result => result.status == "loading").length > 0) statusfFetchVotes.current = "isLoading"
-    if (resultQueries.filter(result => result.status != "loading").length == fetchLists.current.length) {
-
-      resultQueries.forEach((result: any) => {
-        // console.log("single item resultQueries at forEach: ", result)
-        // console.log("votes @fetchVotes: ", ...toVotes(result.data))
-        result.status === 'success' ? 
-          allVotes.current = [...toVotes(result.data), ...allVotes.current]
-          : 
-          console.log("Error with fethcing votes: ", result)  
-      })
-      fetchedProposals.current = [...fetchedProposals.current, ...fetchLists.current.flat()]
-      statusfFetchVotes.current = "isSuccess"
-    }
-
-  }, [ resultQueries ])
-
-
+  ////////////////// Filtering Votes /////////////////////
   const filterVotes = () => {
     statusFilterVotes.current = "isLoading" 
-
-    if (selectedProposals && d1 && d2) {
+    
+    let votes: Vote[] = []
+    if (selectedProposals && d1 && d2 && allVotes) {
       try { 
         // also filter votes on date range (because proposal might have run across begin or end of date range)
         const selectedProposalsId = selectedProposals.map(proposal => proposal.id)
         const startDate = Math.min(d1, d2)  
         const endDate = Math.max(d1, d2)
 
-        selectedVotes.current = allVotes.current.filter(vote => 
+        votes = allVotes.filter(vote => 
           vote.created * 1000 > startDate && 
           vote.created * 1000 < endDate  && 
           selectedProposalsId.indexOf(vote.proposal.id) !== -1 
@@ -171,13 +159,101 @@ export function useVotes() {
         console.log(error)
       }
       statusFilterVotes.current = "isSuccess"
+      setSelectedVotes(votes)
     }
   }
-  
-  // // Whenever  ref is updated, filter is triggered.  
-  useEffect(() => {
-    if ( statusfFetchVotes.current = "isSuccess") filterVotes()
-  }, [selectedProposals, d1, d2 ])
 
-  return { allVotes, selectedVotes }; 
+  ////////////////// Sequencing Hook Data Flow & updating generic status hook /////////////////////
+  // As useQueries triggers at any state change, sequence is changed by settign states, instead of calling functions. 
+  useEffect(() => {
+    console.log("hook sequence triggered")
+    if (
+      statusfFetchQueryList.current == "isSuccess" && 
+      statusfFetchVotes.current == "isSuccess" && 
+      statusFilterVotes.current == "isSuccess" 
+      ) {
+        statusfFetchQueryList.current = "isIdle" 
+        statusfFetchVotes.current = "isIdle" 
+        statusFilterVotes.current = "isIdle" 
+      }
+
+    if (
+      selectedProposals && 
+      statusfFetchQueryList.current != "isLoading"
+      ) fetchQueryList() 
+    if ( // this should trigger useQueries / fetchVotesQuery
+      statusfFetchVotes.current != "isLoading" && 
+      fetchLists.current.length > 0 
+    ) {
+      setFetchListState(fetchLists.current)
+      fetchLists.current = []
+    } 
+    if (
+      fetchedVotes2.filter(result => result.status == "loading").length > 0 && 
+      statusfFetchVotes.current == "isSuccess"
+      ) { 
+        statusfFetchVotes.current = "isLoading"
+      } else {
+      let votes: Vote[] = []
+      fetchedVotes2.forEach((result: any) => {
+        result.status === 'success' ? 
+          votes = [...toVotes(result.data), ...votes]
+          : 
+          console.log("Error with fethcing votes: ", result)  
+      })
+      console.log("votes @useVotes: ", votes )
+      setAllVotes(votes) 
+      statusfFetchVotes.current = "isSuccess"
+      fetchedVotes2 = []
+    }
+    if ( 
+      statusfFetchVotes.current == "isSuccess" && 
+      allVotes  && 
+      allVotes.length > 0 &&  
+      statusFilterVotes.current != "isLoading" 
+      ) {
+        filterVotes()
+      }
+  }, [ 
+    selectedProposals, 
+    d1, 
+    d2
+  ]) 
+
+  // updating generic status. 
+  useEffect(() => {
+    if (
+      statusfFetchQueryList.current == "isSuccess" && 
+      statusfFetchVotes.current == "isSuccess" && 
+      statusFilterVotes.current == "isSuccess" 
+      ) {
+        status.current = "isSuccess"
+      }
+    if (
+      statusfFetchQueryList.current == "isIdle" || 
+      statusfFetchVotes.current == "isIdle" || 
+      statusFilterVotes.current == "isIdle" 
+      ) {
+        status.current = "isIdle"
+      }
+    if (
+      statusfFetchQueryList.current == "isLoading" || 
+      statusfFetchVotes.current == "isLoading" || 
+      statusFilterVotes.current == "isLoading" 
+      ) {
+        status.current = "isLoading"
+      }
+
+    if (
+      statusfFetchQueryList.current == "isError" || 
+      statusfFetchVotes.current == "isError" || 
+      statusFilterVotes.current == "isError" 
+      ) {
+        status.current = "isError"
+      }
+  }, [
+    allVotes, selectedVotes
+  ])
+
+  return { allVotes, selectedVotes, status }; 
 }

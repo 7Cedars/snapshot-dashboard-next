@@ -1,96 +1,56 @@
 "use client";
 
-import { Dialog, Disclosure } from '@headlessui/react'
-import { ChevronUpIcon } from '@heroicons/react/24/outline'
 import { ModalDialog } from '../ui/ModalDialog';
+import { useAppSelector } from '@/redux/hooks';
+import { spaces } from '../../../public/data/spacesList'
+import { useSpaces } from '../hooks/useUrl';
+import { borderColours } from '../dashboard/SpaceItem';
+
+          {/* Heatmap */}
+          {/* <div className="border border-gray-300 mt-4 rounded-lg"> 
+            <ChartCanvas
+              VizComponent={ Heatmap }
+              vizName={"heatmap"}
+              maxWidth={3000}
+              height={heatmapHeight}
+              />
+          </div> */}
 
 export const InfoSpaceDialog = () => {
+  const { modal: selectedSpace } = useAppSelector(state => state.userInput)
+  const { selectedSpaces, removeSpace } = useSpaces() 
 
   return (
 
     <ModalDialog 
       modalName = 'infoSpace'
-      title = 'Information Dao Space'
-      subtitle = 'Detailed information in selected DAO and its space at Snapshot.'
+      // title = {`${selectedSpace}`}
+      // subtitle = 'Detailed information in selected DAO and its space at Snapshot.'
     > 
   
-      <div className="mt-2">
-        <p className="text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... test test test test
-        </p>
-        <p className="text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
-        <p className="text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
-        <p className=" text-gray-500">
-          This app shows analysis of snapshot voter behaviour. 
-          MORE explanation will be inserted here... 
-        </p>
-      </div>
-      <Dialog.Title
-        as="h2"
-        className="pt-6 text-lg font-medium leading-6 text-gray-900"
-      >
-        FAQ
-      </Dialog.Title>
-      <div className="w-full rounded-2xl bg-white py-2">
-        <Disclosure>
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="border border-blue-500 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
-                <span>What is Snapshot?</span>
-                <ChevronUpIcon
-                  className={`${
-                    open ? 'rotate-180 transform' : ''
-                  } h-5 w-5 text-blue-500`}
-                />
-              </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-              Expanation here. (TODO)
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-        <Disclosure as="div" className="mt-2">
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="border border-blue-500 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
-                <span>What is a DAO?</span>
-                <ChevronUpIcon
-                  className={`${
-                    open ? 'rotate-180 transform' : ''
-                  } h-5 w-5 text-blue-500`}
-                />
-              </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                Expanation here. (TODO)
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
-        <Disclosure as="div" className="mt-2">
-          {({ open }) => (
-            <>
-              <Disclosure.Button className="border border-blue-500 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
-                <span>Why this app?</span>
-                <ChevronUpIcon
-                  className={`${
-                    open ? 'rotate-180 transform' : ''
-                  } h-5 w-5 text-blue-500`}
-                />
-              </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                Expanation here. (TODO)
-              </Disclosure.Panel>
-            </>
-          )}
-        </Disclosure>
+      <>
+        <div className="grid grid-cols-2">
+          <div className="flex items-start justify-start pl-2 ">
+            <label className= {`border-4 overflow-hidden flex h-40 w-40 flex-col items-start justify-start rounded-full shadow-lg ${borderColours[selectedSpaces.indexOf(selectedSpace) % 18]}`} >
+              <img
+                className="h-40 w-40"
+                aria-hidden="true"
+                src={`https://cdn.stamp.fyi/space/${selectedSpace}?s=96`}
+                alt="DAO space icon"
+              />
+            </label>
+          </div>
+
+          <div> 
+          List with info on DAO: 
+          </div> 
         </div>
+        <div> 
+          HERE COME HEATMAP with ACTIVITY OVERVIEW + date range. 
+        </div> 
+        
+      </>
+    
   </ModalDialog>
   )
 }

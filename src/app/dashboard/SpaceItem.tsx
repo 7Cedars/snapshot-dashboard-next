@@ -3,7 +3,6 @@
 import { spaces } from '../../../public/data/spacesList'
 import { MinusCircleIcon, InformationCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSpaces } from '../hooks/useUrl';
-import { colourCodes, tailwindColours } from '../../../constants';
 import { useAppDispatch } from '@/redux/hooks';
 import { notification } from '@/redux/reducers/notificationReducer';
 import { updateModal } from '@/redux/reducers/userInputReducer';
@@ -13,7 +12,7 @@ interface Props {
   spaceId: string;
 }
 
-export const borderColours = [
+export const borderColours = [ 
   `border-gray-500`, 
   `border-red-500`, 
   `border-orange-500`,  
@@ -49,7 +48,6 @@ const SpaceItem = ( {spaceId}: Props) => {
       progressInPercent: "noProgress"
     }))
   }
-// + tailwindColours[selectedSpaces.indexOf(spaceId)]
 
   return (
     spaceId !== '' ? 
@@ -57,7 +55,7 @@ const SpaceItem = ( {spaceId}: Props) => {
         <button 
           className='flex grow'
           type="submit"
-          onClick={() => dispatch(updateModal('infoSpace'))}
+          onClick={() => dispatch(updateModal(spaceId))}
           > 
           <div className="flex items-start justify-start pl-2 ">
             <label className= {`border-4 overflow-hidden flex h-12 w-12 flex-col items-start justify-start rounded-full shadow-lg ${borderColours[selectedSpaces.indexOf(spaceId) % 18]}`} >

@@ -21,7 +21,7 @@ export interface Vote {
   created: number;
 }
 export interface UserInputState {
-  modal: 'infoSpace' | 'search' | 'about' | 'settings' | 'savedSearches' | 'none'; 
+  modal: string | 'search' | 'about' | 'settings' | 'savedSearches' | 'none'; 
   stopFetching: boolean;
   settings: {
     darkMode: boolean | undefined; 

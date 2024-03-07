@@ -8,8 +8,8 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 
 type ModalProps = {
   modalName: string; 
-  title: string; 
-  subtitle: string; 
+  title?: string; 
+  subtitle?: string; 
   children: any;
 };
 
@@ -23,7 +23,17 @@ export const ModalDialog = ({
   // Note this ui modal dialog expects the use of redux. 
   // I can change this in other apps if needed. 
   const dispatch = useAppDispatch()
-  const { modal } = useAppSelector(state => state.userInput)
+  const { modal: reduxModal } = useAppSelector(state => state.userInput)
+  let modal: string; 
+
+  reduxModal == 'search' || 
+  reduxModal == 'about' || 
+  reduxModal == 'settings' || 
+  reduxModal == 'savedSearches' || 
+  reduxModal == 'none' ? 
+  modal = reduxModal 
+  : 
+  modal = 'infoSpace'
 
   return (
 

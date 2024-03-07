@@ -41,9 +41,10 @@ for (i in 1:29) {
     skip = i * 1000
   ) 
   result <- conn$exec(listSpaces$link, variables = variable)
-  result <- fromJSON(result, flatten = T) 
-  result <- result$data$spaces
-  result <- toJSON(result)
+  resultdf <- fromJSON(result, flatten = F) 
+  resultspaces <- resultdf$data$spaces
+  resulttoJson <- toJSON(resultspaces)
+  test <- fromJSON(resulttoJson, flatten = F) 
   
   fullResult <- toJSON(rbind(fromJSON(fullResult), fromJSON(result)))
 }

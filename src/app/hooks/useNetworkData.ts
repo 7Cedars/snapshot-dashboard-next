@@ -34,10 +34,11 @@ export function useNetworkData() {
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     statusAtgetNetworkData.current = "isLoading"
 
-    const votesWithProposal: VoteWithProposal[] = selectedVotes.current.map(vote => ({
+    const votesWithProposal: VoteWithProposal[] = !selectedVotes ? [] : selectedVotes.map(vote => ({
       ...vote,
       fullProposal: selectedProposals?.find(proposal => proposal.id === vote.proposal.id)
       }))
+
     console.log("votesWithProposal: ", votesWithProposal)
 
     // if (votesWithProposal && selectedSpaces) {
@@ -76,7 +77,7 @@ export function useNetworkData() {
         let links: any[] = []
 
         const uniqueVoters = Array.from(
-          new Set(selectedVotes.current.map(vote => vote.voter))
+          new Set(selectedVotes?.map(vote => vote.voter))
           )
         
 
@@ -128,10 +129,10 @@ export function useNetworkData() {
 
   useMemo(() => {
     console.log("getNetworkData triggered")
-    if (selectedProposals && selectedVotes.current) {
+    if (selectedProposals && selectedVotes) {
       getNetworkData() 
     }
-  }, [selectedProposals, selectedVotes.current])
+  }, [selectedProposals, selectedVotes])
 
   // Notice: networkData will automatically update, but getNetworkData function can be used to force a reload. 
   return { getNetworkData, networkData };
