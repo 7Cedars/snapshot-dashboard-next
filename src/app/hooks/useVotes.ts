@@ -135,7 +135,7 @@ export function useVotes() {
     let votes: Vote[] = []
     let votesWithProposal: VoteWithProposal[] = []
 
-    if (selectedProposals && d1 && d2 && allVotes) {
+    if (selectedProposals && d1 > 0 && d2 > 0 && allVotes) {
       try { 
         // also filter votes on date range (because proposal might have run across begin or end of date range)
         const selectedProposalsId = selectedProposals.map(proposal => proposal.id)
@@ -157,8 +157,10 @@ export function useVotes() {
         statusFilterVotes.current = "isError"
         console.log(error)
       }
-      statusFilterVotes.current = "isSuccess"
-      setSelectedVotes(votesWithProposal)
+      if (votesWithProposal) {
+        statusFilterVotes.current = "isSuccess"
+        setSelectedVotes(votesWithProposal)
+      }
       votes = [] 
       votesWithProposal = []
     }
@@ -228,6 +230,7 @@ export function useVotes() {
     selectedProposals, 
     d1, 
     d2, 
+    fetchingQueries, 
     fetchedVotes, 
     allVotes
     // statusFetchVotes.current

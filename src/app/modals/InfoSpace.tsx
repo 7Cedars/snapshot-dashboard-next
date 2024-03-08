@@ -60,7 +60,7 @@ export const InfoSpaceDialog = () => {
         <div className="flex flex-row" ref = {heatmapRef}>
           <div className="flex w-fit items-center justify-start">
             <label className= {`border-4 overflow-hidden flex h-40 w-40 flex-col items-start justify-start rounded-full shadow-lg ${borderColours[selectedSpaces.indexOf(selectedSpace) % 18]}`} >
-              <Image
+              <img
                 className="h-40 w-40"
                 aria-hidden="true"
                 src={`https://cdn.stamp.fyi/space/${selectedSpace}?s=96`}

@@ -18,45 +18,14 @@ export function useNetworkData() {
     selectedVotes: selectedVotes
   })
 
-  const networkData = useRef<{nodes: NetworkNode[], links: Link[]}>() 
-  const statusAtgetNetworkData = useRef<Status>("isIdle")
+  const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>() 
+  const statusNetworkData = useRef<Status>("isIdle")
 
-  console.log("networkData: ", networkData )
+  console.log("networkData @useNetworkData: ", networkData )
 
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
-    statusAtgetNetworkData.current = "isLoading"
-
-    // if (votesWithProposal && selectedSpaces) {
-
-    //   let links; 
-
-    //   const votersPerSpace = selectedSpaces.map(space => 
-    //     Array.from(
-    //       new Set(
-    //         votesWithProposal.map(vote => {if (vote.fullProposal && vote.fullProposal.space.id === space) return vote.voter })
-    //       )
-    //     )
-    //   )
-    //   console.log("votersPerSpace: ", votersPerSpace)
-    //   votersPerSpace.forEach((sourceVoters, i) => 
-    //     votersPerSpace.forEach((TargetVoters, j) => {
-    //       console.log({
-    //         sourceVoters: sourceVoters, 
-    //         TargetVoters: TargetVoters
-    //       })
-    //     const filteredArray = sourceVoters.filter(voter => TargetVoters.includes(voter)).length;
-    //     console.log("filteredArray: ", filteredArray)
-
-    //     links.push({source: selectedSpaces[i], target: selectedSpaces[j], value: filteredArray ? filteredArray : 0 }) 
-        
-    //     })
-
-    //   ) 
-    //   console.log("links at reduce: ", links)    
-    // } 
-
-    
-
+    statusNetworkData.current = "isLoading"
+  
     if (selectedProposals && status.current == "isSuccess") {
       try {
         let links: any[] = []
@@ -65,9 +34,6 @@ export function useNetworkData() {
           new Set(selectedVotes?.map(vote => vote.voter))
           )
         
-
-        // console.log("uniqueVoters: ", uniqueVoters)
-
         // The following is a very inefficient, would like to use reduce instead. 
         uniqueVoters.forEach(voter => {
           const voterVotes = selectedVotes?.filter(vote => vote.voter === voter)
@@ -99,29 +65,21 @@ export function useNetworkData() {
                 colour: colourCodes[selectedSpaces.indexOf(space)]
               })
             })
-          statusAtgetNetworkData.current = "isSuccess"
-
-          console.log("FINAL NETWORK DATA: ", {
-            nodes: nodes, links: links
-          })
-
-          if (statusAtgetNetworkData.current == "isSuccess") networkData.current = { nodes: nodes, links: links }
+            setNetworkData({ nodes: nodes, links: links })
+            statusNetworkData.current = "isSuccess"
         }  
       } catch (error) {
-        statusAtgetNetworkData.current = "isError"
+        statusNetworkData.current = "isError"
         console.log(error) 
       } 
     } 
   }
 
-  useMemo(() => {
-    console.log("getNetworkData triggered")
-    if (selectedProposals && selectedVotes) {
-      getNetworkData() 
-    }
-  }, [selectedProposals, selectedVotes])
+  useEffect(() => {
+    if (status.current == "isSuccess" && selectedVotes) getNetworkData() 
+  }, [selectedVotes, status])
 
   // Notice: networkData will automatically update, but getNetworkData function can be used to force a reload. 
-  return { getNetworkData, networkData };
+  return { getNetworkData, networkData, statusNetworkData };
 
 }

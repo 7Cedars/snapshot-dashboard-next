@@ -8,29 +8,28 @@ import { useProposals } from '@/app/hooks/useProposals';
 export const ForceGraph = () => {  
   const svg = useRef(null);
   const { networkData } = useNetworkData()
-  const { allProposals, selectedProposals, status } = useProposals()
+  const { allProposals, selectedProposals } = useProposals()
   const { height: heightDiv, width: widthDiv } = useDimensions(svg)
 
   console.log("from useProposal: ", {
     allProposals: allProposals, 
-    selectedProposals: selectedProposals, 
-    status: status
+    selectedProposals: selectedProposals
   })
   
   console.log({
     heightDiv: heightDiv, 
     widthDiv: widthDiv
   })
-  console.log("networkData: ", networkData)
+  console.log("networkData @ForceGraph: ", networkData)
 
   useEffect(() => {
     if (
-      networkData?.current?.nodes && 
-      networkData?.current?.links &&
+      networkData?.nodes && 
+      networkData?.links &&
       svg && 
       widthDiv != 0) {// && statusAtgetNetworkData.current == "isSuccess" 
         svg.current.replaceChildren()
-        svg.current.appendChild( DrawForceGraph(networkData.current , { //appendChild // networkData.current // dummyData
+        svg.current.appendChild( DrawForceGraph(networkData , { //appendChild // networkData.current // dummyData
           nodeId: d => d.id,
           nodeGroup: d => d.group,
           nodeRadius: d => d.radius, 
@@ -42,7 +41,7 @@ export const ForceGraph = () => {
           // invalidation // a promise to stop the simulation when the cell is re-run
           }), svg.current)
       }
-  }, [widthDiv, heightDiv, networkData.current]) //statusAtgetNetworkData.current
+  }, [widthDiv, heightDiv, networkData]) //statusAtgetNetworkData.current
 
   console.log("svg.current: ", svg.current)
 

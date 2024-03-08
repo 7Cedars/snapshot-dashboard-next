@@ -6,6 +6,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { updateModal } from '@/redux/reducers/userInputReducer';
 import SpaceItem from './SpaceItem';
 import { ForceGraph } from './charts/ForceGraph';
+import InfoSpaceDialog from '../modals/InfoSpace';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
@@ -13,6 +14,7 @@ export default function Page() {
 
   return ( 
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0 border-2 border-red-800">
+      <InfoSpaceDialog/> 
       <div className='w-96 h-full space-y-0 pt-4 grid grid-cols-1 ps-12'> 
         <div className='mt-20 p-2 border border-gray-500 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col  overflow-auto'>
 

@@ -37,9 +37,11 @@ const Home = () => {
             Visualising DAO voter networks
           </div>
           <div className='flex flex-col place-content-center justify-center text-center mt-20'>
-            <div className='w-64 h-10 m-2 self-center flex flex-col place-content-center text-blue-400 border border-blue-500 bg-blue-100 hover:bg-blue-200 rounded rounded-lg hover'>
-              <Link href='/dashboard?d1=1679018147782&d2=1696362727015'>To the DashBoard</Link>
-            </div>
+              <Link 
+                href='/dashboard?d1=1679018147782&d2=1696362727015'
+                className='w-64 h-10 m-2 self-center flex flex-col place-content-center text-blue-400 border border-blue-500 bg-blue-100 hover:bg-blue-200 rounded rounded-lg hover'>
+                  To the DashBoard
+                </Link>
           </div>
         </div>
       </div>
