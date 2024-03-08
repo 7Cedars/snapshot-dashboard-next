@@ -159,6 +159,8 @@ export function useVotes() {
       }
       statusFilterVotes.current = "isSuccess"
       setSelectedVotes(votesWithProposal)
+      votes = [] 
+      votesWithProposal = []
     }
   }
 

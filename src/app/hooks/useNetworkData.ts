@@ -72,7 +72,7 @@ export function useNetworkData() {
         uniqueVoters.forEach(voter => {
           const voterVotes = selectedVotes?.filter(vote => vote.voter === voter)
           const voterSpaces = Array.from(
-            new Set(selectedVotes?.map(vote => vote.fullProposal?.space.id))
+            new Set(voterVotes?.map(vote => vote.fullProposal?.space.id))
           )
 
           if (voterSpaces.length > 1) voterSpaces.forEach(
