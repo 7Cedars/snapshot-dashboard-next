@@ -3,6 +3,7 @@
 import { SelectedSpaces, SearchParams } from "../../types" ;
 import { parseSelectedSpaces, parseDate } from './parsers';
 import { standardDateRange, genesisSnapshot } from "../../../constants";
+import { Suspense } from 'react';
 
 export function getDateRangeFromUrlParams(
   searchParams: SearchParams
@@ -21,7 +22,7 @@ export function getDateRangeFromUrlParams(
   }; ;
 }
 
-export function getSpacesFromUrlParams(
+export function getSpacesFromUseSearchParams(
   searchParams: SearchParams
 ): SelectedSpaces {
   const spacesParam = [searchParams.s].flat();
