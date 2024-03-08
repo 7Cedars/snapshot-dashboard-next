@@ -19,7 +19,7 @@ export default function Page() {
   const {height, width} = useDimensions(screenSize)
 
   return ( 
-    <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0 border-2 border-red-800" ref = {screenSize}>
+    <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0" ref = {screenSize}>
       <ScreenTooSmall height = {height} width = {width} /> 
       <InfoSpaceDialog/> 
       <div className='w-96 h-full space-y-0 pt-4 grid grid-cols-1 ps-12'> 

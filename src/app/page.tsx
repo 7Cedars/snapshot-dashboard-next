@@ -7,8 +7,8 @@ const Home = () => {
 
   return (
     
-    <div className="grid grid-cols-2 max-h-screen text-sm py-5 justify-items-stretch px-2">
-      <div className='flex justify-end pe-12'> 
+    <div className="grid grid-cols-1 lg:grid-cols-2 max-h-screen text-sm py-5 justify-items-stretch px-2">
+      <div className='flex justify-end pe-12 h-0 lg:h-full'> 
         <img
             className="flex"
             aria-hidden="true"
@@ -19,8 +19,8 @@ const Home = () => {
           />
       </div>
 
-      <div className='flex justify-start'>
-        <div className='flex flex-col place-content-center'> 
+      <div className='flex lg:justify-start justify-center'>
+        <div className='flex flex-col place-content-center '> 
          
           <img
                   className="flex justify-center self-center"
