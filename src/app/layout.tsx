@@ -10,7 +10,7 @@ import SearchDialog from './modals/Search';
 import InfoSpaceDialog from './modals/InfoSpace';
 import NavBar from './NavBar';
 import ReactQueryProviders from './ReactQueryWrapper';
-import { useDateRange, useSpaces } from './hooks/useUrl';
+import { ScreenTooSmall } from './modals/ScreenTooSmall';
 
 export const metadata: Metadata = {
   title: 'DAO Network Dashboard',
@@ -32,6 +32,7 @@ export default function RootLayout({
             
               <div className="relative h-screen w-full grid grid-cols-1 bg-slate-50">
                 <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
+                
                 {/* £todo The info InfoSpaceDialog causes a loop! FIX  */}
                 <div > 
                   <NavBar/>
