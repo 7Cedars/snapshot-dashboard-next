@@ -16,7 +16,7 @@ export const ScreenTooSmall = ({height, width}: Props ) => {
   })
 
   return ( 
-    height < 500 || width < 1000 ? 
+    height < 650 || width < 1000 ? 
       <div 
         className="absolute h-full w-full z-50 flex p-6 rounded rounded-lg justify-center items-center bg-slate-50"
         > 
@@ -37,7 +37,7 @@ export const ScreenTooSmall = ({height, width}: Props ) => {
            Visualising DAO voter networks
          </div>
          <div className="pt-12 text-center">
-          This screen is too small. Please access this website from a larger screen. Apologies!     
+          This screen is too small. Please access this website from a larger screen.
           </div> 
         </div> 
       </div> 

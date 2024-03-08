@@ -22,7 +22,7 @@ export default function Page() {
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0" ref = {screenSize}>
       <ScreenTooSmall height = {height} width = {width} /> 
       <InfoSpaceDialog/> 
-      <div className='w-96 h-full space-y-0 pt-4 grid grid-cols-1 ps-12'> 
+      <div className='w-96 h-full space-y-0 py-4 grid grid-cols-1 ps-12'> 
         <div className='mt-20 p-2 border border-gray-500 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col  overflow-auto'>
 
           {/* search box */}
@@ -52,7 +52,7 @@ export default function Page() {
         </div>
       </div>
       
-      <div className='flex flex-grow space-y-0 pt-4 grid grid-cols-1 pe-12'> 
+      <div className='flex flex-grow space-y-0 py-4 grid grid-cols-1 pe-12'> 
         <div className='mt-20 p-2 border border-gray-500 border-l-0 rounded-r-lg shadow-lg bg-gray-100 flex flex-col grow'>
           
           {/* Time range slider */}

@@ -75,7 +75,7 @@ export function useSpaces() {
       newParams.append('s', spaceId)
     )
     
-    router.push(`${pathname}?${newParams.toString()}`);
+    router.push(`/dashboard?${newParams.toString()}`);
   };
 
   return { selectedSpaces, spacesColours, addSpace, removeSpace, loadSavedSearch };
