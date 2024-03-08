@@ -13,10 +13,14 @@ export function useProposals() {
   const { cache }  = useApolloClient()
   const statusFetchingSpaces = useRef<Status>("isIdle")
   const statusToSelectedProposals = useRef<Status>("isIdle")
+  const runtimeSpaces = useRef<String[]>([]);
+  const runtimed1 = useRef<number>();   
+  const runtimed2 = useRef<number>();   
   const unfetchedSpaces = useRef<String[]>([]);   
   const fetchedSpaces = useRef<String[]>([]); 
   const [selectedProposals, setSelectedProposals] = useState<Proposal[]>();  
   const [allProposals, setAllProposals] = useState<Proposal[]>();  
+  const [selectionNeeded, setSelectionNeeded] = useState<boolean>(false)
   const maxVotesProposal: number = 1000 // for now set as static. Can be a value later on.  
 
   const { loading, error, data } = useQuery(PROPOSALS_FROM_SPACES, { // useSuspenseQuery
@@ -35,6 +39,7 @@ export function useProposals() {
   console.log("statusFetchingSpaces @useProposals: ", statusFetchingSpaces )
   console.log("statusToSelectedProposals @useProposals: ", statusToSelectedProposals )
   console.log("selectedSpaces  @useProposals: ", selectedSpaces)
+  console.log("selectionNeeded  @TRIGGER: ", selectionNeeded)
 
   // triggering the hook when selectedSpaces is changed 
   useEffect(() => {
@@ -63,10 +68,24 @@ export function useProposals() {
     } 
   }, [ error, loading, data ])
 
+  useEffect(() => {
+  console.log("selectedSpaces: @TRIGGER", selectedSpaces.length)
+  console.log("runtimeSpaces: @TRIGGER", runtimeSpaces.current.length)
+   if (
+    selectedSpaces.length != runtimeSpaces.current.length || 
+    d1 != runtimed1.current || 
+    d2 != runtimed2.current
+    ) setSelectionNeeded(true)
+   if (
+    selectedSpaces.length == runtimeSpaces.current.length &&
+    d1 == runtimed1.current &&  
+    d2 == runtimed2.current
+    ) setSelectionNeeded(false)
+  }, [selectedSpaces])
+
   // updating state selectedproposals when selectedSpaces and datRangechanges change. 
   useEffect(() => {
-    const loadedSpaces = Array.from(new Set(selectedProposals?.map(proposal => proposal.space.id)))
-      console.log("loadedSpaces: ", loadedSpaces)
+    console.log("ToSelectedProposals TRIGGERED")
 
     if (
       allProposals && 
@@ -74,12 +93,15 @@ export function useProposals() {
       d2 && 
       selectedSpaces && 
       statusFetchingSpaces.current == "isSuccess" && 
-      selectedSpaces.length != loadedSpaces.length
+      selectionNeeded
       ) {  
       statusToSelectedProposals.current = "isLoading"
+      runtimeSpaces.current = selectedSpaces
+      runtimed1.current = d1
+      runtimed2.current = d2
 
       const proposals: Proposal[] = toSelectedProposals({
-        proposals: allProposals,
+        allProposals: allProposals,
         selectedSpaces: selectedSpaces,
         startDate: Math.min(d1, d2),
         endDate: Math.max(d1, d2), 
@@ -88,11 +110,7 @@ export function useProposals() {
       setSelectedProposals(proposals)
       statusToSelectedProposals.current = "isSuccess"
     } 
-  }, [, d1, d2, selectedSpaces])
+  }, [, d1, d2, selectionNeeded ])
 
   return { allProposals, selectedProposals };
-}
-
-function useSuspense(selectedSpaces: SelectedSpaces) {
-  throw new Error("Function not implemented.");
 }

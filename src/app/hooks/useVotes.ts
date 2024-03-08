@@ -189,6 +189,7 @@ export function useVotes() {
         statusFilterVotes.current = "isIdle"
         fetchQueryList()
       } 
+
     if ( // this should trigger useQueries / fetchVotesQuery - it does
       statusFetchVotes.current == "isIdle" && 
       statusFetchQueryList.current == "isSuccess" 

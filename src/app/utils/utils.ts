@@ -1,7 +1,7 @@
 import { Proposal, Node, Vote, Space } from "../../types";
 
 interface ToSelectedProposalsProps {
-  proposals: Proposal[], 
+  allProposals: Proposal[], 
   selectedSpaces: string[], 
   startDate: number | null, 
   endDate: number | null 
@@ -9,7 +9,7 @@ interface ToSelectedProposalsProps {
 }
 
 interface VoteWithProposal extends Vote {
-  fullProposal: Proposal | undefined;
+  fullProposal?: Proposal | undefined;
 }
 
 type VotesToRadiusProps = {
@@ -42,7 +42,7 @@ export const toTimestamp = (dateFormat: string): string => {
   return String(Date.parse(dateFormat))
 };
 
-export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endDate, maxVotes}: ToSelectedProposalsProps  ) => {
+export const toSelectedProposals = ( {allProposals, selectedSpaces, startDate, endDate, maxVotes}: ToSelectedProposalsProps  ) => {
   // console.log("toSelectedProposals CALLED, proposals: ", proposals)
 
   const withinTimeRange = (timeStamp: number ): boolean => {
@@ -60,7 +60,7 @@ export const toSelectedProposals = ( {proposals, selectedSpaces, startDate, endD
   }
 
   const selectedProposals: Proposal[] = [] 
-  proposals.map((proposal: Proposal) => {
+  allProposals.map((proposal: Proposal) => {
       if (withinTimeRange(proposal.start) &&
           withinTimeRange(proposal.end) && 
           amongSelectedSpaces(proposal.space.id) && 

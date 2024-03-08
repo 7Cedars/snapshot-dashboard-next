@@ -6,19 +6,11 @@ import { fromVotesToRadius } from '@/app/utils/utils';
 import { useProposals } from "./useProposals";
 import { colourCodes } from "../../../constants";
 
-interface VoteWithProposal extends Vote {
-  fullProposal: Proposal | undefined;
-}
-
-type BuildLinksProps = {
-  links: NetworkLink[];
-  voterSpace: String[];
-}
 
 export function useNetworkData() {
   const { selectedSpaces } = useSpaces() 
   const { selectedProposals } = useProposals()
-  const { selectedVotes } = useVotes()
+  const { selectedVotes, status } = useVotes()
 
   console.log("incoming data from hooks: ", {
     selectedSpaces: selectedSpaces, 
@@ -33,13 +25,6 @@ export function useNetworkData() {
 
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     statusAtgetNetworkData.current = "isLoading"
-
-    const votesWithProposal: VoteWithProposal[] = !selectedVotes ? [] : selectedVotes.map(vote => ({
-      ...vote,
-      fullProposal: selectedProposals?.find(proposal => proposal.id === vote.proposal.id)
-      }))
-
-    console.log("votesWithProposal: ", votesWithProposal)
 
     // if (votesWithProposal && selectedSpaces) {
 
@@ -72,7 +57,7 @@ export function useNetworkData() {
 
     
 
-    if (selectedProposals) {
+    if (selectedProposals && status.current == "isSuccess") {
       try {
         let links: any[] = []
 
@@ -85,9 +70,9 @@ export function useNetworkData() {
 
         // The following is a very inefficient, would like to use reduce instead. 
         uniqueVoters.forEach(voter => {
-          const voterVotes = votesWithProposal.filter(vote => vote.voter === voter)
+          const voterVotes = selectedVotes?.filter(vote => vote.voter === voter)
           const voterSpaces = Array.from(
-            new Set(voterVotes.map(vote => vote.fullProposal?.space.id))
+            new Set(selectedVotes?.map(vote => vote.fullProposal?.space.id))
           )
 
           if (voterSpaces.length > 1) voterSpaces.forEach(
@@ -103,23 +88,25 @@ export function useNetworkData() {
         })
         console.log("links at loop: ", links)
 
-        const radia = fromVotesToRadius({votesWithProposal: votesWithProposal , selectedSpaces: selectedSpaces, minRadius: 10, maxRadius: 40})
-        const nodes: NetworkNode[] = selectedSpaces.map((space, i) => { 
-          return ({
-              id: space, 
-              group: String(i), 
-              radius: radia[i],
-              colour: colourCodes[selectedSpaces.indexOf(space)]
-            })
-          })
-        statusAtgetNetworkData.current = "isSuccess"
-
-        console.log("FINAL NETWORK DATA: ", {
-          nodes: nodes, links: links
-        })
-
-        if (statusAtgetNetworkData.current == "isSuccess") networkData.current = { nodes: nodes, links: links }
+        if (selectedVotes) {
+          const radia = fromVotesToRadius({votesWithProposal: selectedVotes , selectedSpaces: selectedSpaces, minRadius: 10, maxRadius: 40})
       
+          const nodes: NetworkNode[] = selectedSpaces.map((space, i) => { 
+            return ({
+                id: space, 
+                group: String(i), 
+                radius: radia[i],
+                colour: colourCodes[selectedSpaces.indexOf(space)]
+              })
+            })
+          statusAtgetNetworkData.current = "isSuccess"
+
+          console.log("FINAL NETWORK DATA: ", {
+            nodes: nodes, links: links
+          })
+
+          if (statusAtgetNetworkData.current == "isSuccess") networkData.current = { nodes: nodes, links: links }
+        }  
       } catch (error) {
         statusAtgetNetworkData.current = "isError"
         console.log(error) 
