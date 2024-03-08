@@ -1,6 +1,4 @@
 import { Space, StartDate, EndDate, SelectedSpaces, Proposal, Vote, SavedSearch} from "../../types";
-import spaces from "../../../public/data/spacesList";
-import { error } from "console";
 
 const isString = (text: unknown): text is string => {
   return typeof text === 'string' || text instanceof String;
@@ -36,6 +34,13 @@ const parseCategories = (categories: unknown): Array<string> => {
   return [] as Array<string>;
 };
 
+const parseAbout = (about: unknown): string => {
+  if (!isString(about)) {
+    throw new Error(`Incorrect or missing categories: ${about}`);
+  }
+  return about;
+};
+
 export const toSpaceEntry = (object: unknown): Space => { 
   if ( !object || typeof object !== 'object' ) {
     throw new Error('Incorrect or missing data');
@@ -43,13 +48,15 @@ export const toSpaceEntry = (object: unknown): Space => {
 
   if ('id' in object && 
       'votesCount' in object && 
-      'categories' in object
+      'categories' in object && 
+      'about' in object
       )  
   {
     const entry: Space = {
       id: parseId(object.id),
       votesCount: parseVotesCount(object.votesCount),
       categories: parseCategories(object.categories), 
+      about: parseAbout(object.about)
     };
 
     return entry;  

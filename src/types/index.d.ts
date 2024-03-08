@@ -120,7 +120,7 @@ export interface ListSpacesGqlValues {
   skip: number;
 }
 
-export type OnlyNameSpace = Omit<Space, 'votesCount' | 'categories'>;
+export type OnlyNameSpace = Omit<Space, 'votesCount' | 'categories' | 'about' >;
 // export type NotificationWithoutId = Omit<Notification, 'id' >;
 export type OnlyIdProposal = Omit<Proposal, 
   | 'space' | 'categories' | 'votes' | 'start' | 'end' 

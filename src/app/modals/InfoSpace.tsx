@@ -12,6 +12,7 @@ import { ChartCanvas } from '../ui/ChartCanvas';
 import { useDimensions } from '@/app/hooks/useDimensions';
 import { useRef } from 'react';
 import { Heatmap } from '../dashboard/charts/Heatmap';
+import Image from 'next/image';
 
 export const InfoSpaceDialog = () => {
   const heatmapRef = useRef(null);
@@ -59,7 +60,7 @@ export const InfoSpaceDialog = () => {
         <div className="flex flex-row" ref = {heatmapRef}>
           <div className="flex w-fit items-center justify-start">
             <label className= {`border-4 overflow-hidden flex h-40 w-40 flex-col items-start justify-start rounded-full shadow-lg ${borderColours[selectedSpaces.indexOf(selectedSpace) % 18]}`} >
-              <img
+              <Image
                 className="h-40 w-40"
                 aria-hidden="true"
                 src={`https://cdn.stamp.fyi/space/${selectedSpace}?s=96`}
@@ -92,8 +93,6 @@ export const InfoSpaceDialog = () => {
           </div> 
         </div>
 
-        
-        
         <div 
           className="border border-gray-300 mt-4 rounded-lg h-14"
           > 

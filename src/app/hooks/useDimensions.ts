@@ -21,18 +21,18 @@ export const useDimensions = (targetRef: React.RefObject<HTMLDivElement>) => {
     setDimensions(getDimensions());
   };
 
-  // useLayoutEffect(() => {
-  //   handleResize();
-  // }, [ ]);
+  useLayoutEffect(() => {
+    handleResize();
+  }, [ ]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [ ]);
 
-  useEffect(() => {
-    handleResize();
-  }, [ ])
+  // useEffect(() => {
+  //   handleResize();
+  // }, [ ])
 
 
 

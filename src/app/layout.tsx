@@ -12,8 +12,8 @@ import NavBar from './NavBar';
 import ReactQueryProviders from './ReactQueryWrapper';
 
 export const metadata: Metadata = {
-  title: 'Snapshot Dashboard',
-  description: 'Uses GraphQl, Nextjs, TailwindCSS',
+  title: 'DAO Network Dashboard',
+  description: 'Build with GraphQl, Nextjs, TailwindCSS and Snapshot`s API',
 }
 
 export default function RootLayout({
@@ -28,9 +28,10 @@ export default function RootLayout({
         <ReduxProvider>
           <ApolloWrapper>
             
-              <div className="relative h-screen w-full grid grid-cols-1">
-            
-                  <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> <InfoSpaceDialog/>
+              <div className="relative h-screen w-full grid grid-cols-1 bg-slate-50">
+                <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
+                {/* £todo The info InfoSpaceDialog causes a loop! FIX  */}
+                {/* <InfoSpaceDialog/>  */} 
                 <div > 
                   <NavBar/>
                 </div> 

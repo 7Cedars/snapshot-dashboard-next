@@ -1,39 +1,39 @@
-import { Space, Proposal } from "@/types"
-import spaces from "../../../public/data/spacesList"
+// import { Space, Proposal } from "@/types"
+// import spaces from "../../../public/data/spacesList"
 
-export const proposalsOfSpaceNotCached = (selectedSpaces: string[], cachedProposals: Proposal[] ) => {
-  // checkes if all proposals have been loaded for list of spaces. 
-  // does this by comparing votesCount as stated in spacesList, to sum of votes of cached proposals. 
-  // These two do not always align completely, so a margin (by percentage) is included.  
+// export const proposalsOfSpaceNotCached = (selectedSpaces: string[], cachedProposals: Proposal[] ) => {
+//   // checkes if all proposals have been loaded for list of spaces. 
+//   // does this by comparing votesCount as stated in spacesList, to sum of votes of cached proposals. 
+//   // These two do not always align completely, so a margin (by percentage) is included.  
 
-  const cachedProposalsBySpace = selectedSpaces.map(spaceId => 
-    cachedProposals.filter(proposal => proposal.space.id === spaceId ))
-  const cachedVoteCount = cachedProposalsBySpace.map(array =>
-    array.reduce((n: any, { votes } ) => n + votes, 0)
-    )
+//   const cachedProposalsBySpace = selectedSpaces.map(spaceId => 
+//     cachedProposals.filter(proposal => proposal.space.id === spaceId ))
+//   const cachedVoteCount = cachedProposalsBySpace.map(array =>
+//     array.reduce((n: any, { votes } ) => n + votes, 0)
+//     )
 
-  const selectedSavedSpaces: Space[] = selectedSpaces.map(spaceId => 
-    spaces.filter(space => space.id === spaceId ) ).flat()
-  const savedVotesCount = selectedSavedSpaces.map(space => space.votesCount)
+//   const selectedSavedSpaces: Space[] = selectedSpaces.map(spaceId => 
+//     spaces.filter(space => space.id === spaceId ) ).flat()
+//   const savedVotesCount = selectedSavedSpaces.map(space => space.votesCount)
 
-  const result = selectedSpaces.map((space, i) => ({
-    spaceId: space, 
-    savedVotesCount: savedVotesCount[i], 
-    cachedVoteCount: cachedVoteCount[i]
-  }));
+//   const result = selectedSpaces.map((space, i) => ({
+//     spaceId: space, 
+//     savedVotesCount: savedVotesCount[i], 
+//     cachedVoteCount: cachedVoteCount[i]
+//   }));
   
-  let notCached: string[] = []
-  selectedSpaces.forEach((space, i) => {
-    if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
-      notCached.push(space) 
-    } 
-  })
+//   let notCached: string[] = []
+//   selectedSpaces.forEach((space, i) => {
+//     if (Math.abs(savedVotesCount[i] - cachedVoteCount[i]) > (savedVotesCount[i] * .05)) {
+//       notCached.push(space) 
+//     } 
+//   })
 
-  return ({ 
-    result: result,
-    notCached: notCached
-    }) 
-}
+//   return ({ 
+//     result: result,
+//     notCached: notCached
+//     }) 
+// }
 
 // export const votesOfProposalNotCached = (selectedProposals: string[], filterLargeProposals: boolean) => {
 //   const { cache }  = useApolloClient()
