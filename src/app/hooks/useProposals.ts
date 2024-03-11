@@ -11,17 +11,21 @@ export function useProposals() {
   const { selectedSpaces } = useSpaces()
   const { d1, d2 } = useDateRange()
   const { cache }  = useApolloClient()
+  
   const statusFetchingSpaces = useRef<Status>("isIdle")
   const statusToSelectedProposals = useRef<Status>("isIdle")
+  const status = useRef<Status>("isIdle")
+
   const runtimeSpaces = useRef<String[]>([]);
-  const runtimed1 = useRef<number>();   
-  const runtimed2 = useRef<number>();   
+  const runtimeD1 = useRef<number>();   
+  const runtimeD2 = useRef<number>();   
   const unfetchedSpaces = useRef<String[]>([]);   
   const fetchedSpaces = useRef<String[]>([]); 
+ 
   const [selectedProposals, setSelectedProposals] = useState<Proposal[]>();  
   const [allProposals, setAllProposals] = useState<Proposal[]>();  
-  const [selectionNeeded, setSelectionNeeded] = useState<boolean>(false)
-  const maxVotesProposal: number = 1000 // for now set as static. Can be a value later on.  
+  const [refetchNeeded, setRefetchNeeded] = useState<boolean>(false)
+  const maxVotesProposal: number = 1000 // £todo: need to fetch more votes from larger proposals - set value at constants  
 
   const { loading, error, data } = useQuery(PROPOSALS_FROM_SPACES, { // useSuspenseQuery
     variables: { 
@@ -31,21 +35,17 @@ export function useProposals() {
       // context: { fetchOptions: { cache: "force-cache" } }, 
   });
  
-  // console.log("cachedProposals @useProposals: ", cachedProposals)
   console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
-  // console.log("networkStatus @useProposals: ", networkStatus) 
   console.log("allProposals @useProposals: ", allProposals )
   console.log("selectedProposals @useProposals: ", selectedProposals )
   console.log("statusFetchingSpaces @useProposals: ", statusFetchingSpaces )
   console.log("statusToSelectedProposals @useProposals: ", statusToSelectedProposals )
   console.log("selectedSpaces  @useProposals: ", selectedSpaces)
-  console.log("selectionNeeded  @TRIGGER: ", selectionNeeded)
+  console.log("refetchNeeded  @TRIGGER: ", refetchNeeded)
 
   // triggering the hook when selectedSpaces is changed 
   useEffect(() => {
     const notFetched = selectedSpaces?.filter(spaceId => fetchedSpaces.current.indexOf(spaceId) == -1)
-    console.log("notFetched spaces: ", notFetched)
-
     if (
       !loading && 
       data.length != notFetched.length &&
@@ -68,19 +68,21 @@ export function useProposals() {
     } 
   }, [ error, loading, data ])
 
+  // detached selectedSpaces from reloading hook as it led to loop. 
+  // this useEffect first checks if actual reload is needed before triggering. 
   useEffect(() => {
   console.log("selectedSpaces: @TRIGGER", selectedSpaces.length)
   console.log("runtimeSpaces: @TRIGGER", runtimeSpaces.current.length)
    if (
     selectedSpaces.length != runtimeSpaces.current.length || 
-    d1 != runtimed1.current || 
-    d2 != runtimed2.current
-    ) setSelectionNeeded(true)
+    d1 != runtimeD1.current || 
+    d2 != runtimeD2.current
+    ) setRefetchNeeded(true)
    if (
     selectedSpaces.length == runtimeSpaces.current.length &&
-    d1 == runtimed1.current &&  
-    d2 == runtimed2.current
-    ) setSelectionNeeded(false)
+    d1 == runtimeD1.current &&  
+    d2 == runtimeD2.current
+    ) setRefetchNeeded(false)
   }, [selectedSpaces])
 
   // updating state selectedproposals when selectedSpaces and datRangechanges change. 
@@ -93,12 +95,12 @@ export function useProposals() {
       d2 && 
       selectedSpaces && 
       statusFetchingSpaces.current == "isSuccess" && 
-      selectionNeeded
+      refetchNeeded
       ) {  
       statusToSelectedProposals.current = "isLoading"
       runtimeSpaces.current = selectedSpaces
-      runtimed1.current = d1
-      runtimed2.current = d2
+      runtimeD1.current = d1
+      runtimeD2.current = d2
 
       const proposals: Proposal[] = toSelectedProposals({
         allProposals: allProposals,
@@ -110,7 +112,23 @@ export function useProposals() {
       setSelectedProposals(proposals)
       statusToSelectedProposals.current = "isSuccess"
     } 
-  }, [, d1, d2, selectionNeeded ])
+  }, [, d1, d2, refetchNeeded ])
 
-  return { allProposals, selectedProposals };
+  // managing updates status 
+  useEffect(() => {
+    if (
+      statusFetchingSpaces.current == "isIdle" || 
+      statusToSelectedProposals.current == "isIdle" 
+    ) status.current = "isIdle"
+    if (
+      statusFetchingSpaces.current == "isSuccess" && 
+      statusToSelectedProposals.current == "isSuccess" 
+    ) status.current = "isSuccess"
+    if (
+      statusFetchingSpaces.current == "isLoading" || 
+      statusToSelectedProposals.current == "isLoading" 
+    ) status.current = "isLoading"
+  }, [statusFetchingSpaces.current, statusToSelectedProposals.current])
+
+  return { allProposals, selectedProposals, status };
 }

@@ -10,23 +10,22 @@ import { colourCodes } from "../../../constants";
 export function useNetworkData() {
   const { selectedSpaces } = useSpaces() 
   const { selectedProposals } = useProposals()
-  const { selectedVotes, status } = useVotes()
+  const { selectedVotes, status: statusVotes } = useVotes()
+
+  const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>() 
+  const status = useRef<Status>("isIdle")
 
   console.log("incoming data from hooks: ", {
     selectedSpaces: selectedSpaces, 
     selectedProposals: selectedProposals, 
     selectedVotes: selectedVotes
   })
-
-  const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>() 
-  const statusNetworkData = useRef<Status>("isIdle")
-
   console.log("networkData @useNetworkData: ", networkData )
 
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
-    statusNetworkData.current = "isLoading"
+    status.current = "isLoading"
   
-    if (selectedProposals && status.current == "isSuccess") {
+    if (selectedProposals && statusVotes.current == "isSuccess") {
       try {
         let links: any[] = []
 
@@ -66,20 +65,20 @@ export function useNetworkData() {
               })
             })
             setNetworkData({ nodes: nodes, links: links })
-            statusNetworkData.current = "isSuccess"
+            status.current = "isSuccess"
         }  
       } catch (error) {
-        statusNetworkData.current = "isError"
+        status.current = "isError"
         console.log(error) 
       } 
     } 
   }
 
   useEffect(() => {
-    if (status.current == "isSuccess" && selectedVotes) getNetworkData() 
-  }, [selectedVotes, status])
+    if (statusVotes.current == "isSuccess" && selectedVotes) getNetworkData() 
+  }, [selectedVotes, statusVotes])
 
   // Notice: networkData will automatically update, but getNetworkData function can be used to force a reload. 
-  return { getNetworkData, networkData, statusNetworkData };
+  return { getNetworkData, networkData, status };
 
 }
