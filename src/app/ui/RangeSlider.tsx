@@ -29,19 +29,19 @@ export const RangeSlider = ({
 
   return (
     <>
-    <div className= "grid grid-cols-1 h-14 bg-white w-full px-6 m-0 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium " >
+    <div className= "grid grid-cols-1 h-14 bg-slate-50 dark:bg-slate-800 w-full px-6 m-0 border border-blue-300 dark:border-slate-600 text-sm hover:border-blue-500 rounded-lg font-medium " >
      
      {/* Labels  */}
      <div className="flex flex-row justify-between w-full "> 
-        <label htmlFor="sliderA" className=" flex-none w-16 pt-2 text-sm font-medium text-gray-500">
+        <label htmlFor="sliderA" className=" flex-none w-16 pt-2 text-sm font-medium text-slate-500">
           { minLabel }
         </label>
 
-        <div className="text-gray-900 text-base text-md  flex align-items-center pt-2 ">
+        <div className="text-slate-900 dark:text-slate-300 text-base text-md  flex align-items-center pt-2 ">
           { children }
         </div>
 
-        <label htmlFor="sliderB" className=" flex-none w-16 pt-2 text-sm text-gray-500">
+        <label htmlFor="sliderB" className=" flex-none w-16 pt-2 text-sm text-slate-500">
         { maxLabel }
         </label>
       </div>
@@ -50,7 +50,7 @@ export const RangeSlider = ({
         <div className="flex flex-row justify-center relative "> 
           <input
               id="sliderA"
-              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-gray-300 rounded-lg accent-blue-500 appearance-none dark:bg-gray-700`}
+              className={`w-full absolute inset-x-0 px-4 h-1 mb-12 bg-slate-300 rounded-lg accent-blue-500 cursor-pointer appearance-none dark:bg-slate-700`}
               name="min"
               type="range"
               step="1"

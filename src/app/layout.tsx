@@ -11,6 +11,7 @@ import InfoSpaceDialog from './modals/InfoSpace';
 import NavBar from './NavBar';
 import ReactQueryProviders from './ReactQueryWrapper';
 import { ScreenTooSmall } from './modals/ScreenTooSmall';
+import { ThemeWrapper } from './ThemeWrapper';
 
 export const metadata: Metadata = {
   title: 'DAO Network Dashboard',
@@ -29,6 +30,7 @@ export default function RootLayout({
       <ReactQueryProviders>
         <ReduxProvider>
           <ApolloWrapper>
+            <ThemeWrapper>
             
               <div className="relative h-screen w-full grid grid-cols-1 bg-slate-50 dark:bg-slate-900">
                 <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
@@ -41,7 +43,8 @@ export default function RootLayout({
                  {children}
                 </div> 
               </div>
-            
+              
+              </ThemeWrapper>
             </ApolloWrapper>
           </ReduxProvider>
         </ReactQueryProviders>

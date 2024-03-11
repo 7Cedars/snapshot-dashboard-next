@@ -1,3 +1,5 @@
+// £ack adapted from https://nextjsdev.com/dark-mode-in-next-js-13-app-using-tailwind-css/#step-3-creating-the-theme-provider-and-theme-switcher
+
 "use client"
 
 import { useState, useEffect } from 'react'
@@ -8,39 +10,32 @@ import {
  } from '@heroicons/react/24/outline'
 
 const ThemeSwitch = () => {
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme } = useTheme()
+  const { systemTheme, theme, setTheme } = useTheme()
 
-  // useEffect only runs on the client, so now we can safely show the UI
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const currentTheme = theme === "system" ? systemTheme : theme 
 
-  if (!mounted) {
-    return null
-  }
   console.log("theme: ", theme )
 
   return (
-    theme == "dark" ? 
+    currentTheme == "dark" ? 
     <button
-      className="text-slate-200 hover:text-slate-500 font-bold py-2 px-4"
+      className="text-slate-400 hover:text-blue-500 font-bold py-2 px-4"
       type="submit"
       onClick={() => setTheme("light")} 
       >
       <SunIcon
-        className="h-7 w-7"
+        className="h-6 w-6"
         aria-hidden="true"
       />
     </button>
     :
     <button 
-      className="text-slate-800 hover:text-slate-900 font-bold py-2 px-4"
+      className="text-slate-800 hover:text-blue-500 font-bold py-2 px-4"
       type="submit"
       onClick={() => setTheme("dark")} 
       >
       <MoonIcon
-        className="h-7 w-7"
+        className="h-6 w-6"
         aria-hidden="true"
       />
     </button>

@@ -51,7 +51,7 @@ const SpaceItem = ( {spaceId}: Props) => {
 
   return (
     spaceId !== '' ? 
-      <div className='border-gray-500 flex flex-row items-center bg-gray-100 border grow rounded-lg my-1 py-1  '> 
+      <div className='border-gray-500 flex flex-row items-center bg-slate-100 dark:bg-slate-800 border grow rounded-lg my-1 py-1  '> 
         <button 
           className='flex grow'
           type="submit"
@@ -69,15 +69,15 @@ const SpaceItem = ( {spaceId}: Props) => {
           </div>
 
           <div className='px-1 grow text-xs'> 
-            <div className={`truncate font-medium text-sm pl-1`} >
+            <div className={`truncate font-medium text-sm pl-1 text-slate-800 dark:text-slate-200`} >
               {spaceId}
             </div>
             { space ?
               <>
-                <div className={`block truncate font-light text-gray-600 pl-1`} >
+                <div className={`block truncate font-light text-slate-500 pl-1`} >
                   Total votes: {space.votesCount} 
                 </div>
-                <div className={`block truncate font-light text-gray-600 pl-1`}>
+                <div className={`block truncate font-light text-slate-500 pl-1`}>
                   {space.categories.length > 0 ? 
                     `Categories: ${space.categories.map((category: string) => category).join(", ")}`
                     : 

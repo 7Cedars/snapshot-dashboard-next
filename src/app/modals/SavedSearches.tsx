@@ -91,10 +91,10 @@ export const SavedSearchesDialog = () => {
    
     <div className="w-full h-full">
       {/* Save current search box  */}
-      <div className="col-span-4 text-md font-medium flex my-2 justify-center text-gray-900">  
+      <div className="col-span-4 text-md font-medium flex my-2 justify-center text-slate-900">  
           Save current search 
       </div>
-      <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-grey-600 rounded-lg">  
+      <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-slate-500 rounded-lg">  
         <div className='py-2 col-span-1' > 
           Title: 
         </div> 
