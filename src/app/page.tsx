@@ -12,8 +12,8 @@ const Home = () => {
         <img
             className="flex"
             aria-hidden="true"
-            width={800}
-            height={800}
+            width={400}
+            height={400}
             src={`/images/networkExample.png `}
             alt="network example"
           />

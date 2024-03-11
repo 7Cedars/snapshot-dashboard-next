@@ -13,6 +13,7 @@ import { useRef } from 'react';
 import { useProposals } from '../hooks/useProposals';
 import { useVotes } from '../hooks/useVotes';
 import { useNetworkData } from '../hooks/useNetworkData';
+import Link from 'next/link';
 
 export default function Page() {
   const { selectedSpaces } = useSpaces()
@@ -22,6 +23,12 @@ export default function Page() {
   const dispatch = useAppDispatch()
   const screenSize = useRef(null) 
   const {height, width} = useDimensions(screenSize)
+
+  console.log("status at dashboard page: ", {
+    statusProposals: statusProposals, 
+    statusVotes: statusVotes, 
+    statusNetwork: statusNetwork
+  })
 
   return ( 
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0" ref = {screenSize}>
@@ -64,13 +71,33 @@ export default function Page() {
           <TimeRangeSlider/> 
           
           {/* Network Diagram */}
-          <div className="border border-gray-300 mt-4 rounded-lg items-center flex-auto"> 
+          <div className="border border-gray-300 mt-4 rounded-lg flex-auto"> 
             <div className='z-20 h-full w-full' > 
-            {
+            {statusProposals.current == "isIdle" && 
+              statusVotes.current == 'isIdle' && 
+              statusNetwork.current == 'isIdle' ?  
+              <div className="grid grid-cols-1 h-full w-full justify-items-start content-between text-slate-500"> 
+                <img
+                  className="rounded-lg self-start"
+                  src={"/images/intro.svg"}
+                  alt="Loading icon"
+                />
+
+              <div className='flex flex-col place-content-center justify-center text-center w-full'>
+                <Link 
+                // Here paste link of interesting but not too large network.. 
+                  href='/dashboard?d1=1680938869154&d2=1625676795108&s=deepobjects-voting.eth&s=departedapes.eth&s=deskvoting.eth&s=starsharks.com&s=manablog-org.eth&s=interleavestudios.eth&s=shreddingsassy.eth&s=omgkirby.eth' 
+                  className='w-3/4 h-10 m-2 mb-12 self-center flex flex-col place-content-center text-blue-400 border border-blue-500 bg-blue-100 hover:bg-blue-200 rounded rounded-lg hover'>
+                    Feeling lazy? Load example network
+                </Link>
+              </div>
+          
+              </div>
+              :
               statusProposals.current == "isLoading" || 
               statusVotes.current == 'isLoading' || 
               statusNetwork.current == 'isLoading' ?  
-              <div className="flex flex-col h-full w-full col-span-1 xs:col-span-2 sm:col-span-3 md:col-span-4 justify-center items-center text-slate-500"> 
+              <div className="flex flex-col h-full w-full justify-center items-center text-slate-500"> 
                 <img
                   className="rounded-lg mx-3 animate-spin h-12 w-12 m-2"
                   src={"/images/loading.svg"}

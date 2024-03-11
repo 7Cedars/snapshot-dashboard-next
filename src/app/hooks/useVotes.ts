@@ -17,7 +17,14 @@ interface VoteWithProposal extends Vote {
 
 export function useVotes() {
   const { d1, d2 } = useDateRange() 
-  const { selectedProposals } = useProposals() 
+  const startDate = Math.min(d1, d2)  
+  const endDate = Math.max(d1, d2)
+
+  const { selectedSpaces } = useSpaces() 
+  console.log("useSpaces Data @useVotes: ", {
+    selectedSpaces: selectedSpaces, 
+  })
+  const { selectedProposals, status: statusProposals } = useProposals() 
   console.log("useProposal Data @useVotes: ", {
     selectedProposals: selectedProposals, 
   })
@@ -26,18 +33,21 @@ export function useVotes() {
   const statusFetchQueryList = useRef<Status>("isIdle")
   const statusFetchVotes = useRef<Status>("isIdle")  
   const statusSetAllVotes = useRef<Status>("isIdle")  
-  const statusFilterVotes = useRef<Status>("isIdle")
+  const statusSelectVotes = useRef<Status>("isIdle")
   const status = useRef<Status>("isIdle")
   console.log("status @useVotes: ", { 
     statusFetchQueryList: statusFetchQueryList,
     statusFetchVotes: statusFetchVotes,
     statusSetAllVotes: statusSetAllVotes, 
-    statusFilterVotes: statusFilterVotes, 
+    statusSelectVotes: statusSelectVotes, 
     status: status
   })
 
   const fetchedProposals = useRef<String[]>([]); 
-  const fetchLists = useRef<string[][]>() 
+  const fetchLists = useRef<string[][]>(); 
+  const runtimeSpaces = useRef<String[]>([]);
+  const runtimeD1 = useRef<number>();   
+  const runtimeD2 = useRef<number>();   
 
   // const fetchedVotes = useRef<any[]>([]) 
   console.log("refs @useVotes: ", { 
@@ -49,7 +59,8 @@ export function useVotes() {
   const [fetchListState, setFetchListState] = useState<string[][]>() 
   const [fetchedVotes, setFetchedVotes] = useState<any[]>() 
   const [allVotes, setAllVotes] = useState<Vote[]>([]) 
-  const [selectedVotes, setSelectedVotes] = useState<VoteWithProposal[]>() 
+  const [selectionNeeded, setSelectionNeeded] = useState<boolean>(true)
+  const [selectedVotes, setSelectedVotes] = useState<VoteWithProposal[]>([]) 
   console.log("states @useVotes: ", { 
     fetchListState: fetchListState,
     fetchedVotes: fetchedVotes, 
@@ -129,8 +140,9 @@ export function useVotes() {
   console.log("NB statusFetchVotes.current: ", statusFetchVotes.current)
 
   ////////////////// Filtering Votes /////////////////////
-  const filterVotes = () => {
-    statusFilterVotes.current = "isLoading" 
+  // This is not properly triggered yet. 
+  const selectVotes = () => {
+    statusSelectVotes.current = "isLoading" 
     
     let votes: Vote[] = []
     let votesWithProposal: VoteWithProposal[] = []
@@ -138,9 +150,7 @@ export function useVotes() {
     if (selectedProposals && d1 > 0 && d2 > 0 && allVotes) {
       try { 
         // also filter votes on date range (because proposal might have run across begin or end of date range)
-        const selectedProposalsId = selectedProposals.map(proposal => proposal.id)
-        const startDate = Math.min(d1, d2)  
-        const endDate = Math.max(d1, d2)
+        const selectedProposalsId = selectedProposals.map(proposal => proposal.id) 
 
         votes = allVotes.filter(vote => 
           vote.created * 1000 > startDate && 
@@ -154,11 +164,14 @@ export function useVotes() {
           }))
 
       } catch (error) {
-        statusFilterVotes.current = "isError"
+        statusSelectVotes.current = "isError"
         console.log(error)
       }
       if (votesWithProposal) {
-        statusFilterVotes.current = "isSuccess"
+        statusSelectVotes.current = "isSuccess"
+        runtimeSpaces.current = selectedSpaces
+        runtimeD1.current = d1
+        runtimeD2.current = d2
         setSelectedVotes(votesWithProposal)
       }
       votes = [] 
@@ -166,20 +179,26 @@ export function useVotes() {
     }
   }
 
+  // hook that triggers updating selection votes. 
+  useEffect(() => {
+    if (
+      selectedSpaces.length != runtimeSpaces.current.length || 
+      d1 != runtimeD1.current || 
+      d2 != runtimeD2.current 
+      ) {
+        setSelectionNeeded(true)
+      }
+    if (
+      selectedSpaces.length == runtimeSpaces.current.length &&
+      d1 == runtimeD1.current &&  
+      d2 == runtimeD2.current 
+      ) setSelectionNeeded(false)
+  }, [ selectedSpaces, d1, d2 ])
+  
   ////////////////// Sequencing Hook Data Flow & updating generic status hook /////////////////////
   // As useQueries triggers at any state change, sequence is changed by settign states, instead of calling functions. 
   useEffect(() => {
     console.log("hook sequence triggered")
-    // if (
-    //   statusFetchQueryList.current == "isSuccess" && 
-    //   statusFetchVotes.current == "isSuccess" && 
-    //   statusFilterVotes.current == "isSuccess" && 
-    //   fetchListState
-    //   ) {
-        
-        // setFetchListState(undefined) 
-      // }
-
     if (
       selectedProposals &&
       savedSelectedProposals.current && 
@@ -190,7 +209,7 @@ export function useVotes() {
         statusFetchQueryList.current = "isIdle"
         statusFetchVotes.current = "isIdle"
         statusSetAllVotes.current = "isIdle"
-        statusFilterVotes.current = "isIdle"
+        statusSelectVotes.current = "isIdle"
         fetchQueryList()
       } 
 
@@ -220,11 +239,12 @@ export function useVotes() {
       }
     if ( 
       allVotes && 
+      selectionNeeded && 
       statusSetAllVotes.current == "isSuccess" && 
-      statusFilterVotes.current == "isIdle" 
+      statusSelectVotes.current != "isLoading"
       ) {
-        // statusFilterVotes.current = "isLoading"
-        filterVotes()
+        statusSelectVotes.current = "isLoading"
+        selectVotes()
       }
   }, [ 
     selectedProposals, 
@@ -232,7 +252,8 @@ export function useVotes() {
     d2, 
     fetchingQueries, 
     fetchedVotes, 
-    allVotes
+    allVotes, 
+    selectionNeeded
     // statusFetchVotes.current
     // fetchLists.current,
   ]) 
@@ -242,29 +263,28 @@ export function useVotes() {
     if (
       statusFetchQueryList.current == "isSuccess" && 
       statusFetchVotes.current == "isSuccess" && 
-      statusFilterVotes.current == "isSuccess" 
+      statusSelectVotes.current == "isSuccess" 
       ) {
         status.current = "isSuccess"
       }
     if (
-      statusFetchQueryList.current == "isIdle" || 
-      statusFetchVotes.current == "isIdle" || 
-      statusFilterVotes.current == "isIdle" 
+      statusFetchQueryList.current == "isIdle" && 
+      statusFetchVotes.current == "isIdle" && 
+      statusSelectVotes.current == "isIdle" 
       ) {
         status.current = "isIdle"
       }
     if (
       statusFetchQueryList.current == "isLoading" || 
       statusFetchVotes.current == "isLoading" || 
-      statusFilterVotes.current == "isLoading" 
+      statusSelectVotes.current == "isLoading" 
       ) {
         status.current = "isLoading"
       }
-
     if (
       statusFetchQueryList.current == "isError" || 
       statusFetchVotes.current == "isError" || 
-      statusFilterVotes.current == "isError" 
+      statusSelectVotes.current == "isError" 
       ) {
         status.current = "isError"
       }

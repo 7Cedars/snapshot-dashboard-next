@@ -3,6 +3,8 @@
 import { 
   HomeIcon, 
   Cog6ToothIcon, 
+  SunIcon,
+  MoonIcon, 
   BookmarkSquareIcon, 
   QuestionMarkCircleIcon
  } from '@heroicons/react/24/outline'
@@ -12,80 +14,71 @@ import {
  import Link from 'next/link';
  import { NotificationDialog } from './ui/NotificationDialog';
 
- interface UrlProps {
-  searchParams: {
-    sps: string[];
-    sd: number; 
-    ed: number;
-  }
-}
-
 const NavBar = ( ) => {
   const dispatch = useAppDispatch() 
-
-  // console.log(searchParams)
 
   return (
     <header className="absolute top-0 grid justify-items-center flex flex-wrap w-full text-sm py-0 border-b border-black shadow-md z-20">
 
-    <div className="grid grid-cols-10 gap-2 w-4/5 flex">
-
-      <div className="flex flex-row col-span-2 rounded-lg m-1 pt-4">
-          <Link href='/' className='text-black hover:text-blue-800 font-bold pt-1'>
+    <div className="flex w-4/5 m-2">
+   
+        <div className='flex-none flex items-center justify-center'> 
+          <Link href='/' className='text-black hover:text-blue-800 font-bold w-fit h-fit'>
             <HomeIcon
-              className="h-7 w-7"
+              className="h-7 w-7 self-center"
               aria-hidden="true"
             /> 
           </Link>
       </div>
         
-      <div className="col-span-6 pt-4"> 
+      <div className="grow md:w-96"> 
         <NotificationDialog /> 
       </div> 
 
 
-    <div className="flex flex-row-reverse col-span-2 rounded-lg py-4 m-0">
+    <div className="flex items-center ">
           {/* <div className="flex grow h-10 items-center  sm:justify-end sm:gap-x-7  "> */}
 
-          <div className="container basis-1/4 flex-none rounded-lg p-0 m-0">
+          <div className="flex-none w-fit h-fit items-center justify-center">
             <button 
-              className="text-black hover:text-blue-800 font-bold py-2 px-4"
+              className="text-black hover:text-blue-800 font-bold m-2"
               type="submit"
-              onClick={() => dispatch(updateModal('settings'))} 
+              onClick={() => dispatch(updateModal('about'))}
               >
-              <Cog6ToothIcon
+                FAQ
+              {/* <QuestionMarkCircleIcon
                 className="h-7 w-7"
                 aria-hidden="true"
-              />
+              /> */}
             </button>
           </div>
 
-          <div className="container basis-1/4 flex-none rounded-lg p-0 m-0">
+          <div className="flex-none w-fit items-center">
             <button 
               className="text-black hover:text-blue-800 font-bold py-2 px-4"
               type="submit"
               onClick={() => dispatch(updateModal('savedSearches'))}
               >
-              <BookmarkSquareIcon
+                Saved Searches
+              {/* <BookmarkSquareIcon
                 className="h-7 w-7"
                 aria-hidden="true"
-              />
+              /> */}
             </button>
           </div>
 
-          <div className="container basis-1/4 flex-none rounded-lg p-0 m-0">
+          <div className="flex-none w-fit items-center">
             <button 
-              className="text-black hover:text-blue-800 font-bold py-2 px-4"
+              className="text-black hover:text-blue-800 font-bold py-2 px-4 border-"
               type="submit"
-              onClick={() => dispatch(updateModal('about'))}
+              // onClick={() => dispatch(updateModal('settings'))} 
               >
-              <QuestionMarkCircleIcon
+              <SunIcon
                 className="h-7 w-7"
                 aria-hidden="true"
               />
             </button>
           </div>
-
         </div>
     </div>
     </header>

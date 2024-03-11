@@ -115,6 +115,8 @@ export const SearchDialog = () => {
           />
       </form>
 
+      {/* £bug £fix: it somehow shows a code in the list of categories. fix!  */}
+
       <div className="flex justify-between w-48 grid border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium mt-4" > 
         <Listbox value={selectedCategory} onChange={setSelectedCategory} >
           
