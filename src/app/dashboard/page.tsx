@@ -23,12 +23,12 @@ export default function Page() {
       <ScreenTooSmall height = {height} width = {width} /> 
       <InfoSpaceDialog/> 
       <div className='w-96 h-full space-y-0 py-4 grid grid-cols-1 ps-12'> 
-        <div className='mt-20 p-2 border border-gray-500 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col  overflow-auto'>
+        <div className='mt-20 p-2 border border-gray-500 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col overflow-auto'>
 
           {/* search box */}
           <form>
             <input
-              className="p-2 w-full border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+              className="p-2 w-full border border-blue-300 text-sm hover:border-blue-500 outline-transparent hover:outline-transparent rounded-lg font-medium "
               type="search" 
               id="mySearch"
               name="q"

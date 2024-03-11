@@ -106,7 +106,7 @@ export const SearchDialog = () => {
     <div className='flex w-full'> 
       <form>
         <input
-          className="p-2 flex-auto w-11/12 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium mt-4"
+          className="p-2 flex-auto w-11/12 border border-blue-300 text-sm hover:border-blue-500 outline-transparent select:outline-transparent rounded-lg font-medium mt-4"
           type="search"
           id="mySearch"
           name="q"
