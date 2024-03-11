@@ -71,9 +71,9 @@ export const NotificationDialog = () => {
               aria-hidden="true"
             />
         </button>
-      <div 
+      {/* <div 
         className={`absolute bottom-0 text-xs font-medium text-center leading-none rounded-bl-md h-1 ${colourProgressBar[colour]}`}
-        style={{width:`${notificationToShow.progressInPercent}%`}}> . </div>
+        style={{width:`${notificationToShow.progressInPercent}%`}}> . </div> */}
     </div>
   )
 

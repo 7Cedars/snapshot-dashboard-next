@@ -34,8 +34,8 @@ export default function Page() {
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0" ref = {screenSize}>
       <ScreenTooSmall height = {height} width = {width} /> 
       <InfoSpaceDialog/> 
-      <div className='w-96 h-full space-y-0 py-4 grid grid-cols-1 ps-12'> 
-        <div className='mt-20 p-2 border border-gray-500 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col overflow-auto'>
+      <div className='w-96 h-full space-y-0 pb-4 grid grid-cols-1 ps-12'> 
+        <div className='mt-20 p-2 border border-gray-300 border-r-0 rounded-l-lg shadow-lg bg-gray-200 flex flex-col overflow-auto'>
 
           {/* search box */}
           <form>
@@ -64,24 +64,26 @@ export default function Page() {
         </div>
       </div>
       
-      <div className='flex flex-grow space-y-0 py-4 grid grid-cols-1 pe-12'> 
-        <div className='mt-20 p-2 border border-gray-500 border-l-0 rounded-r-lg shadow-lg bg-gray-100 flex flex-col grow'>
+      <div className='flex flex-grow space-y-0 pb-4 grid grid-cols-1 pe-12'> 
+        <div className='mt-20 p-2 border border-gray-300 border-l-0 rounded-r-lg shadow-lg bg-gray-100 flex flex-col grow'>
           
           {/* Time range slider */}
           <TimeRangeSlider/> 
           
           {/* Network Diagram */}
-          <div className="border border-gray-300 mt-4 rounded-lg flex-auto"> 
+          <div className="mt-4 rounded-lg flex-auto"> 
             <div className='z-20 h-full w-full' > 
             {statusProposals.current == "isIdle" && 
               statusVotes.current == 'isIdle' && 
               statusNetwork.current == 'isIdle' ?  
               <div className="grid grid-cols-1 h-full w-full justify-items-start content-between text-slate-500"> 
-                <img
-                  className="rounded-lg self-start"
-                  src={"/images/intro.svg"}
-                  alt="Loading icon"
-                />
+                <div className='flex justify-items-start w-1/2 h-1/2 '> 
+                  <img
+                    className="rounded-lg flex w-fit h-fit "
+                    src={"/images/intro.svg"}
+                    alt="Loading icon"
+                  />
+                </div>
 
               <div className='flex flex-col place-content-center justify-center text-center w-full'>
                 <Link 

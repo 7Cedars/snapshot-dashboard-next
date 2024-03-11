@@ -30,7 +30,7 @@ export default function RootLayout({
         <ReduxProvider>
           <ApolloWrapper>
             
-              <div className="relative h-screen w-full grid grid-cols-1 bg-slate-50">
+              <div className="relative h-screen w-full grid grid-cols-1 bg-slate-50 dark:bg-slate-900">
                 <AboutDialog /> <SettingsDialog /> <SavedSearchesDialog /> < SearchDialog /> 
                 
                 {/* £todo The info InfoSpaceDialog causes a loop! FIX  */}
