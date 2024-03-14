@@ -91,32 +91,32 @@ export const SavedSearchesDialog = () => {
    
     <div className="w-full h-full">
       {/* Save current search box  */}
-      <div className="col-span-4 text-md font-medium flex my-2 justify-center text-slate-900">  
+      <div className="col-span-4 text-md font-medium flex my-2 justify-center text-slate-500">  
           Save current search 
       </div>
-      <form className="m-1 p-2 grid grid-cols-4 gap-2 border-2 border-slate-500 rounded-lg">  
-        <div className='py-2 col-span-1' > 
+      <form className="m-1 p-2 grid grid-cols-4 gap-2 border border-slate-500 rounded-lg">  
+        <div className='py-2 col-span-1 text-slate-900 dark:text-slate-300' > 
           Title: 
         </div> 
         <input
-          className="p-2 col-span-3 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+          className="p-2 col-span-3 border dark:border-slate-600 dark:hover:border-slate-400  bg-slate-50 dark:bg-slate-800 text-sm hover:border-blue-500 outline-transparent hover:outline-transparent rounded-lg font-medium "
           type="text"
           id="titleSavedSearch"
           placeholder="e.g. Recent Social Dapps" 
           onChange={(event) => setTitleInput(event.target.value)}
           />
         
-        <div className='col-span-1'> 
+        <div className='col-span-1 text-slate-900 dark:text-slate-300'> 
           Description: 
         </div> 
         <textarea
-          className="p-2 col-span-3 border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium "
+          className="p-2 col-span-3 border dark:border-slate-600 dark:hover:border-slate-400  bg-slate-50 dark:bg-slate-800 text-sm hover:border-blue-500 outline-transparent hover:outline-transparent rounded-lg font-medium"
           id="descriptionSavedSearch"
           placeholder="e.g. This search shows the recent increase in activity of social dapps and how central X is among them." 
           onChange={(event) => setDescriptionInput(event.target.value)}
           />
         
-        <div className='col-span-1'> 
+        <div className='col-span-1 text-slate-900 dark:text-slate-300'> 
           DAO Spaces: 
         </div> 
         <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
@@ -134,16 +134,16 @@ export const SavedSearchesDialog = () => {
           }
         </div> 
 
-        <div className='col-span-1'> 
+        <div className='col-span-1 text-slate-900 dark:text-slate-300'> 
           Time Range: 
         </div> 
-        <div className='col-span-3'> 
+        <div className='col-span-3 text-slate-900 dark:text-slate-300'> 
           {`${toFullDateFormat(startDate)} until ${toFullDateFormat(endDate)}`}
         </div> 
 
         <button  
           onClick={(event: React.MouseEvent<HTMLElement>) => handleSaveSearch(event)}
-          className='p-2 col-span-4 border border-blue-300 bg-blue-100 text-sm hover:border-blue-500 hover:bg-blue-300 rounded-lg font-medium '
+          className='p-2 m-4 col-span-4 h-10 border text-blue-500 bg-blue-100 hover:bg-blue-200 hover:text-blue-700 dark:hover:text-blue-300 border border-blue-500 dark:hover:border-blue-300 hover:border-blue-700 dark:bg-opacity-0 rounded rounded-lg'
           > 
           Save search
         </button>
@@ -152,7 +152,7 @@ export const SavedSearchesDialog = () => {
 
       {/* List previous saved searches  */}
       <> 
-      <div className="text-md font-medium text-gray-900 w-full flex justify-center overflow-auto mt-6 mb-2">  
+      <div className="text-md font-medium text-slate-500 w-full flex justify-center overflow-auto mt-6 mb-2">  
         Saved searches 
       </div>
 
@@ -161,7 +161,7 @@ export const SavedSearchesDialog = () => {
             <div className='grid grid-cols-4 gap-1 border border-gray-500 rounded-lg m-1 p-2' key = {savedsearch.title} > 
               <div className='col-span-4 flex justify-end '> 
                 <button 
-                  className="text-black font-bold pt-1 px-1"
+                  className="text-slate-900 dark:text-slate-300 font-bold pt-1 px-1"
                   type="submit"
                   onClick={(event) => handleDeleteSearch(savedsearch, event)}
                   >
@@ -171,14 +171,14 @@ export const SavedSearchesDialog = () => {
                   />
                 </button>
               </div>
-            <div className='col-span-4 text-md font-medium text-gray-900 mb-0'>
+            <div className='col-span-4 text-md font-medium text-slate-900 dark:text-slate-300 mb-0'>
               {savedsearch.title} 
             </div> 
             <div className='col-span-4 text-gray-500 mb-4'> 
               {savedsearch.description}  
             </div> 
           
-              <div className='col-span-1'> 
+              <div className='col-span-1 text-slate-900 dark:text-slate-300'> 
                 DAO Spaces: 
               </div> 
               <div className='col-span-3 grid grid-cols-12 gap-1 auto-cols-auto'> 
@@ -195,17 +195,17 @@ export const SavedSearchesDialog = () => {
                   )
                 }
               </div> 
-              <div className='col-span-1'> 
+              <div className='col-span-1 text-slate-900 dark:text-slate-300'> 
                 Time Range: 
               </div> 
-              <div className='col-span-3'> 
+              <div className='col-span-3 text-slate-900 dark:text-slate-300'> 
                 {`${toFullDateFormat(savedsearch.startDate)} until ${toFullDateFormat(savedsearch.endDate)}`}
               </div> 
 
               <button  
                 type = 'button'
                 onClick={(event) => handleSelectSearch(savedsearch, event)}
-                className='p-2 mt-4 col-span-4 border border-green-400 text-sm text-green-400 hover:bg-green-100 hover:bg-green-300 rounded-lg font-medium'
+                className='p-2 mt-4 col-span-4 border border-green-400 text-sm text-green-400 hover:bg-green-100 hover:bg-green-300 dark:hover:text-green-200 dark:hover:border-green-200  rounded-lg font-medium dark:bg-opacity-0'
                 > 
                 Select search
               </button>

@@ -55,11 +55,11 @@ export const ModalDialog = ({
 
         <div className="fixed inset-0 overflow-y-auto">
         <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Dialog.Panel className="min-w-fit max-h-[48rem] transform rounded overflow-auto  bg-white p-6 text-left align-middle shadow-xl transition-all">
+            <Dialog.Panel className="min-w-fit max-h-[48rem] transform rounded overflow-auto bg-slate-50 dark:bg-slate-800 p-6 text-left align-middle shadow-xl transition-all">
             
             <div className='flex justify-end '> 
               <button 
-                className="text-black font-bold pt-2 px-2"
+                className="text-slate-900 dark:text-slate-200 font-bold pt-2 px-2"
                 type="submit"
                 onClick={() => dispatch(updateModal('none'))}
                 >
@@ -71,7 +71,7 @@ export const ModalDialog = ({
             </div>
               <Dialog.Title
                 as="h2"
-                className="text-lg font-medium leading-6 text-gray-900"
+                className="text-lg font-medium leading-6 text-slate-900 dark:text-slate-200"
               >
                 <p> {title} </p>
               </Dialog.Title>

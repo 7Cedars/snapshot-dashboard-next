@@ -106,7 +106,7 @@ export const SearchDialog = () => {
     <div className='flex w-full'> 
       <form>
         <input
-          className="p-2 flex-auto w-11/12 border border-blue-300 text-sm hover:border-blue-500 outline-transparent select:outline-transparent rounded-lg font-medium mt-4"
+          className="p-2 flex-auto w-11/12 border text-slate-900 dark:text-slate-200 border-blue-300 dark:border-slate-600 hover:dark:border-slate-400 bg-slate-50 dark:bg-slate-800 text-sm hover:border-blue-500 outline-transparent hover:outline-transparent rounded-lg font-medium mt-4"
           type="search"
           id="mySearch"
           name="q"
@@ -117,19 +117,23 @@ export const SearchDialog = () => {
 
       {/* £bug £fix: it somehow shows a code in the list of categories. fix!  */}
 
-      <div className="flex justify-between w-48 grid border border-blue-300 text-sm hover:border-blue-500 rounded-lg font-medium mt-4" > 
+      <div className="flex justify-between w-48 grid border border-blue-300 dark:border-slate-600 hover:dark:border-slate-400 bg-slate-50 dark:bg-slate-800 text-sm hover:border-blue-500 outline-transparent hover:outline-transparent rounded-lg font-medium  mt-4" > 
         <Listbox value={selectedCategory} onChange={setSelectedCategory} >
           
             <Listbox.Button className="absolute flex justify-between cursor-default p-2 w-48">
                 <TagIcon
-                  className="h-5 w-5 text-black pointer-events-none "
+                  className="h-5 w-5 text-slate-900 dark:text-slate-300 pointer-events-none "
                   aria-hidden="true"
                 />
 
-              {listCategories.find(category => category.value === selectedCategory)?.label }
+                <div className='text-slate-900 dark:text-slate-200'> 
+                  {listCategories.find(category => category.value === selectedCategory)?.label }
+                </div>
+
+              
 
                 <ChevronDownIcon
-                  className="h-5 w-5 text-black pointer-events-none "
+                  className="h-5 w-5 text-slate-900 dark:text-slate-300 pointer-events-none "
                   aria-hidden="true"
                 />
 
@@ -146,7 +150,10 @@ export const SearchDialog = () => {
                     key={categoryIdx}
                     className={({ active }) =>
                       `relative cursor-default select-none py-1 pl-5 ${
-                        active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'
+                        active ? 
+                        'bg-blue-100 text-blue-900' 
+                        : 
+                        'text-slate-900 dark:text-slate-300 bg-slate-800'
                       }`
                     }
                     value={category.value}
@@ -182,10 +189,10 @@ export const SearchDialog = () => {
           className='border border-blue-300 rounded-lg p-2 mr-1 my-2 w-96 grid justify-items-start'
           onClick={() => handleSelect(space.id)} 
         > 
-          <div className={`block truncate font-medium`} >
+          <div className={`block truncate font-medium text-slate-900 dark:text-slate-300`} >
               {space.id}
             </div>
-            <div className={`block truncate font-light`} >
+            <div className={`block truncate font-light text-slate-900 dark:text-slate-300`} >
               Total votes: {space.votesCount} 
               {space.categories.length > 0 ? 
               ` | ${

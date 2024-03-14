@@ -19,7 +19,6 @@ type VotesToRadiusProps = {
   maxRadius: number; 
 }
 
-
 const nameMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 export const toDateFormat = (timestamp: number): string => { 
