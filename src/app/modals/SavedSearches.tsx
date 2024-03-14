@@ -11,11 +11,11 @@ import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
 const exampleSearch1 = {
-  title: "Example search 1", 
-  description: "This is an example search", 
-  startDate: 1696682542396,
-  endDate: 1649531843772,
-  selectedSpaceIds: ["gcverseofmeta.eth", "deepobjects-voting.eth", "krap.eth", "departedapes.eth"] 
+  title: "Example", 
+  description: "This is the default example search.", 
+  startDate: 1680938869154,
+  endDate: 1625676795108,
+  selectedSpaceIds: ["deepobjects-voting.eth", "departedapes.eth", "deskvoting.eth", "starsharks.com", "manablog-org.eth", "interleavestudios.eth", "shreddingsassy.eth", "omgkirby.eth"] 
 }
 
 export const SavedSearchesDialog = () => {
@@ -33,12 +33,12 @@ export const SavedSearchesDialog = () => {
   })
 
   useEffect(() => {
-    let searchesInStorage = toSavedSearch(localStorage.getItem('savedSearches'))
-    if (searchesInStorage.length === 0) {
-      searchesInStorage = [exampleSearch1]
+    try { 
+      let searchesInStorage = toSavedSearch(localStorage.getItem('savedSearches'))
+      setSavedSearches(searchesInStorage)
+    } catch (error) {
+      setSavedSearches([exampleSearch1])
     }
-
-    setSavedSearches(searchesInStorage)
   }, []);
 
   const handleSaveSearch = (event: React.MouseEvent<HTMLElement>) => {

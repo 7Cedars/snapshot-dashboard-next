@@ -91,24 +91,13 @@ const SpaceItem = ( {spaceId}: Props) => {
         </button>
 
           <div className="flex items-center justify-end pe-2">
-          {/* <div className="grid grid-cols-1 divide-y-2 items-center justify-end pe-2 opacity-0 hover:opacity-100"> */}
-            {/* <button 
-              className="font-bold"
-              type="submit"
-              onClick={() => dispatch(updateModal('infoSpace'))}
-              >
-                <InformationCircleIcon
-                  className="h-6 w-6 text-gray-300 hover:text-gray-500 items-center justify-center"
-                  aria-hidden="true"
-                />
-            </button> */}
             <button 
               className="font-bold px-1"
               type="submit"
               onClick={() => handleRemoveSpace(spaceId) }
               >
                 <MinusCircleIcon
-                  className="h-6 w-6 text-red-300 hover:text-red-700 items-center justify-center"
+                  className="h-6 w-6 text-red-300 hover:text-red-700 dark:text-red-700 dark:hover:text-red-400 items-center justify-center"
                   aria-hidden="true"
                 />
             </button>
