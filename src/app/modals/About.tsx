@@ -34,15 +34,15 @@ export const AboutDialog = () => {
       </div>
       <Dialog.Title
         as="h2"
-        className="pt-6 text-lg font-medium leading-6 text-gray-900"
+        className="pt-6 text-lg font-medium leading-6 text-slate-800 dark:text-slate-200"
       >
         FAQ
       </Dialog.Title>
-      <div className="w-full rounded-2xl bg-white py-2">
+      <div className="w-full rounded-2xl bg-slate-50 dark:bg-slate-800 py-2">
         <Disclosure>
           {({ open }) => (
             <>
-              <Disclosure.Button className="border border-blue-500 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
+              <Disclosure.Button className="border border-blue-500 dark:hover:border-blue-300 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-500 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75 dark:bg-opacity-0">
                 <span>What is Snapshot?</span>
                 <ChevronUpIcon
                   className={`${
@@ -59,7 +59,7 @@ export const AboutDialog = () => {
         <Disclosure as="div" className="mt-2">
           {({ open }) => (
             <>
-              <Disclosure.Button className="border border-blue-500 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
+              <Disclosure.Button className="border border-blue-500 dark:hover:border-blue-300 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-500 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75 dark:bg-opacity-0">
                 <span>What is a DAO?</span>
                 <ChevronUpIcon
                   className={`${
@@ -76,7 +76,7 @@ export const AboutDialog = () => {
         <Disclosure as="div" className="mt-2">
           {({ open }) => (
             <>
-              <Disclosure.Button className="border border-blue-500 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75">
+              <Disclosure.Button className="border border-blue-500 dark:hover:border-blue-300 flex w-full justify-between rounded-lg bg-blue-100 px-4 py-2 text-left text-sm font-medium text-blue-500 hover:bg-blue-200 focus:outline-none focus-visible:ring focus-visible:ring-blue-500 focus-visible:ring-opacity-75 dark:bg-opacity-0">
                 <span>Why this app?</span>
                 <ChevronUpIcon
                   className={`${

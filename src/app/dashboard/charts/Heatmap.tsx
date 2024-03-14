@@ -9,7 +9,7 @@ import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 import { colourCodes } from "../../../../constants";
 import { useAppSelector } from "@/redux/hooks";
-import useDarkMode from "@/app/hooks/useDarkMode";
+import { useTheme } from "next-themes";
 
 const MARGIN = { top: 2, right: 2, bottom: 20, left: 2 };
 
@@ -21,11 +21,11 @@ interface HeatmapProps {
 export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { width = 500, height = 100 }: HeatmapProps
   const nCol = 20
   const { d1, d2 } = useDateRange() 
-  const [colorTheme, setTheme] = useDarkMode() 
+  const { systemTheme, theme, setTheme } = useTheme()
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
-  const tilesColour = colorTheme == 'light' ? "#1e293b" : "#f8fafc"
-  const strokeColour = colorTheme == 'light' ? "#1e293b" : "#f8fafc"
+  const tilesColour = theme == 'light' ? "#1e293b" : "#f8fafc"
+  const strokeColour = theme == 'light' ? "#1e293b" : "#f8fafc"
 
   // const { selectedSpaces: selectedSpacesFromUrl } = useSpaces()
   const { cache }  = useApolloClient()

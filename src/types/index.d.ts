@@ -39,17 +39,6 @@ export interface SearchParams {
   d2: number;
 }
 
-// export interface UserInputStateU {
-//   selectedSpacesU: string[];
-//   startDateU: number; 
-//   endDateU: number; 
-//   modal: 'search' | 'about' | 'settings' | 'savedSearches' | 'none'; 
-//   stopFetching: boolean;
-//   settings: {
-//     darkMode: boolean | undefined; 
-//     developerMode: boolean | undefined; 
-//   }
-// }
 
 export type Status = "isIdle" | "isLoading" | "isError" | "isSuccess" | "isPrepping" | "isFetching"
 
