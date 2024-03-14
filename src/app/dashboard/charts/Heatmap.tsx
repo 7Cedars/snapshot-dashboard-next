@@ -9,6 +9,7 @@ import { useApolloClient } from "@apollo/client";
 import { toProposals } from "@/app/utils/parsers";
 import { colourCodes } from "../../../../constants";
 import { useAppSelector } from "@/redux/hooks";
+import useDarkMode from "@/app/hooks/useDarkMode";
 
 const MARGIN = { top: 2, right: 2, bottom: 20, left: 2 };
 
@@ -20,34 +21,32 @@ interface HeatmapProps {
 export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { width = 500, height = 100 }: HeatmapProps
   const nCol = 20
   const { d1, d2 } = useDateRange() 
+  const [colorTheme, setTheme] = useDarkMode() 
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
+  const tilesColour = colorTheme == 'light' ? "#1e293b" : "#f8fafc"
+  const strokeColour = colorTheme == 'light' ? "#1e293b" : "#f8fafc"
+
   // const { selectedSpaces: selectedSpacesFromUrl } = useSpaces()
   const { cache }  = useApolloClient()
   const { modal: selectedSpace } = useAppSelector(state => state.userInput)
+  
   const cachedProposals = toProposals({
     proposals: Object.values(cache.extract()).filter(item => item.__typename === "Proposal")
   })
-  console.log("cachedProposals @Heatmap:", cachedProposals)
-
   const selectedProposals = cachedProposals.filter((proposal: any) => {
     return selectedSpace?.includes( proposal.space.id )
   }) 
-  console.log("selectedProposals @Heatmap: ", selectedProposals)
   
   const dataMap = toHeatmapData({proposals: selectedProposals, start: startDate, end: endDate, nCol}) 
-
-  console.log("dataMap @Heatmap: ", dataMap)
 
   // bounds = area inside the axis
   const boundsWidth = width - MARGIN.right - MARGIN.left;
   const boundsHeight = height - MARGIN.top - MARGIN.bottom;
-
   // groups
   const allYGroups = useMemo(() => [...new Set(dataMap.map((d) => d.y))], [dataMap]);
   const allXGroups = useMemo(() => [...new Set(dataMap.map((d) => d.x))], [dataMap]);
 
-  console.log("data inside Heatmap: ", allYGroups, allYGroups)
 
   // x and y scales
   const xScale = useMemo(() => {
@@ -69,7 +68,6 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
   const [min, max] = d3.extent(dataMap.map((d) => d.value));
 
   if (min === undefined || max === undefined) {
-    // throw new Error(`Incorrect data at Heatmap`);
     return null;
   }
 
@@ -77,7 +75,7 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
   const allRects = dataMap.map((d, i) => {
 
     const colorScale = d3
-    .scaleSequential(["#ffffff", colourCodes[selectedSpace.indexOf(d.y)]]) // #f3f4f6 // selectedSpace.indexOf(d.y)
+    .scaleSequential([tilesColour, colourCodes[selectedSpace.indexOf(d.y)]]) // #f3f4f6 // selectedSpace.indexOf(d.y)
     .domain([min, max / 10]);
 
     return (
@@ -91,7 +89,7 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
         opacity={1}
         fill={colorScale(d.value)}
         rx={3}
-        stroke={"#ffffff"} // #f3f4f6
+        stroke={strokeColour} // #f3f4f6
       />
     );
   });
@@ -109,6 +107,7 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
             textAnchor="middle"
             dominantBaseline="middle"
             fontSize={12}
+            stroke={"#64748b"}
           >
             {toShortDateFormat(parseInt(timestamp))}
           </text>

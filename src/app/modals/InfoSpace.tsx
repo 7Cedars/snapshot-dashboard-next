@@ -12,7 +12,6 @@ import { ChartCanvas } from '../ui/ChartCanvas';
 import { useDimensions } from '@/app/hooks/useDimensions';
 import { useRef } from 'react';
 import { Heatmap } from '../dashboard/charts/Heatmap';
-import Image from 'next/image';
 
 export const InfoSpaceDialog = () => {
   const heatmapRef = useRef(null);
@@ -41,20 +40,17 @@ export const InfoSpaceDialog = () => {
   const selectedVotesForDAO = selectedVotes?.filter(vote => vote.fullProposal?.space.id === selectedSpace)
   const uniqueVoters = Array.from(new Set(selectedVotesForDAO?.map(vote => vote.voter))) 
 
+  // console.log("Heatmap @InfoSpace: ", Heatmap)
 
-  console.log("Heatmap @InfoSpace: ", Heatmap)
-
-  console.log( {
-    heightDiv: heightDiv, 
-    widthDiv: widthDiv
-  })
+  // console.log( {
+  //   heightDiv: heightDiv, 
+  //   widthDiv: widthDiv
+  // })
 
   return (
 
     <ModalDialog 
       modalName = 'infoSpace'
-      // title = {`${selectedSpace}`}
-      // subtitle = {`Data for period from ${toFullDateFormat(startDate)} until ${toFullDateFormat(endDate)}.`}
     > 
       <div>
         <div className="flex flex-row" ref = {heatmapRef}>
@@ -69,16 +65,16 @@ export const InfoSpaceDialog = () => {
             </label>
           </div>
           <div className='flex grow w-full items-center  grid grid-cols-1 p-4'>
-            <p className='w-full text-bold text-2xl'> 
+            <p className='w-full text-bold text-slate-600 dark:text-slate-300 text-2xl'> 
               {selectedSpace} 
             </p> 
-            <ul className="list-none list-inside w-96 text-wrap">
+            <ul className="list-none list-inside w-96 text-wrap text-slate-600 dark:text-slate-300">
               <li> 
                 <article className='text-wrap italic pb-4'>
                   {selectedSpaceData ? selectedSpaceData.about : "No description provided."} 
                 </article> 
               </li>
-              <li> 
+              <li className=''> 
                 {
                   selectedSpaceData && selectedSpaceData.categories.length > 0 ? 
                     `Categories: ${selectedSpaceData.categories.map((category: string) => category).join(", ")}`
@@ -94,7 +90,7 @@ export const InfoSpaceDialog = () => {
         </div>
 
         <div 
-          className="border border-gray-300 mt-4 rounded-lg h-14"
+          className="border border-slate-200 dark:border-slate-600 mt-4 rounded-lg h-14"
           > 
             <ChartCanvas
               VizComponent={ Heatmap } 
