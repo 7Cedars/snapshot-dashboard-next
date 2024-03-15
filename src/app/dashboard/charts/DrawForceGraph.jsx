@@ -33,6 +33,8 @@ export function DrawForceGraph({
   console.log("ForceGraph CALLED")
   console.log("nodeRadius: ", nodeRadius)
 
+ 
+
   const N = d3.map(nodes, nodeId).map(intern);
   console.log("N: ", N)
   const LS = d3.map(links, linkSource).map(intern);
@@ -79,8 +81,8 @@ export function DrawForceGraph({
       .attr("viewBox", [-width / 2, -height / 2, width, height])
       .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
   
- // setting background patterns for each selected DAO. 
- // £ack https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3 
+// setting background patterns for each selected DAO. 
+// £ack https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3 
   nodes.forEach((node, i) => 
     svg.append("defs").append("pattern")
       .attr('id',`${node.id}`) // name = node.id 
@@ -163,4 +165,5 @@ export function DrawForceGraph({
   console.log("ForceGraph svg: ", svg)
 
   return Object.assign(svg.node()) // , {scales: {color}});
+
 }

@@ -73,8 +73,8 @@ export default function Page() {
           {/* Network Diagram */}
           <div className="mt-4 rounded-lg flex-auto"> 
             <div className='z-20 h-full w-full' > 
-            {statusProposals.current == "isIdle" && 
-              statusVotes.current == 'isIdle' && 
+            {statusProposals.current == "isIdle" || 
+              statusVotes.current == 'isIdle' || 
               statusNetwork.current == 'isIdle' ?  
               <div className="grid grid-cols-1 h-full w-full justify-items-start content-between text-slate-500"> 
                 <div className='flex justify-items-start w-1/2 h-1/2 '> 
@@ -116,7 +116,12 @@ export default function Page() {
                 }
               </div> 
               :
+              statusProposals.current == "isSuccess" && 
+              statusVotes.current == 'isSuccess' && 
+              statusNetwork.current == 'isSuccess' ?  
               <ForceGraph />  
+              : 
+              null
             }
             </div> 
           </div>

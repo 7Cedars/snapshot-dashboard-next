@@ -9,7 +9,7 @@ import { colourCodes } from "../../../constants";
 
 export function useNetworkData() {
   const { selectedSpaces } = useSpaces() 
-  const { selectedProposals } = useProposals()
+  const { selectedProposals, status: statusProposals  } = useProposals()
   const { selectedVotes, status: statusVotes } = useVotes()
 
   const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>() 
@@ -25,7 +25,7 @@ export function useNetworkData() {
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     status.current = "isLoading"
   
-    if (selectedProposals && statusVotes.current == "isSuccess") {
+    if (selectedProposals && statusVotes.current == "isSuccess" && statusProposals.current == "isSuccess") {
       try {
         let links: any[] = []
 
@@ -75,8 +75,8 @@ export function useNetworkData() {
   }
 
   useEffect(() => {
-    if (statusVotes.current == "isSuccess" && selectedVotes) getNetworkData() 
-  }, [selectedVotes, statusVotes])
+    if (statusVotes.current == "isSuccess" && statusProposals.current == "isSuccess" && selectedVotes) getNetworkData() 
+  }, [selectedVotes, statusVotes.current, statusProposals.current])
 
   // Notice: networkData will automatically update, but getNetworkData function can be used to force a reload. 
   return { getNetworkData, networkData, status };

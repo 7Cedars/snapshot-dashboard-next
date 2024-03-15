@@ -21,11 +21,11 @@ interface HeatmapProps {
 export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { width = 500, height = 100 }: HeatmapProps
   const nCol = 20
   const { d1, d2 } = useDateRange() 
-  const { systemTheme, theme, setTheme } = useTheme()
+  const { theme } = useTheme()
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
-  const tilesColour = theme == 'light' ? "#1e293b" : "#f8fafc"
-  const strokeColour = theme == 'light' ? "#1e293b" : "#f8fafc"
+  const tilesColour = theme == 'light' ? "#f8fafc" : "#1e293b"
+  const strokeColour = theme == 'light' ? "#f8fafc" : "#1e293b"
 
   // const { selectedSpaces: selectedSpacesFromUrl } = useSpaces()
   const { cache }  = useApolloClient()

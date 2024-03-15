@@ -186,6 +186,7 @@ export function useVotes() {
       d1 != runtimeD1.current || 
       d2 != runtimeD2.current 
       ) {
+        statusSelectVotes.current != "isLoading"
         setSelectionNeeded(true)
       }
     if (

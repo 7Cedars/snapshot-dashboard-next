@@ -24,8 +24,9 @@ export const ForceGraph = () => {
 
   useEffect(() => {
     if (
-      networkData?.nodes && 
-      networkData?.links &&
+      networkData && 
+      networkData.nodes && 
+      networkData.links &&
       svg && 
       widthDiv != 0) {// && statusAtgetNetworkData.current == "isSuccess" 
         svg.current.replaceChildren()

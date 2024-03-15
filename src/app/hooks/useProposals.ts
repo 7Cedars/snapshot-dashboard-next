@@ -71,15 +71,19 @@ export function useProposals() {
   // detached selectedSpaces from reloading hook as it led to loop. 
   // this useEffect first checks if actual reload is needed before triggering. 
   // £bug when a space is REMOVED it does not trigger. Interesting
+  // problem is at useSpace / useUrl. When a space is removed, the whole url needs to be repopulated. 
+  // this leads to many triggers + delay -> confusing the trigger sequence after. 
+  // I tried event listerner - was also a no go.    
+  //  
   useEffect(() => {
     // console.log("selectedSpaces: @TRIGGER", selectedSpaces.length)
     // console.log("runtimeSpaces: @TRIGGER", runtimeSpaces.current.length)
    if (
+    selectedSpaces.length > 0 && 
     selectedSpaces.length != runtimeSpaces.current.length || 
     d1 != runtimeD1.current || 
     d2 != runtimeD2.current
     ) {
-      statusToSelectedProposals.current = "isLoading"
       setSelectionNeeded(true)
     }
    if (
@@ -95,13 +99,13 @@ export function useProposals() {
     // console.log("ToSelectedProposals TRIGGERED")
     statusToSelectedProposals.current = "isLoading"
     if (
-      allProposals && 
-      selectionNeeded
+      selectionNeeded && 
+      allProposals
       ) {  
         console.log("@ToSelectedProposals: PASSED CONDITIONAL")
 
         const proposals: Proposal[] = toSelectedProposals({
-          allProposals: allProposals,
+          allProposals: allProposals ? allProposals : [],
           selectedSpaces: selectedSpaces,
           startDate: Math.min(d1, d2),
           endDate: Math.max(d1, d2), 
@@ -114,7 +118,7 @@ export function useProposals() {
         setSelectedProposals(proposals)
     } 
   }, [, selectionNeeded, allProposals ])
-
+    
   // managing updates status 
   useEffect(() => {
     if (
