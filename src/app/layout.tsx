@@ -31,8 +31,6 @@ export default function RootLayout({
             
               <div className="relative h-screen w-full grid grid-cols-1 bg-slate-50 dark:bg-slate-900">
                 <AboutDialog /> <SavedSearchesDialog /> < SearchDialog /> 
-                
-                {/* £todo The info InfoSpaceDialog causes a loop! FIX  */}
                 <div > 
                   <NavBar/>
                 </div> 

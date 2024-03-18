@@ -54,8 +54,8 @@ export const ModalDialog = ({
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-        <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Dialog.Panel className="min-w-fit max-h-[48rem] transform rounded overflow-auto bg-slate-50 dark:bg-slate-800 p-6 text-left align-middle shadow-xl transition-all">
+        <div className="flex min-h-full items-center justify-center p-4 pt-20 text-center">
+            <Dialog.Panel className="max-h-[48rem] max-w-[48rem] transform rounded overflow-auto bg-slate-50 dark:bg-slate-800 p-6 text-left align-middle shadow-xl transition-all">
             
             <div className='flex justify-end '> 
               <button 
