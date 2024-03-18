@@ -1,9 +1,6 @@
 "use client"
 
-import { useRef } from "react"
-import { useDimensions } from "../hooks/useDimensions"
 import { useTheme } from "next-themes"
-
 
 type Props = {
   height: number;  
