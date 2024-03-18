@@ -15,24 +15,26 @@ export function useNetworkData() {
   const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>() 
   const status = useRef<Status>("isIdle")
 
-  console.log("incoming data from hooks: ", {
-    selectedSpaces: selectedSpaces, 
-    selectedProposals: selectedProposals, 
-    selectedVotes: selectedVotes
-  })
-  console.log("networkData @useNetworkData: ", networkData )
+  // console.log("incoming data from hooks: ", {
+  //   selectedSpaces: selectedSpaces, 
+  //   selectedProposals: selectedProposals, 
+  //   selectedVotes: selectedVotes
+  // })
+  // console.log("networkData @useNetworkData: ", networkData )
 
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     status.current = "isLoading"
   
-    if (selectedProposals && statusVotes.current == "isSuccess" && statusProposals.current == "isSuccess") {
+    if (selectedProposals && selectedVotes && statusVotes.current == "isSuccess" && statusProposals.current == "isSuccess") {
       try {
         let links: any[] = []
+        let nodes: NetworkNode[] = []
 
         const uniqueVoters = Array.from(
           new Set(selectedVotes?.map(vote => vote.voter))
           )
         
+        // building links
         // The following is a very inefficient, would like to use reduce instead. 
         uniqueVoters.forEach(voter => {
           const voterVotes = selectedVotes?.filter(vote => vote.voter === voter)
@@ -51,25 +53,29 @@ export function useNetworkData() {
             )
           )
         })
-        console.log("links at loop: ", links)
-
-        if (selectedVotes) {
-          const radia = fromVotesToRadius({votesWithProposal: selectedVotes , selectedSpaces: selectedSpaces, minRadius: 10, maxRadius: 40})
-      
-          const nodes: NetworkNode[] = selectedSpaces.map((space, i) => { 
-            return ({
-                id: space, 
-                group: String(i), 
-                radius: radia[i],
-                colour: colourCodes[selectedSpaces.indexOf(space)]
-              })
-            })
-            setNetworkData({ nodes: nodes, links: links })
-            status.current = "isSuccess"
-        }  
+        
+        // building nodes 
+        const radia = fromVotesToRadius({votesWithProposal: selectedVotes , selectedSpaces: selectedSpaces, minRadius: 10, maxRadius: 40})
+        // Note that it seems a bit convoluted to get DAO spaces from votes (instead of selectedSpaces directly) - but I wanted to make sure
+        // that links and nodes were drawn from the same data source: selected votes. 
+        const voterSpaces = Array.from(
+          new Set(selectedVotes.map(vote => vote.fullProposal?.space.id))
+        ).filter((space): space is string => !!space) // NB! typecasting. normally I do this in the parsers, but can also be done inline. 
+        
+        nodes = voterSpaces.map((space, i) => { 
+          return ({
+              id: space, 
+              group: String(i), 
+              radius: radia[i],
+              colour: colourCodes[selectedSpaces.indexOf(space)]
+          })
+        })
+        setNetworkData({ nodes: nodes, links: links })
+        status.current = "isSuccess"
+        
       } catch (error) {
         status.current = "isError"
-        console.log(error) 
+        // console.log(error) 
       } 
     } 
   }

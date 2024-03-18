@@ -11,16 +11,16 @@ export const ForceGraph = () => {
   const { allProposals, selectedProposals } = useProposals()
   const { height: heightDiv, width: widthDiv } = useDimensions(svg)
 
-  console.log("from useProposal: ", {
-    allProposals: allProposals, 
-    selectedProposals: selectedProposals
-  })
+  // console.log("from useProposal: ", {
+  //   allProposals: allProposals, 
+  //   selectedProposals: selectedProposals
+  // })
   
-  console.log({
-    heightDiv: heightDiv, 
-    widthDiv: widthDiv
-  })
-  console.log("networkData @ForceGraph: ", networkData)
+  // console.log({
+  //   heightDiv: heightDiv, 
+  //   widthDiv: widthDiv
+  // })
+  // console.log("networkData @ForceGraph: ", networkData)
 
   useEffect(() => {
     if (
@@ -44,7 +44,7 @@ export const ForceGraph = () => {
       }
   }, [widthDiv, heightDiv, networkData]) //statusAtgetNetworkData.current
 
-  console.log("svg.current: ", svg.current)
+  // console.log("svg.current: ", svg.current)
 
   return (
     <div ref = {svg} className='h-full' />   

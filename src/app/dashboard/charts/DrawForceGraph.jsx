@@ -30,28 +30,28 @@ export function DrawForceGraph({
   invalidation // when this promise resolves, stop the simulation
 } = {}) {
   // Compute values.
-  console.log("ForceGraph CALLED")
-  console.log("nodeRadius: ", nodeRadius)
+  // console.log("ForceGraph CALLED")
+  // console.log("nodeRadius: ", nodeRadius)
 
  
 
   const N = d3.map(nodes, nodeId).map(intern);
-  console.log("N: ", N)
+  // console.log("N: ", N)
   const LS = d3.map(links, linkSource).map(intern);
   const LT = d3.map(links, linkTarget).map(intern);
   if (nodeTitle === undefined) nodeTitle = (_, i) => N[i];
   const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
-  console.log("T: ", T)
+  // console.log("T: ", T)
   const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
   const R = nodeRadius == null ? null : d3.map(nodes, nodeRadius);
   const C = nodeColour == null ? null : d3.map(nodes, nodeColour);
   const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
   const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
 
-  console.log("R: ", R)
-  console.log("C: ", C)
-  console.log("W: ", W)
-  console.log("N: ", N)
+  // console.log("R: ", R)
+  // console.log("C: ", C)
+  // console.log("W: ", W)
+  // console.log("N: ", N)
 
   // Replace the input nodes and links with mutable objects for the simulation.
   nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
@@ -162,7 +162,7 @@ export function DrawForceGraph({
       .on("end", dragended);
   }
 
-  console.log("ForceGraph svg: ", svg)
+  // console.log("ForceGraph svg: ", svg)
 
   return Object.assign(svg.node()) // , {scales: {color}});
 

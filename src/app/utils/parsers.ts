@@ -257,7 +257,7 @@ export const toVotes = (object: unknown): Vote[] => {
 
 // // To be depricated 
 // export const parseUrlInput = (object: unknown): UrlInput => { 
-//   console.log("parseInputEntries is called.")
+//   // console.log("parseInputEntries is called.")
 //   if (!isString(object)) {
 //     throw new Error(`Incorrect or missing dataUrl at Parser: ${object}`);
 //   }

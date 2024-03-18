@@ -35,13 +35,13 @@ export function useProposals() {
       // context: { fetchOptions: { cache: "force-cache" } }, 
   });
  
-  console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
-  console.log("allProposals @useProposals: ", allProposals )
-  console.log("selectedProposals @useProposals: ", selectedProposals )
-  console.log("statusFetchingSpaces @useProposals: ", statusFetchingSpaces )
-  console.log("statusToSelectedProposals @useProposals: ", statusToSelectedProposals )
-  console.log("selectedSpaces  @useProposals: ", selectedSpaces)
-  console.log("selectionNeeded  @TRIGGER: ", selectionNeeded)
+  // console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
+  // console.log("allProposals @useProposals: ", allProposals )
+  // console.log("selectedProposals @useProposals: ", selectedProposals )
+  // console.log("statusFetchingSpaces @useProposals: ", statusFetchingSpaces )
+  // console.log("statusToSelectedProposals @useProposals: ", statusToSelectedProposals )
+  // console.log("selectedSpaces  @useProposals: ", selectedSpaces)
+  // console.log("selectionNeeded  @TRIGGER: ", selectionNeeded)
 
   // triggering loading spaces when selectedSpaces changes and there are unfetched Spaces.  
   useEffect(() => {
@@ -76,8 +76,8 @@ export function useProposals() {
   // I tried event listerner - was also a no go.    
   //  
   useEffect(() => {
-    // console.log("selectedSpaces: @TRIGGER", selectedSpaces.length)
-    // console.log("runtimeSpaces: @TRIGGER", runtimeSpaces.current.length)
+    // // console.log("selectedSpaces: @TRIGGER", selectedSpaces.length)
+    // // console.log("runtimeSpaces: @TRIGGER", runtimeSpaces.current.length)
    if (
     selectedSpaces.length > 0 && 
     selectedSpaces.length != runtimeSpaces.current.length || 
@@ -96,13 +96,13 @@ export function useProposals() {
 
   // updating state selectedproposals when selectionNeeded is updated. 
   useEffect(() => {
-    // console.log("ToSelectedProposals TRIGGERED")
+    // // console.log("ToSelectedProposals TRIGGERED")
     statusToSelectedProposals.current = "isLoading"
     if (
       selectionNeeded && 
       allProposals
       ) {  
-        console.log("@ToSelectedProposals: PASSED CONDITIONAL")
+        // console.log("@ToSelectedProposals: PASSED CONDITIONAL")
 
         const proposals: Proposal[] = toSelectedProposals({
           allProposals: allProposals ? allProposals : [],

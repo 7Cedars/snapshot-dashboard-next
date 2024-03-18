@@ -94,7 +94,7 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
     );
   });
 
-  console.log("allRects: ", allRects)
+  // console.log("allRects: ", allRects)
 
   const xLabels = allXGroups.map((timestamp, i) => {
     const xPos = xScale(timestamp) ?? 0;
@@ -115,7 +115,7 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
       }
   });
 
-  console.log("xLabels: ", xLabels)
+  // console.log("xLabels: ", xLabels)
 
   return (
     <svg width={width} height={height}>

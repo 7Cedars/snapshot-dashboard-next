@@ -15,7 +15,7 @@ const NavBar = ( ) => {
   const dispatch = useAppDispatch() 
 
   useEffect(() =>{ 
-    console.log("window.document.documentElement.classList: ", window.document.documentElement.classList)
+    // console.log("window.document.documentElement.classList: ", window.document.documentElement.classList)
     window.document.documentElement.classList.remove("dark")
     window.document.documentElement.classList.add("light")
   }, [])

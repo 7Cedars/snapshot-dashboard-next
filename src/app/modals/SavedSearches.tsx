@@ -27,10 +27,10 @@ export const SavedSearchesDialog = () => {
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
 
-  console.log({
-    titleInput: titleInput, 
-    descriptionInput: descriptionInput
-  })
+  // console.log({
+  //   titleInput: titleInput, 
+  //   descriptionInput: descriptionInput
+  // })
 
   useEffect(() => {
     try { 
@@ -57,7 +57,7 @@ export const SavedSearchesDialog = () => {
     setSavedSearches(newSavedSearches) 
   } 
 
-  console.log("savedSearches: ", savedSearches)
+  // console.log("savedSearches: ", savedSearches)
 
   const handleDeleteSearch = (savedSearch: any, event: React.FormEvent<HTMLElement>) => {
     event.preventDefault()

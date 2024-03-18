@@ -11,7 +11,7 @@
 - [ ] limit amount of selected spaces to N (50?) 
 - [ ] create git dev branch 
 - [ ] deploy on vercel.com
-- [ ] Do code clean up: limit console.logs 
+- [ ] Do code clean up: limit // console.logs 
 - [ ] implement proper Readme 
 - 
 

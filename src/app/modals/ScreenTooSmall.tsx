@@ -13,10 +13,10 @@ type Props = {
 export const ScreenTooSmall = ({height, width}: Props ) => {
   const { systemTheme, theme, setTheme } = useTheme()
 
-  console.log({
-    heightScreenTooSmall: height, 
-    widthScreenTooSmall: width
-  })
+  // console.log({
+  //   heightScreenTooSmall: height, 
+  //   widthScreenTooSmall: width
+  // })
 
   return ( 
     height < 650 || width < 1000 ? 

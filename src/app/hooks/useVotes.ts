@@ -21,13 +21,13 @@ export function useVotes() {
   const endDate = Math.max(d1, d2)
 
   const { selectedSpaces } = useSpaces() 
-  console.log("useSpaces Data @useVotes: ", {
-    selectedSpaces: selectedSpaces, 
-  })
+  // console.log("useSpaces Data @useVotes: ", {
+  //   selectedSpaces: selectedSpaces, 
+  // })
   const { selectedProposals, status: statusProposals } = useProposals() 
-  console.log("useProposal Data @useVotes: ", {
-    selectedProposals: selectedProposals, 
-  })
+  // console.log("useProposal Data @useVotes: ", {
+  //   selectedProposals: selectedProposals, 
+  // })
 
   const savedSelectedProposals = useRef<Proposal[]>([])
   const statusFetchQueryList = useRef<Status>("isIdle")
@@ -35,13 +35,13 @@ export function useVotes() {
   const statusSetAllVotes = useRef<Status>("isIdle")  
   const statusSelectVotes = useRef<Status>("isIdle")
   const status = useRef<Status>("isIdle")
-  console.log("status @useVotes: ", { 
-    statusFetchQueryList: statusFetchQueryList,
-    statusFetchVotes: statusFetchVotes,
-    statusSetAllVotes: statusSetAllVotes, 
-    statusSelectVotes: statusSelectVotes, 
-    status: status
-  })
+  // console.log("status @useVotes: ", { 
+  //   statusFetchQueryList: statusFetchQueryList,
+  //   statusFetchVotes: statusFetchVotes,
+  //   statusSetAllVotes: statusSetAllVotes, 
+  //   statusSelectVotes: statusSelectVotes, 
+  //   status: status
+  // })
 
   const fetchedProposals = useRef<String[]>([]); 
   const fetchLists = useRef<string[][]>(); 
@@ -50,34 +50,34 @@ export function useVotes() {
   const runtimeD2 = useRef<number>();   
 
   // const fetchedVotes = useRef<any[]>([]) 
-  console.log("refs @useVotes: ", { 
-    fetchedProposals: fetchedProposals,
-    fetchLists: fetchLists, 
-    savedSelectedProposals: savedSelectedProposals
-  })
+  // console.log("refs @useVotes: ", { 
+  //   fetchedProposals: fetchedProposals,
+  //   fetchLists: fetchLists, 
+  //   savedSelectedProposals: savedSelectedProposals
+  // })
 
   const [fetchListState, setFetchListState] = useState<string[][]>() 
   const [fetchedVotes, setFetchedVotes] = useState<any[]>() 
   const [allVotes, setAllVotes] = useState<Vote[]>([]) 
   const [selectionNeeded, setSelectionNeeded] = useState<boolean>(true)
   const [selectedVotes, setSelectedVotes] = useState<VoteWithProposal[]>([]) 
-  console.log("states @useVotes: ", { 
-    fetchListState: fetchListState,
-    fetchedVotes: fetchedVotes, 
-    allVotes: allVotes, 
-    selectedVotes: selectedVotes
-  })
+  // console.log("states @useVotes: ", { 
+  //   fetchListState: fetchListState,
+  //   fetchedVotes: fetchedVotes, 
+  //   allVotes: allVotes, 
+  //   selectedVotes: selectedVotes
+  // })
 
   /////////////////// Creating Fetch Lists /////////////////////
   const fetchQueryList = () => {
-    console.log("Fetchquery List triggered")
+    // console.log("Fetchquery List triggered")
     statusFetchQueryList.current = "isLoading"
 
     // only fetch votes for proposals that have not already been fetched. 
     const unfetchedProposals = selectedProposals?.filter(proposal => 
       fetchedProposals.current.indexOf(proposal.id) === -1
     )
-    console.log("unfetchedProposals: ", unfetchedProposals)
+    // console.log("unfetchedProposals: ", unfetchedProposals)
     if ( unfetchedProposals?.length === 0 ) statusFetchQueryList.current = "isSuccess"
 
     // building array (queryList) used to fetch votes through useQueries hook. 
@@ -123,7 +123,7 @@ export function useVotes() {
         }
       ))
     })
-  console.log("resultQueries: ", fetchingQueries)
+  // console.log("resultQueries: ", fetchingQueries)
 
   useEffect(() => {
     if (
@@ -137,35 +137,35 @@ export function useVotes() {
       statusFetchVotes.current = "isLoading"
     } 
   }, [fetchingQueries])
-  console.log("NB statusFetchVotes.current: ", statusFetchVotes.current)
+  // console.log("NB statusFetchVotes.current: ", statusFetchVotes.current)
 
   ////////////////// Filtering Votes /////////////////////
-  // This is not properly triggered yet. 
   const selectVotes = () => {
     statusSelectVotes.current = "isLoading" 
     
     let votes: Vote[] = []
     let votesWithProposal: VoteWithProposal[] = []
 
-    if (selectedProposals && d1 > 0 && d2 > 0 && allVotes) {
+    if (selectedSpaces && d1 > 0 && d2 > 0 && allVotes) {
       try { 
         // also filter votes on date range (because proposal might have run across begin or end of date range)
-        const selectedProposalsId = selectedProposals.map(proposal => proposal.id) 
-
-        votes = allVotes.filter(vote => 
-          vote.created * 1000 > startDate && 
-          vote.created * 1000 < endDate  && 
-          selectedProposalsId.indexOf(vote.proposal.id) !== -1 
-        )
-        
-        votesWithProposal = !votes ? [] : votes.map(vote => ({
+        // const selectedProposalsId = selectedProposals.map(proposal => proposal.id) 
+        votesWithProposal = !allVotes ? [] : allVotes.map(vote => ({
           ...vote,
           fullProposal: selectedProposals?.find(proposal => proposal.id === vote.proposal.id)
           }))
+        // console.log("votesWithProposal1: ", votesWithProposal)
 
+        votesWithProposal = votesWithProposal.filter(vote => 
+          vote.created * 1000 > startDate && 
+          vote.created * 1000 < endDate  && 
+          selectedSpaces.indexOf(vote.fullProposal ? vote.fullProposal.space.id : "") !== -1 
+        )
+        // console.log("votesWithProposal2: ", votesWithProposal)
+        
       } catch (error) {
         statusSelectVotes.current = "isError"
-        console.log(error)
+        // console.log(error)
       }
       if (votesWithProposal) {
         statusSelectVotes.current = "isSuccess"
@@ -199,13 +199,13 @@ export function useVotes() {
   ////////////////// Sequencing Hook Data Flow & updating generic status hook /////////////////////
   // As useQueries triggers at any state change, sequence is changed by settign states, instead of calling functions. 
   useEffect(() => {
-    console.log("hook sequence triggered")
+    // console.log("hook sequence triggered")
     if (
       selectedProposals &&
       savedSelectedProposals.current && 
       selectedProposals.length != savedSelectedProposals.current.length 
       ) {
-        console.log("fetchqueryist triggered")
+        // console.log("fetchqueryist triggered")
         savedSelectedProposals.current = selectedProposals
         statusFetchQueryList.current = "isIdle"
         statusFetchVotes.current = "isIdle"
@@ -225,7 +225,7 @@ export function useVotes() {
       statusFetchVotes.current == "isSuccess" && 
       statusSetAllVotes.current == "isIdle"
       ) {
-        console.log("statusFetchVotes TRIGGERED: 'SETTING ALLVOTES'")
+        // console.log("statusFetchVotes TRIGGERED: 'SETTING ALLVOTES'")
         statusSetAllVotes.current = "isLoading"
 
         let votes: Vote[] = []

@@ -40,9 +40,9 @@ export const InfoSpaceDialog = () => {
   const selectedVotesForDAO = selectedVotes?.filter(vote => vote.fullProposal?.space.id === selectedSpace)
   const uniqueVoters = Array.from(new Set(selectedVotesForDAO?.map(vote => vote.voter))) 
 
-  // console.log("Heatmap @InfoSpace: ", Heatmap)
+  // // console.log("Heatmap @InfoSpace: ", Heatmap)
 
-  // console.log( {
+  // // console.log( {
   //   heightDiv: heightDiv, 
   //   widthDiv: widthDiv
   // })

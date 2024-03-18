@@ -15,7 +15,7 @@ type listCategoryProp = {
   value: string;
 }
 
-console.log("spaces: ", spaces)
+// console.log("spaces: ", spaces)
 
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
@@ -37,7 +37,7 @@ export const SearchDialog = () => {
       selectedSpaces.indexOf(space.id) === -1
     )
     setUnfilteredSpaces(queriedSpaces) 
-    console.log("unfilteredSpaces: ", unfilteredSpaces)
+    // console.log("unfilteredSpaces: ", unfilteredSpaces)
 
     const uniqueCategories = Array.from(
       new Set(
@@ -153,7 +153,7 @@ export const SearchDialog = () => {
                         active ? 
                         'bg-blue-100 text-blue-900' 
                         : 
-                        'text-slate-900 dark:text-slate-300 bg-slate-800'
+                        'text-slate-900  bg-slate-50 dark:text-slate-300 dark:bg-slate-800'
                       }`
                     }
                     value={category.value}

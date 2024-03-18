@@ -42,7 +42,7 @@ export const toTimestamp = (dateFormat: string): string => {
 };
 
 export const toSelectedProposals = ( {allProposals, selectedSpaces, startDate, endDate, maxVotes}: ToSelectedProposalsProps  ) => {
-  // console.log("toSelectedProposals CALLED, proposals: ", proposals)
+  // // console.log("toSelectedProposals CALLED, proposals: ", proposals)
 
   const withinTimeRange = (timeStamp: number ): boolean => {
     if (startDate === null || endDate === null) { return true }  
@@ -67,18 +67,18 @@ export const toSelectedProposals = ( {allProposals, selectedSpaces, startDate, e
       { selectedProposals.push(proposal) }
     })
   
-  // console.log("selectedProposals @toSelectedProposals: ", selectedProposals)
+  // // console.log("selectedProposals @toSelectedProposals: ", selectedProposals)
 
   return selectedProposals
 }; 
 
 export const fromVotesToRadius = ( { votesWithProposal, selectedSpaces, minRadius, maxRadius }: VotesToRadiusProps  ) => {
-  console.log("fromVotesToRadius CALLED, proposals: ", {
-    votesWithProposal: votesWithProposal,
-    selectedSpaces: selectedSpaces, 
-    minRadius: minRadius, 
-    maxRadius: maxRadius
-  })
+  // console.log("fromVotesToRadius CALLED, proposals: ", {
+  //   votesWithProposal: votesWithProposal,
+  //   selectedSpaces: selectedSpaces, 
+  //   minRadius: minRadius, 
+  //   maxRadius: maxRadius
+  // })
 
   const numberVotes: number[] = selectedSpaces.map(space =>
     votesWithProposal.filter(vote => vote.fullProposal?.space.id === space).length

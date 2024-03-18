@@ -14,7 +14,7 @@ const ThemeSwitch = () => {
 
   const currentTheme = theme === "system" ? systemTheme : theme 
 
-  console.log("theme: ", theme )
+  // console.log("theme: ", theme )
 
   return (
     currentTheme == "dark" ? 
