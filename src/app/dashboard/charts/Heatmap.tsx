@@ -1,8 +1,6 @@
-// Based on clone from https://github.com/holtzy/react-graph-gallery
-
 import { useMemo } from "react";
 import * as d3 from "d3";
-import { useDateRange, useSpaces } from "@/app/hooks/useUrl";
+import { useDateRange } from "@/app/hooks/useUrl";
 import { toHeatmapData } from "../../utils/transposeData";
 import { toShortDateFormat } from "../../utils/utils";
 import { useApolloClient } from "@apollo/client";
@@ -26,8 +24,6 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
   const endDate = Math.max(d1, d2)
   const tilesColour = theme == 'light' ? "#f8fafc" : "#1e293b"
   const strokeColour = theme == 'light' ? "#f8fafc" : "#1e293b"
-
-  // const { selectedSpaces: selectedSpacesFromUrl } = useSpaces()
   const { cache }  = useApolloClient()
   const { modal: selectedSpace } = useAppSelector(state => state.userInput)
   
@@ -75,7 +71,7 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
   const allRects = dataMap.map((d, i) => {
 
     const colorScale = d3
-    .scaleSequential([tilesColour, colourCodes[selectedSpace.indexOf(d.y)]]) // #f3f4f6 // selectedSpace.indexOf(d.y)
+    .scaleSequential([tilesColour, colourCodes[selectedSpace.indexOf(d.y)]]) 
     .domain([min, max / 10]);
 
     return (
@@ -89,12 +85,10 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
         opacity={1}
         fill={colorScale(d.value)}
         rx={3}
-        stroke={strokeColour} // #f3f4f6
+        stroke={strokeColour} 
       />
     );
   });
-
-  // console.log("allRects: ", allRects)
 
   const xLabels = allXGroups.map((timestamp, i) => {
     const xPos = xScale(timestamp) ?? 0;
@@ -114,8 +108,6 @@ export const Heatmap = ({ width = 500, height = 30 }: HeatmapProps ) => { // { w
         );
       }
   });
-
-  // console.log("xLabels: ", xLabels)
 
   return (
     <svg width={width} height={height}>

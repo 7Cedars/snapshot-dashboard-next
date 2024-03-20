@@ -1,10 +1,9 @@
 "use client";
 
 import { ModalDialog } from '../ui/ModalDialog';
-import { useEffect, useState, FormEventHandler, FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { SavedSearch } from '@/types';
 import { toSavedSearch } from '../utils/parsers';
-import { Button } from '../ui/Button';
 import { useDateRange, useSpaces } from '../hooks/useUrl';
 import { toFullDateFormat } from '../utils/utils';
 import React from 'react';
@@ -26,11 +25,6 @@ export const SavedSearchesDialog = () => {
   const [savedSearches, setSavedSearches] = useState<SavedSearch[] >([]) 
   const startDate = Math.min(d1, d2)
   const endDate = Math.max(d1, d2)
-
-  // console.log({
-  //   titleInput: titleInput, 
-  //   descriptionInput: descriptionInput
-  // })
 
   useEffect(() => {
     try { 
@@ -56,8 +50,6 @@ export const SavedSearchesDialog = () => {
     localStorage.setItem('savedSearches', JSON.stringify(newSavedSearches));
     setSavedSearches(newSavedSearches) 
   } 
-
-  // console.log("savedSearches: ", savedSearches)
 
   const handleDeleteSearch = (savedSearch: any, event: React.FormEvent<HTMLElement>) => {
     event.preventDefault()

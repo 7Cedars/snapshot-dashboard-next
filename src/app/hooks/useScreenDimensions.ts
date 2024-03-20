@@ -1,15 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
-// Cloned from: https://github.com/holtzy/react-graph-gallery
-// Hook:
-// - check the dimension of a target ref
-// - listen to window size change
-// - return width and height
+// £ack Cloned from: https://github.com/holtzy/react-graph-gallery
 
 export const useScreenDimensions = () => {
 
   const [dimensions, setDimensions] = useState({height: 1, width: 1});
-
-  // // console.log("dimensions: ", dimensions)
 
   const handleResize = () => {
     setDimensions({

@@ -2,6 +2,7 @@
 // slightly adapted by 7Cedars. 
 // Released under the ISC license.
 // https://observablehq.com/@d3/force-directed-graph
+
 import * as d3 from "d3"
 
 export function DrawForceGraph({
@@ -29,29 +30,18 @@ export function DrawForceGraph({
   height = 400, // outer height, in pixels
   invalidation // when this promise resolves, stop the simulation
 } = {}) {
+
   // Compute values.
-  // console.log("ForceGraph CALLED")
-  // console.log("nodeRadius: ", nodeRadius)
-
- 
-
   const N = d3.map(nodes, nodeId).map(intern);
-  // console.log("N: ", N)
   const LS = d3.map(links, linkSource).map(intern);
   const LT = d3.map(links, linkTarget).map(intern);
   if (nodeTitle === undefined) nodeTitle = (_, i) => N[i];
   const T = nodeTitle == null ? null : d3.map(nodes, nodeTitle);
-  // console.log("T: ", T)
   const G = nodeGroup == null ? null : d3.map(nodes, nodeGroup).map(intern);
   const R = nodeRadius == null ? null : d3.map(nodes, nodeRadius);
   const C = nodeColour == null ? null : d3.map(nodes, nodeColour);
   const W = typeof linkStrokeWidth !== "function" ? null : d3.map(links, linkStrokeWidth);
   const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
-
-  // console.log("R: ", R)
-  // console.log("C: ", C)
-  // console.log("W: ", W)
-  // console.log("N: ", N)
 
   // Replace the input nodes and links with mutable objects for the simulation.
   nodes = d3.map(nodes, (_, i) => ({id: N[i]}));
@@ -60,10 +50,7 @@ export function DrawForceGraph({
   // Compute default domains.
   if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
 
-  // Construct the scales.
-  // const color =  nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
-
-  // Construct the forces.
+  // Construct forces.
   const forceNode = d3.forceManyBody();
   const forceLink = d3.forceLink(links).id(({index: i}) => N[i]);
   if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
@@ -162,8 +149,6 @@ export function DrawForceGraph({
       .on("end", dragended);
   }
 
-  // console.log("ForceGraph svg: ", svg)
-
-  return Object.assign(svg.node()) // , {scales: {color}});
+  return Object.assign(svg.node())
 
 }

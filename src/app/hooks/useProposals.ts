@@ -1,11 +1,10 @@
-import { UseSuspenseQueryResult, useApolloClient, useQuery, useSuspenseQuery } from "@apollo/client";
+import { useApolloClient, useQuery } from "@apollo/client";
 import { useDateRange, useSpaces } from "./useUrl";
 import { PROPOSALS_FROM_SPACES } from "../utils/queries";
 import { toProposals } from "../utils/parsers";
-import { Proposal, SelectedSpaces, Status } from "@/types";
-import { lazy, useEffect, useRef, useState } from "react";
+import { Proposal, Status } from "@/types";
+import { useEffect, useRef, useState } from "react";
 import { toSelectedProposals } from "../utils/utils";
-import { UseQueryResult } from "@tanstack/react-query";
 
 export function useProposals() {
   const { selectedSpaces } = useSpaces()
@@ -27,22 +26,13 @@ export function useProposals() {
   const [selectionNeeded, setSelectionNeeded] = useState<boolean>(true)
   const maxVotesProposal: number = 1000 // £todo: need to fetch more votes from larger proposals - set value at constants  
 
-  const { loading, error, data } = useQuery(PROPOSALS_FROM_SPACES, { // useSuspenseQuery
+  const { loading, error, data } = useQuery(PROPOSALS_FROM_SPACES, { 
     variables: { 
       first: 1000, 
       skip: 0, 
       space_in: unfetchedSpaces.current ? unfetchedSpaces.current : [" "]}
-      // context: { fetchOptions: { cache: "force-cache" } }, 
   });
  
-  // console.log("unfetchedSpaces.current @useProposals: ", unfetchedSpaces.current)
-  // console.log("allProposals @useProposals: ", allProposals )
-  // console.log("selectedProposals @useProposals: ", selectedProposals )
-  // console.log("statusFetchingSpaces @useProposals: ", statusFetchingSpaces )
-  // console.log("statusToSelectedProposals @useProposals: ", statusToSelectedProposals )
-  // console.log("selectedSpaces  @useProposals: ", selectedSpaces)
-  // console.log("selectionNeeded  @TRIGGER: ", selectionNeeded)
-
   // triggering loading spaces when selectedSpaces changes and there are unfetched Spaces.  
   useEffect(() => {
     const notFetched = selectedSpaces?.filter(spaceId => fetchedSpaces.current.indexOf(spaceId) == -1)
@@ -70,14 +60,7 @@ export function useProposals() {
 
   // detached selectedSpaces from reloading hook as it led to loop. 
   // this useEffect first checks if actual reload is needed before triggering. 
-  // £bug when a space is REMOVED it does not trigger. Interesting
-  // problem is at useSpace / useUrl. When a space is removed, the whole url needs to be repopulated. 
-  // this leads to many triggers + delay -> confusing the trigger sequence after. 
-  // I tried event listerner - was also a no go.    
-  //  
   useEffect(() => {
-    // // console.log("selectedSpaces: @TRIGGER", selectedSpaces.length)
-    // // console.log("runtimeSpaces: @TRIGGER", runtimeSpaces.current.length)
    if (
     selectedSpaces.length > 0 && 
     selectedSpaces.length != runtimeSpaces.current.length || 
@@ -96,14 +79,11 @@ export function useProposals() {
 
   // updating state selectedproposals when selectionNeeded is updated. 
   useEffect(() => {
-    // // console.log("ToSelectedProposals TRIGGERED")
     statusToSelectedProposals.current = "isLoading"
     if (
       selectionNeeded && 
       allProposals
       ) {  
-        // console.log("@ToSelectedProposals: PASSED CONDITIONAL")
-
         const proposals: Proposal[] = toSelectedProposals({
           allProposals: allProposals ? allProposals : [],
           selectedSpaces: selectedSpaces,

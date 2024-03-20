@@ -1,11 +1,10 @@
 import { Link, NetworkNode, Proposal, Status, Vote, NetworkLink } from "@/types";
 import { useSpaces } from "./useUrl"
 import { useVotes } from "./useVotes"
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fromVotesToRadius } from '@/app/utils/utils';
 import { useProposals } from "./useProposals";
 import { colourCodes } from "../../../constants";
-
 
 export function useNetworkData() {
   const { selectedSpaces } = useSpaces() 
@@ -14,13 +13,6 @@ export function useNetworkData() {
 
   const [networkData, setNetworkData] = useState<{nodes: NetworkNode[], links: Link[]}>() 
   const status = useRef<Status>("isIdle")
-
-  // console.log("incoming data from hooks: ", {
-  //   selectedSpaces: selectedSpaces, 
-  //   selectedProposals: selectedProposals, 
-  //   selectedVotes: selectedVotes
-  // })
-  // console.log("networkData @useNetworkData: ", networkData )
 
   const getNetworkData = async () => { // votes: Vote[], proposals: Proposal[]
     status.current = "isLoading"
@@ -35,7 +27,7 @@ export function useNetworkData() {
           )
         
         // building links
-        // The following is a very inefficient, would like to use reduce instead. 
+        // £todo The following is a very inefficient, would like to use reduce instead. 
         uniqueVoters.forEach(voter => {
           const voterVotes = selectedVotes?.filter(vote => vote.voter === voter)
           const voterSpaces = Array.from(
@@ -57,7 +49,7 @@ export function useNetworkData() {
         // building nodes 
         const radia = fromVotesToRadius({votesWithProposal: selectedVotes , selectedSpaces: selectedSpaces, minRadius: 10, maxRadius: 40})
         // Note that it seems a bit convoluted to get DAO spaces from votes (instead of selectedSpaces directly) - but I wanted to make sure
-        // that links and nodes were drawn from the same data source: selected votes. 
+        // that links and nodes were drawn from the same data source: selectedVotes. 
         const voterSpaces = Array.from(
           new Set(selectedVotes.map(vote => vote.fullProposal?.space.id))
         ).filter((space): space is string => !!space) // NB! typecasting. normally I do this in the parsers, but can also be done inline. 
@@ -75,7 +67,7 @@ export function useNetworkData() {
         
       } catch (error) {
         status.current = "isError"
-        // console.log(error) 
+        console.log(error) 
       } 
     } 
   }

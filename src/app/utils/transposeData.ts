@@ -1,11 +1,7 @@
 import { 
   Proposal, 
-  Node, 
   Vote, 
-  NetworkGraph, 
-  NetworkLink, 
-  NetworkNode, 
-  Link 
+  NetworkNode
 } from "../../types";
 
 interface toHeatmapProps {
@@ -19,12 +15,6 @@ interface rangeProps {
   start: number; 
   end: number;
   nCol: number;
-} 
-
-interface withinRangeProps {
-  proposalStart: number; 
-  proposalStop: number;
-  spacesRange: number[];
 } 
 
 interface HeatmapProps {
@@ -46,8 +36,7 @@ interface VoteProposal extends Vote {
 
 export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): HeatmapProps[] => {
 
-  // // console.log("toHeatmapData called")
-  // adapted from: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
+  // £ack: adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
   const range = ({start, end, nCol}: rangeProps ) =>
     Array.from({ length: nCol + 1 }, (_, i) => start + (i * ((end - start) / nCol) ));
 
@@ -61,8 +50,6 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
     )
 
   const intersectionRangeProposal = ({startRange, endRange, startProposal, endProposal}: IntersectionProps): number => {
-    // // console.log("intersectionRangeProposal: ",startRange, endRange, startProposal, endProposal)
-
     if (startProposal > endRange || startRange > endProposal ) {return 0} 
     else {
       const intervalLength = Math.min(endRange, endProposal) - Math.max(startRange, startProposal) 
@@ -85,8 +72,7 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
       }) 
     ))
 
-    // console.log("basic data structure: ", data)
-
+    // filling data structure. 
     proposals.forEach((proposal: any) => 
       data.forEach(point => {
          if (point.y ===  proposal.space.id) {
@@ -100,31 +86,11 @@ export const toHeatmapData = ({proposals, start, end, nCol}: toHeatmapProps): He
          }
       }) 
     )
-
-  //  // console.log('test: ', data)
-  // filling in data points.
-  // proposals.forEach((proposal: any) => {
-  //   data.forEach(point => {
-  //     if (point.y ===  proposal.space.__ref.replace("Space:", "")) {
-  //       return point.value + proposal.votes * intersectionRangeProposal(
-  //         { startRange: parseInt(point.x),
-  //           endRange: parseInt(point.x) + stepPerCol,
-  //           startProposal: proposal.start,
-  //           endProposal: proposal.end
-  //         } 
-  //       )
-  //     }
-  //   })
-  // })
-
-  // console.log("DATA at Heatmap data: ", data)
   
   return data
 }
 
-// toNetworkGraph
 export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
-  // console.log("toNetworkGraph called")
 
   const uniqueSpaces = Array.from( 
     new Set(proposals.map((proposal: any) => proposal.space.id))
@@ -137,13 +103,9 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
     }
   ))
 
-  // console.log("voteProposal: ", voteProposal)
-
   const uniqueVoters = Array.from(
     new Set(votes.map(vote => vote.voter))
     )
-
-  // console.log("uniqueVoters: ", uniqueVoters)
 
   let links: any[] = []
   uniqueVoters.forEach(voter => {
@@ -159,17 +121,6 @@ export const toNetworkGraph = (votes: Vote[], proposals: Proposal[]) => {
       }
     })
   })
-
-  // console.log("links: ", links)
-
-//  const uniqueLinks = links.reduce
- 
-//  Link[] = Array.from(
-//     new Set(links)
-//     )
-//   uniqueLinks = uniqueLinks.map(link => {return ({...link, strength: .1})})
-
-//   // console.log("links @transpose data: ", uniqueLinks)
 
   const nodes: NetworkNode[] = uniqueSpaces.map((space, i) => 
     ({id: space, group: "tbi"})

@@ -12,7 +12,7 @@ export const AboutDialog = () => {
     <ModalDialog 
       modalName = 'about'
       title = 'About'
-      subtitle = 'Snapnet maps voting behaviour of DAO members on Snapshot.'
+      subtitle = 'Snapnet maps voting behaviour of DAO members on Snapshot.org.'
     > 
       <div className="mt-2">
         <p className="text-gray-500 my-2">

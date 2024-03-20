@@ -20,7 +20,7 @@ export const InfoSpaceDialog = () => {
   const { d1, d2 } = useDateRange()
   const { selectedVotes } = useVotes() 
   const { selectedProposals } = useProposals() 
-  const { height: heightDiv, width: widthDiv } = useDimensions(heatmapRef)
+  const { width: widthDiv } = useDimensions(heatmapRef)
 
   let selectedSpace: string; 
   modal == 'search' || 
@@ -39,13 +39,6 @@ export const InfoSpaceDialog = () => {
   const selectedProposalsOfDAO = selectedProposals?.filter(proposal => proposal.space.id === selectedSpace)
   const selectedVotesForDAO = selectedVotes?.filter(vote => vote.fullProposal?.space.id === selectedSpace)
   const uniqueVoters = Array.from(new Set(selectedVotesForDAO?.map(vote => vote.voter))) 
-
-  // // console.log("Heatmap @InfoSpace: ", Heatmap)
-
-  // // console.log( {
-  //   heightDiv: heightDiv, 
-  //   widthDiv: widthDiv
-  // })
 
   return (
 
