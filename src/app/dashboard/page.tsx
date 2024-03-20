@@ -24,12 +24,6 @@ export default function Page() {
   const screenSize = useRef(null) 
   const {height, width} = useDimensions(screenSize)
 
-  // console.log("status at dashboard page: ", {
-  //   statusProposals: statusProposals, 
-  //   statusVotes: statusVotes, 
-  //   statusNetwork: statusNetwork
-  // })
-
   return ( 
     <div className="absolute top-0 h-screen w-full h-full flex flex-row space-x-0" ref = {screenSize}>
       <ScreenTooSmall height = {height} width = {width} /> 

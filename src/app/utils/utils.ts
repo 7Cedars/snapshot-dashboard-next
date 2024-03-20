@@ -1,4 +1,4 @@
-import { Proposal, Node, Vote, Space } from "../../types";
+import { Proposal, Vote } from "../../types";
 
 interface ToSelectedProposalsProps {
   allProposals: Proposal[], 
@@ -42,8 +42,6 @@ export const toTimestamp = (dateFormat: string): string => {
 };
 
 export const toSelectedProposals = ( {allProposals, selectedSpaces, startDate, endDate, maxVotes}: ToSelectedProposalsProps  ) => {
-  // // console.log("toSelectedProposals CALLED, proposals: ", proposals)
-
   const withinTimeRange = (timeStamp: number ): boolean => {
     if (startDate === null || endDate === null) { return true }  
     
@@ -66,19 +64,11 @@ export const toSelectedProposals = ( {allProposals, selectedSpaces, startDate, e
           belowMaxVotes(proposal.votes)) 
       { selectedProposals.push(proposal) }
     })
-  
-  // // console.log("selectedProposals @toSelectedProposals: ", selectedProposals)
 
   return selectedProposals
 }; 
 
 export const fromVotesToRadius = ( { votesWithProposal, selectedSpaces, minRadius, maxRadius }: VotesToRadiusProps  ) => {
-  // console.log("fromVotesToRadius CALLED, proposals: ", {
-  //   votesWithProposal: votesWithProposal,
-  //   selectedSpaces: selectedSpaces, 
-  //   minRadius: minRadius, 
-  //   maxRadius: maxRadius
-  // })
 
   const numberVotes: number[] = selectedSpaces.map(space =>
     votesWithProposal.filter(vote => vote.fullProposal?.space.id === space).length
@@ -92,7 +82,11 @@ export const fromVotesToRadius = ( { votesWithProposal, selectedSpaces, minRadiu
   const radiusRange = maxRadius - minRadius
   const multiplier = radiusRange / valueRange 
   
-  const radia = numberVotes.map(number => number == 0 ? minRadius : ((Math.log10(number) - minValue) * multiplier) + minRadius)
+  const radia = numberVotes.map(
+    number => number == 0 ? minRadius : ((
+      Math.log10(number) - minValue) * multiplier
+      ) + minRadius
+    )
   return radia
 }; 
 

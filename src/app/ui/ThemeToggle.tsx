@@ -11,10 +11,7 @@ import {
 
 const ThemeSwitch = () => {
   const { systemTheme, theme, setTheme } = useTheme()
-
   const currentTheme = theme === "system" ? systemTheme : theme 
-
-  // console.log("theme: ", theme )
 
   return (
     currentTheme == "dark" ? 
@@ -39,12 +36,6 @@ const ThemeSwitch = () => {
         aria-hidden="true"
       />
     </button>
-
-    // <select value={theme} onChange={e => setTheme(e.target.value)}>
-    //   <option value="system">System</option>
-    //   <option value="dark">Dark</option>
-    //   <option value="light">Light</option>
-    // </select>
   )
 }
 

@@ -116,25 +116,6 @@ export const toSavedSearch = (object: unknown): SavedSearch[] => {
 
 }
 
-// "[{"title":"","description":"","startDate":1680756100633,"endDate":1696534900633,"selectedSpaceIds":[]}]"
-
-// NB: still need to add parsers for Proposal and Vote inputs. 
-// Never ever trust anything you receive from an outside source... 
-
-// NB: still WIP: see below.
-
-// export const parseDateRange = (value: string): [StartDate, EndDate] => {
-//   if (!isString(value)) {
-//     throw new Error(`Incorrect or missing dataUrl at Parser: ${value}`);
-//   }
-
-//   if (!isNumber(parseInt(value))) {
-//     throw new Error(`Data is not stringefied number: ${value}`);
-//   }
-
-//   return parseInt(value); 
-// }
-
 export const parseDateRange = (dateRange: string[]): [StartDate, EndDate] => {
   if (dateRange.find(date => !isString(date))) {
     throw new Error(`Incorrect or missing dataUrl at dateRange: ${dateRange}`);
@@ -168,11 +149,7 @@ export const parseSelectedSpaces = (spaces: string[]): SelectedSpaces => {
     throw new Error(`Incorrect or missing dataUrl at selectedSpaces: ${spaces}`);
   }
 
-  const selectedSpaces = spaces //.split(';')
-  // TODO
-  // Here should be checked against ids of spacelist. 
-  // But should not be created everysingle time... 
-  // should save this list in redux store at startup. 
+  const selectedSpaces = spaces 
 
   return selectedSpaces; 
 }
@@ -241,55 +218,5 @@ export const toVotes = (object: unknown): Vote[] => {
   } 
   throw new Error('Incorrect data: malformed fields');
 }
-  
-
-//   throw new Error('Incorrect data: some fields are missing');
-// };
-
-  // const selectedSpaces = spaces //.split(';')
-  // TODO
-  // Here should be checked against ids of spacelist. 
-  // But should not be created everysingle time... 
-  // should save this list in redux store at startup. 
-
-  // return selectedSpaces; 
-// }
-
-// // To be depricated 
-// export const parseUrlInput = (object: unknown): UrlInput => { 
-//   // console.log("parseInputEntries is called.")
-//   if (!isString(object)) {
-//     throw new Error(`Incorrect or missing dataUrl at Parser: ${object}`);
-//   }
-
-//   if (
-//     object.indexOf('sps:') === -1 || 
-//     object.indexOf('&&sd:') === -1 || 
-//     object.indexOf('&&ed:') === -1 
-//     ) {
-//       throw new Error(`Incorrect data in dataUrl: ${object}`);
-    
-//     } else {
-//       const splitUrl = object.split('&&')
-//       // const modal: 'about' | 'settings' | 'savedSearches' | 'none' = 'none'
-//       // const stopFetching = false
-//       // const settings: {darkMode: boolean; developerMode: boolean } = {
-//       //   darkMode: false, developerMode: false } 
-
-//       // NB: These still need to be properly checked. 
-
-//       const inputState  = {
-//         //urlData: object, 
-//         selectedSpaces: splitUrl[0].replace('sps:', '').split(';'),
-//         startDate: parseInt(splitUrl[1].replace('sd:', '')), 
-//         endDate: parseInt(splitUrl[2].replace('ed:', '')), 
-//         // modal: modal,
-//         // stopFetching: stopFetching, 
-//         // settings: settings
-//       }
-
-//       return inputState
-//     }
-// }; 
 
 export default { toSpaceEntry }; 

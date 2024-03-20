@@ -13,8 +13,6 @@ import {
   tailwindColours, 
   colourCodes 
 } from '../../../constants';
-import { useEffect, useRef } from 'react';
-import { Status } from '@/types';
 
 export function useDateRange() {
   const params = useSearchParams();

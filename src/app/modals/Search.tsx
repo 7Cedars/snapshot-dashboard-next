@@ -15,8 +15,6 @@ type listCategoryProp = {
   value: string;
 }
 
-// console.log("spaces: ", spaces)
-
 const compareVotes = (a: Space, b: Space) => {
   return b.votesCount - a.votesCount
 }
@@ -37,13 +35,14 @@ export const SearchDialog = () => {
       selectedSpaces.indexOf(space.id) === -1
     )
     setUnfilteredSpaces(queriedSpaces) 
-    // console.log("unfilteredSpaces: ", unfilteredSpaces)
 
-    const uniqueCategories = Array.from(
+    const uniqueCategoriesRaw = Array.from(
       new Set(
         unfilteredSpaces.map((space: Space) => space.categories.flat()).flat()
         )
     )
+    // due to messy json files, the first item in uniqueCategoriesRaw is incorrect. I filter out here.  
+    const uniqueCategories = uniqueCategoriesRaw.slice(1, uniqueCategoriesRaw.length)
 
     const listCategories = [{
       label: `all (${queriedSpaces.length})`, 
@@ -115,8 +114,6 @@ export const SearchDialog = () => {
           />
       </form>
 
-      {/* £bug £fix: it somehow shows a code in the list of categories. fix!  */}
-
       <div className="flex justify-between w-48 grid border border-blue-300 dark:border-slate-600 hover:dark:border-slate-400 bg-slate-50 dark:bg-slate-800 text-sm hover:border-blue-500 outline-transparent hover:outline-transparent rounded-lg font-medium  mt-4" > 
         <Listbox value={selectedCategory} onChange={setSelectedCategory} >
           
@@ -129,9 +126,7 @@ export const SearchDialog = () => {
                 <div className='text-slate-900 dark:text-slate-200'> 
                   {listCategories.find(category => category.value === selectedCategory)?.label }
                 </div>
-
-              
-
+                
                 <ChevronDownIcon
                   className="h-5 w-5 text-slate-900 dark:text-slate-300 pointer-events-none "
                   aria-hidden="true"

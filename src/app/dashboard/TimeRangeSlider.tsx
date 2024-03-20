@@ -31,7 +31,6 @@ const TimeRangeSlider = () => {
     } else {
       setValue2(value)
     }
-    // // console.log("value1: ", d1 - value, "value2: ", d2 - value)
     handleDatesDebounced(String(value1), String(value2))
   }
 

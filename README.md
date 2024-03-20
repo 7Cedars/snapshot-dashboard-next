@@ -181,6 +181,11 @@ GitHub profile [https://github.com/7Cedars](https://github.com/7Cedars)
 * [React course Full stack dev... ]() <!-- React course Full stack dev  -->
 * [Readme File... ]() <!-- This readme file, page -->
 * <!-- search through files for £ack -->
+<!-- * // £ack https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3  (Re Background SVG in nodes) -->
+<!-- // https://observablehq.com/@d3/force-directed-graph For example graph.  --> 
+<!-- https://github.com/holtzy/react-graph-gallery: heatmap. -->
+<!-- Cloned from: https://github.com/holtzy/react-graph-gallery : useScreenDimensions -->
+ <!-- https://nextjsdev.com/dark-mode-in-next-js-13-app-using-tailwind-css/#step-3-creating-the-theme-provider-and-theme-switcher Theme switcher -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
