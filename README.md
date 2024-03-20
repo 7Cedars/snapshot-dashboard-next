@@ -173,31 +173,18 @@ GitHub profile [https://github.com/7Cedars](https://github.com/7Cedars)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
-* [SnapShot for their API]() <!-- Snapshot  -->
-* [React course Full stack dev... ]() <!-- React course Full stack dev  -->
-* [Readme File... ]() <!-- This readme file, page -->
-* <!-- search through files for £ack -->
-<!-- * // £ack https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3  (Re Background SVG in nodes) -->
-<!-- // https://observablehq.com/@d3/force-directed-graph For example graph.  --> 
-<!-- https://github.com/holtzy/react-graph-gallery: heatmap. -->
-<!-- Cloned from: https://github.com/holtzy/react-graph-gallery : useScreenDimensions -->
- <!-- https://nextjsdev.com/dark-mode-in-next-js-13-app-using-tailwind-css/#step-3-creating-the-theme-provider-and-theme-switcher Theme switcher -->
-
+* A big thank you to [Snapshot.org](Snapshot.org) for making their API publicly available. 
+* I build this app after completing Matti Luukkainen's amazing [Fullstack open](https://fullstackopen.com/en/) course at the University of Helsinki. It comes highly recommended for anyone interested to learn React, Javascrip, Redux, Typescript - and a whole lot more of what is needed to become a fullstack dev. 
+* I took the template for the readme file from [Drew Othneil](https://github.com/othneildrew/Best-README-Template/blob/master/README.md?plain=1). 
+* The network graph was adapted from the observablehq [here](https://observablehq.com/@d3/force-directed-graph). 
+* An honourable mention goes to [this stackExchange conversation](https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3) that solved dynamic backgrounds of nodes for me. 
+* The theme switcher was taken from [nextjsdev](https://nextjsdev.com/dark-mode-in-next-js-13-app-using-tailwind-css/#step-3-creating-the-theme-provider-and-theme-switcher). 
+* Other acknowledgments are mentioned in the code, marked with the `£ack`  label. 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-<!-- [contributors-shield]: https://img.shields.io/github/contributors/7Cedars/loyalty-program-next.svg?style=for-the-badge
-[contributors-url]: https://github.com/7Cedars/snapshot-dashboard-next/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/7Cedars/loyalty-program-next.svg?style=for-the-badge
-[forks-url]: https://github.com/7Cedars/snapshot-dashboard-next/network/members
-[stars-shield]: https://img.shields.io/github/stars/7Cedars/loyalty-program-next.svg?style=for-the-badge
-[stars-url]: https://github.com/7Cedars/snapshot-dashboard-next/stargazers -->
 [issues-shield]: https://img.shields.io/github/issues/7Cedars/loyalty-program-next.svg?style=for-the-badge
 [issues-url]: https://github.com/7Cedars/snapshot-dashboard-next/issues/
 [license-shield]: https://img.shields.io/github/license/7Cedars/loyalty-program-next.svg?style=for-the-badge
