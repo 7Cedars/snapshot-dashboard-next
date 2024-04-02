@@ -176,7 +176,7 @@ GitHub profile [https://github.com/7Cedars](https://github.com/7Cedars)
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 * A big thank you to [Snapshot.org](Snapshot.org) for making their API publicly available. 
-* I build this app after completing Matti Luukkainen's amazing [Fullstack open](https://fullstackopen.com/en/) course at the University of Helsinki. It comes highly recommended for anyone interested to learn React, Javascrip, Redux, Typescript - and a whole lot more of what is needed to become a fullstack dev. 
+* I built this app after completing Matti Luukkainen's amazing [Fullstack open](https://fullstackopen.com/en/) course at the University of Helsinki. It comes highly recommended for anyone interested to learn React, Javascrip, Redux, Typescript - and a whole lot more of what is needed to become a fullstack dev. 
 * I took the template for the readme file from [Drew Othneil](https://github.com/othneildrew/Best-README-Template/blob/master/README.md?plain=1). 
 * The network graph was adapted from the observablehq [here](https://observablehq.com/@d3/force-directed-graph). 
 * An honourable mention goes to [this stackExchange conversation](https://stackoverflow.com/questions/14610954/can-an-svg-pattern-be-implemented-in-d3) that solved dynamic backgrounds of nodes for me. 
